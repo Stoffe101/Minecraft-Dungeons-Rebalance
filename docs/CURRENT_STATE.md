@@ -21,6 +21,8 @@ Gold chest native defaults confirm ranges 4–6 and 8–10. Loot Urn base defaul
 - Three cooked package outputs re-opened; all imports, property schema and Blueprint scripts match their originals.
 - Eight Hunt tests pass, including all eleven real levels and negative route/gate/reference/identity checks.
 
+Windows CI run 37364457448 failed with the collector job cancelled before any steps or runner assignment. This is not a compiler/test failure result; Windows CI verification remains outstanding.
+
 See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 ## Full design status
