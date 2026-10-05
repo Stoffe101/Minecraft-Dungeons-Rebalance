@@ -34,6 +34,15 @@ var loaded = patches.Select(p => {
     min.Value = p.Min; max.Value = p.Max;
     return (Patch: p, Input: input, Asset: asset);
 }).ToArray();
+// Camp reward uses a separate native LobbyChest scalar, not the urn/chest DropData struct.
+var campPath = "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset";
+var campInput = Path.Combine(source, campPath.Replace('/', Path.DirectorySeparatorChar));
+var campAsset = new UAsset(campInput, EngineVersion.VER_UE4_22);
+var campDefault = campAsset.Exports.OfType<NormalExport>().Single(x => x.ObjectName.ToString() == "Default__BP_LobbyChest_C");
+var campReward = campDefault.Data.OfType<IntPropertyData>().Single(x => x.Name.ToString() == "EmeraldsReward");
+var campAfter = (int)cfg["emeralds"]!["campChest"]!;
+if (campReward.Value != 50 || campAfter < 50 || campAfter > 1000) throw new InvalidDataException("Unexpected/invalid Camp emerald reward.");
+campReward.Value = campAfter;
 Directory.CreateDirectory(output);
 try {
     foreach (var item in loaded) {
@@ -52,8 +61,15 @@ try {
         records.Add(new { package = p.Path, component = p.Export, category = p.Category, before = new[] {p.OldMin,p.OldMax}, after = new[] {p.Min,p.Max},
             inputSha256 = Hash(item.Input), outputSha256 = Hash(destination), roundTrip = true });
     }
+    var campDestination = Path.Combine(output, campPath.Replace('/', Path.DirectorySeparatorChar));
+    Directory.CreateDirectory(Path.GetDirectoryName(campDestination)!);
+    campAsset.Write(campDestination);
+    var campReread = new UAsset(campDestination, EngineVersion.VER_UE4_22);
+    if (campAsset.SerializeJson() != campReread.SerializeJson()) throw new InvalidDataException("Camp reward package re-read mismatch.");
+    records.Add(new { package = campPath, component = "Default__BP_LobbyChest_C", property = "EmeraldsReward", before = 50, after = campAfter,
+        inputSha256 = Hash(campInput), outputSha256 = Hash(campDestination), roundTrip = true });
     File.WriteAllText(Path.Combine(output,"ECONOMY_PATCH_REPORT.json"), JsonConvert.SerializeObject(records,Formatting.Indented));
-    Console.WriteLine("Patched and re-opened three reward packages; native bytecode unchanged.");
+    Console.WriteLine("Patched and re-opened four reward packages; native bytecode unchanged.");
 } catch {
     Directory.Delete(output,true);
     throw;

@@ -2,15 +2,18 @@ param(
     [string]$PaksPath,
     [string]$AesKey = "0x7D5F892ECEBFA53CC22001DF48B871D51C0DF7C54CE41933BFB285219829B3A8",
     [string]$OutputDirectory,
-    [string]$DotNetPath
+    [string]$DotNetPath,
+    [ValidateSet('Baseline', 'AncientSpawn')][string]$TargetSet = 'Baseline'
 )
 . (Join-Path $PSScriptRoot 'EvidenceCommon.ps1')
 if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw 'This collector requires Windows x64.' }
 if ($AesKey -notmatch '^(0x)?[0-9a-fA-F]{64}$') { throw 'Supply a 256-bit hexadecimal -AesKey.' }
 $root = Get-ProjectRoot
+$targetFile = if ($TargetSet -eq 'AncientSpawn') { 'config/evidence-ancient-targets.json' } else { 'config/evidence-targets.json' }
 $paks = Find-McdPaksPath -Override $PaksPath
 if (-not $OutputDirectory) {
-    $folder = 'rebalance-evidence-' + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')
+    $prefix = if ($TargetSet -eq 'AncientSpawn') { 'rebalance-ancient-evidence-' } else { 'rebalance-evidence-' }
+    $folder = $prefix + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')
     $OutputDirectory = Join-Path $root ('.research/' + $folder)
 }
 $out = [System.IO.Path]::GetFullPath($OutputDirectory)
@@ -62,7 +65,7 @@ try {
         if ($code -ne 0) { throw 'Rebalance inspector build failed; see Build.log.' }
     }
     $data = Join-Path $out 'Metadata'
-    $arguments = @((Join-Path $buildDir 'RebalanceEvidence.dll'), '--paks', $paks, $AesKey, $data, $libraries, (Join-Path $root 'config/evidence-targets.json'))
+    $arguments = @((Join-Path $buildDir 'RebalanceEvidence.dll'), '--paks', $paks, $AesKey, $data, $libraries, (Join-Path $root $targetFile))
     $code = Invoke-EvidenceProcess $DotNetPath $arguments (Join-Path $out 'Exporter.log')
     if ($code -ne 0) { $issues.Add("Legacy exporter returned $code; partial metadata and logs retained.") }
     if (-not (Test-Path (Join-Path $data 'EXPORT_REPORT.json'))) { $issues.Add('Exporter produced no completion manifest.') }
@@ -71,6 +74,8 @@ try {
     schemaVersion = 1
     collectedUtc = [DateTime]::UtcNow.ToString('o')
     game = 'Minecraft Dungeons 1'
+    targetSet = $TargetSet
+    targetManifest = $targetFile
     parser = 'UAssetAPI 1.1.0 legacy UProperty / UE4_22'
     archiveReader = 'CUE4Parse from pinned UeBlueprintDumper 1.2.0'
     aesKeyProvided = $true

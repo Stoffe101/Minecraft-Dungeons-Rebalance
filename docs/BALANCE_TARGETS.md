@@ -158,3 +158,7 @@ For at least 10 runs per test configuration:
 ## Measured-input correction and implemented first pass
 
 Actual base Loot Urn package amount range is **3–7**, not the earlier community estimate of 15–30. First-pass patch doubles its serialized range to **6–14**. Native field/bundle semantics and child override coverage need retail verification before expressing that as exact final emeralds. Normal/rare chest defaults directly confirm 4–6 and 8–10 and are patched to 10–15 and 20–30. Completion stays unchanged in this first test subset. The 150–220/250–300 Hunt totals, approximately 2x overall emerald income and +50–75% Gold Room opportunities remain unmeasured design targets.
+
+## Current v2 bindings
+
+Camp emerald chest native EmeraldsReward=50 is now patched to the agreed 100; availability remains native and wallet effect is retail untested. The guaranteed random Ancient minimum of one per successfully started Hunt is accepted but not yet bound to the native generation contract. Full gold/run and effective emerald-income goals remain unmeasured.

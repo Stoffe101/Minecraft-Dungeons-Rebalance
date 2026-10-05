@@ -34,3 +34,5 @@ A meaningful feature/research pass is not considered complete until:
 - [EVIDENCE_COLLECTION.md](EVIDENCE_COLLECTION.md): one-click targeted source collection.
 
 - [BUILD_AND_TEST.md](BUILD_AND_TEST.md): first playable subset, installation and outstanding gameplay checks.
+
+- [Guaranteed random Ancient investigation](ANCIENT_GUARANTEE.md)

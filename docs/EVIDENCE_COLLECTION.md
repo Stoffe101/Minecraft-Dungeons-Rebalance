@@ -28,3 +28,7 @@ A missing asset or parser error produces a nonzero exit status and retained part
 ## Limits
 
 Local integration tests exercised an unencrypted UE4.22 third-party mod fixture and synthetic JSON, not this retail game's encrypted archives or your Windows installation. Windows CI tests the source build and native-library initialization when it runs. Neither test certifies smith gameplay, multiplayer sharing or balance.
+
+## Supplemental Ancient spawn evidence
+
+The initial 72 targets and upstream mod were received successfully. For the new guarantee request, use **Collect-AncientSpawnEvidence.cmd** from the Ancient collector bundle. It collects 14 offering/chance/door/merchant packages plus the separate netherhypermission-hyper.json configuration: 15 catalog-confirmed new targets, zero overlap. It produces rebalance-ancient-evidence-*.zip. Do not resend the initial upload or mod. See ANCIENT_GUARANTEE.md for why these are needed. Source checkout can use -TargetSet AncientSpawn; Baseline stays the default.

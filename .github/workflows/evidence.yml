@@ -39,6 +39,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Collector build failed' }
           dotnet .tools/RebalanceEvidence/RebalanceEvidence.dll --validate-targets config/evidence-targets.json
           if ($LASTEXITCODE -ne 0) { throw 'Invalid target manifest' }
+          dotnet .tools/RebalanceEvidence/RebalanceEvidence.dll --validate-targets config/evidence-ancient-targets.json
+          if ($LASTEXITCODE -ne 0) { throw 'Invalid Ancient spawn target manifest' }
           $fixture = (Get-ChildItem .tools/fixture -Recurse -Filter BP_WASD_Movement.uasset).FullName
           python tests/test_evidence.py --dotnet (Get-Command dotnet).Source --exporter .tools/RebalanceEvidence/RebalanceEvidence.dll --libraries $libraries --fixture $fixture --packager .tools/modkit/Tools/py/u4pak.py -v
           if ($LASTEXITCODE -ne 0) { throw 'Collector integration tests failed' }
@@ -52,7 +54,7 @@ jobs:
         run: |
           dotnet build tools/CookedEconomyPatcher/CookedEconomyPatcher.csproj -c Release -o .tools/CookedEconomyPatcher
           if ($LASTEXITCODE -ne 0) { throw 'Economy patcher build failed' }
-          python -m py_compile scripts/lovika_json.py scripts/build_hunts.py scripts/build_test_pak.py tests/test_hunts.py
+          python -m py_compile scripts/lovika_json.py scripts/build_hunts.py scripts/build_test_pak.py tests/test_hunts.py tests/test_economy.py
           if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
       - uses: actions/upload-artifact@v4
         with:

@@ -146,3 +146,7 @@ Every implementation pass updates:
 ## Implemented gameplay tooling
 
 `CookedEconomyPatcher` changes six verified integer fields in three cooked reward components, validates native before-values/categories, writes/re-opens output and requires exact semantic equality to expected mutations. `build_hunts.py` adapts whitelisted upstream JSON fields onto installed originals with validation and bounds. `build_test_pak.py` composes a fresh standalone stage, packages seventeen known entries, integrity-tests the archive and unpack-compares every byte. Reports remain outside the runtime PAK. Native smith/party-reward architecture remains unresolved and is excluded from this build.
+
+## v2 reward coverage and guarantee boundary
+
+Economy patcher now validates all four originals before output and changes six DropData integers plus the LobbyChest EmeraldsReward scalar. Builder packages 19 entries and explicitly lists the Ancient guarantee as excluded. New config guarantee fields are design goals, never fabricated native properties. Supplemental evidence uses an independent allowlist through the existing collector; baseline workflow remains unchanged.

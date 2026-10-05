@@ -94,3 +94,11 @@ Produce a clearly named test PAK from verified reward fields and adapted Lovika 
 ## D-014 — Bounds and native-flow preservation
 
 Bound adapted density at 1.75, per-type counts at 4, arena requests at 24 per wave/10 waves, side-path probability at 1 and maximum length at 4. These are experimental request limits, not a global active-mob cap. Preserve current native objectives/main-route geometry/triggers/gates/rewards. Keep the permitted extra two-Ancient wave and later raid captain; preserve upstream native arena timing controls pending runtime observation.
+
+## D-015 — Guarantee a random Ancient independently of offerings
+
+Accept the user request for at least one random reachable Ancient per successfully started Hunt, including a single-item/no-enchantment-point/no-matching-runes case. Do not equate rune eligibility, a chance-label change or additional arena waves with guaranteed generation. Do not remove gold rooms to achieve it. Implement at the authoritative generation/selection step after observing its contract; until then mark unimplemented.
+
+## D-016 — Camp reward scalar
+
+The actual BP_LobbyChest CDO contains EmeraldsReward=50 and derives from native LobbyChest. Set this single native field to 100 without altering availability or other chest graphs. Validate the vanilla value, bound configuration, serialize/re-open and reject mixed already-patched inputs before writing. Retail wallet measurement is still required.

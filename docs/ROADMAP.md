@@ -148,3 +148,7 @@ Collector implementation is complete for the known targets; retail collection is
 ## Superseding milestone update
 
 Initial source collection received. Implemented and structurally validated HuntsEconomy-Test-v1; retail testing is next for this subset. Native Camp services, full economy coverage/completion rewards, explicit Gold Room weighting and shared-gold contracts are still open. Collect measurable run totals and arena timing before expanding/tuning. No full-design completion milestone is closed.
+
+## Latest continuation priorities
+
+Camp emerald chest scalar 50 -> 100 implemented and structurally validated in v2. Guaranteed random Ancient minimum added as a new requirement; it needs the separate hypermission configuration and offering/door-selection evidence, not another copy of the initial collection. Run supplemental collector, establish the authoritative generation contract, implement guaranteed random fallback/reservation and execute the acceptance matrix. Continue native paid merchant and shared-gold research; neither milestone is completed.

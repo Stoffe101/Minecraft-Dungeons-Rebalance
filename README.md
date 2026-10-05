@@ -2,11 +2,11 @@
 
 A standalone Minecraft Dungeons gameplay rebalance mod focused on making Ancient Hunts, currency progression, and gear upgrading more rewarding while keeping the game recognizably vanilla.
 
-> **Status:** first Hunts/Economy test `.pak` built and structurally verified. Camp smiths, full currency coverage and shared-gold behavior remain unfinished. Retail gameplay testing is pending.
+> **Status:** Hunts/Economy v2 test `.pak` built and structurally verified. Camp smiths, full currency coverage and shared-gold behavior remain unfinished. Retail gameplay testing is pending.
 
 ## Current test build
 
-See [BUILD_AND_TEST.md](docs/BUILD_AND_TEST.md) for installation, exact implemented features and runtime checks. The test PAK increases gold chest rewards, doubles the base urn amount range, and adapts bounded Better Ancient Hunt waves/enemies/side paths. It does not yet implement paid Camp smiths or shared gold.
+See [BUILD_AND_TEST.md](docs/BUILD_AND_TEST.md) for installation, exact implemented features and runtime checks. The test PAK increases gold chest rewards, sets Camp emerald chest reward to 100, doubles the base urn amount range, and adapts bounded Better Ancient Hunt waves/enemies/side paths. It does not yet implement guaranteed random Ancient selection, paid Camp smiths or shared gold.
 
 The targeted asset upload has been received and inspected; no repeat collection of those 72 targets is needed. See [verified findings](docs/NATIVE_ASSET_RESEARCH.md) and [current implementation status](docs/CURRENT_STATE.md).
 
@@ -19,6 +19,7 @@ The targeted asset upload has been received and inspected; no repeat collection 
   - more Gold Room/chest opportunities
   - more mobs
   - more Ancient encounters
+  - at least one guaranteed random Ancient per started Hunt, independent of offering count (implementation pending)
   - higher challenge without unstable spawn spam
 - Increase normal **emerald income** mainly through richer physical drops and containers.
 - Investigate **party-wide gold sharing** so co-op players benefit together.

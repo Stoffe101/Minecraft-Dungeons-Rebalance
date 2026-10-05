@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "source": "Exact paths in user Store catalog 2026-10-05; supplemental targets absent from first collection",
+  "packages": [
+    "Dungeons/Content/Content_DLC4/Decor/Prefab/Functional/TravelDoors/BP_HyperDungeonDoor.uasset",
+    "Dungeons/Content/Content_DLC4/Decor/Prefab/Functional/TravelDoors/BP_HyperDungeonDoor_flipped.uasset",
+    "Dungeons/Content/Content_DLC4/Decor/Prefab/Merchants/BP_LobbyHyperMissionMerchant.uasset",
+    "Dungeons/Content/Content_DLC4/UI/MissionSelectMap/BPL_MissionOfferings.uasset",
+    "Dungeons/Content/Content_DLC4/UI/MissionSelectMap/Inspector/UMG_MissionOfferingsContent.uasset",
+    "Dungeons/Content/Content_DLC4/UI/MissionSelectMap/Inspector/UMG_MissionOfferingsPanel.uasset",
+    "Dungeons/Content/Content_DLC4/UI/MissionSelectMap/Info/UMG_MissionAncientChances.uasset",
+    "Dungeons/Content/Content_DLC4/UI/MissionSelectMap/Info/UMG_MissionProbabilities.uasset",
+    "Dungeons/Content/Content_DLC4/UI/Merchant/type/generic/UMG_TransactionAncientMobChances.uasset",
+    "Dungeons/Content/Content_DLC4/UI/Merchant/interface/UIMissionOfferingsBind.uasset",
+    "Dungeons/Content/Content_DLC4/UI/Merchant/type/interace/UIMissionOfferingsHandler.uasset",
+    "Dungeons/Content/Content_DLC4/UI/Merchant/transaction/UMG_MissionOfferingsTransactionArchetypes.uasset",
+    "Dungeons/Content/Content_DLC4/UI/Merchant/transaction/UMG_MissionOfferingsTransactionProblem.uasset",
+    "Dungeons/Content/Content_DLC4/UI/Merchant/type/UMG_MerchantHyperMissionContent.uasset"
+  ],
+  "dataFiles": [
+    "Dungeons/Content/data/lovika/levels/netherhypermission-hyper.json"
+  ]
+}

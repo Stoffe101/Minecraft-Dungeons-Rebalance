@@ -17,8 +17,8 @@ stage=a.output/'stage';stage.mkdir()
 for feature in ['economy','hunts']:
     shutil.copytree(a.output/feature/'Dungeons',stage/'Dungeons',dirs_exist_ok=True)
 files=sorted(x for x in stage.rglob('*') if x.is_file())
-if len(files)!=17:raise ValueError('Unexpected package contents count')
-pak=a.output/'MinecraftDungeonsRebalance-HuntsEconomy-Test-v1.pak'
+if len(files)!=19:raise ValueError('Unexpected package contents count')
+pak=a.output/'MinecraftDungeonsRebalance-HuntsEconomy-Test-v2.pak'
 subprocess.run([sys.executable,str(a.packager),'pack',str(pak),'Dungeons','-p'],cwd=stage,check=True)
 subprocess.run([sys.executable,str(a.packager),'test',str(pak)],check=True)
 unpack=a.output/'verified-unpack'
@@ -26,10 +26,11 @@ subprocess.run([sys.executable,str(a.packager),'unpack','-C',str(unpack),str(pak
 expected={str(x.relative_to(stage)).replace('\\','/'):x.read_bytes() for x in files}
 actual={str(x.relative_to(unpack)).replace('\\','/'):x.read_bytes() for x in unpack.rglob('*') if x.is_file()}
 if expected!=actual:raise ValueError('PAK did not preserve exact file set and bytes')
-report=dict(build='HuntsEconomy-Test-v1',gameplayVerified=False,completeDesignImplemented=False,
+report=dict(build='HuntsEconomy-Test-v2',gameplayVerified=False,completeDesignImplemented=False,
+            balanceSha256=hashlib.sha256(a.balance.read_bytes()).hexdigest(),
             pakSha256=hashlib.sha256(pak.read_bytes()).hexdigest(),
             entries=[dict(path=n,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data)) for n,data in expected.items()],
-            features=['normal gold chests 10-15','rare gold chests 20-30','base Loot Urn emerald drops 6-14','adapted bounded Hunt mobs/sidepaths/arenas','26 Ancient encounter extra waves'],
-            excluded=['Camp smith NPC placement/paid transactions','Hunt completion gold change','global mob currency bundle multipliers','Camp emerald chest change','party-wide gold grants'])
+            features=['normal gold chests 10-15','rare gold chests 20-30','base Loot Urn emerald drops 6-14','Camp emerald chest reward 100','adapted bounded Hunt mobs/sidepaths/arenas','26 Ancient encounter extra waves'],
+            excluded=['guaranteed random Ancient encounter','Camp smith NPC placement/paid transactions','Hunt completion gold change','global mob currency bundle multipliers','party-wide gold grants'])
 (a.output/'BUILD_REPORT.json').write_text(json.dumps(report,indent=2)+'\n')
-print('Built, integrity-tested and unpack-compared all 17 PAK entries:',pak)
+print('Built, integrity-tested and unpack-compared all 19 PAK entries:',pak)

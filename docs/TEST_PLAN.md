@@ -237,3 +237,7 @@ These are collector tests. All gameplay, economy-distribution, item preservation
 ## HuntsEconomy-Test-v1 actual results
 
 All 97 collected-source hashes matched. Three cooked reward packages patched and re-opened with full semantic equality to expected mutation; imports, field schema and every Blueprint script separately matched originals. Eight Hunt tests passed: eleven real levels with bounded adaptation and input preservation; preserved original reward fields; rejected identity mismatch, unknown added wave groups, excessive wave count, native route mutation and gate mutation; JSON comment markers inside strings preserved. Builder packaged 17 entries, u4pak integrity passed, and every extracted byte/path equaled the staging input. Retail loading, reward field units, urn subclass coverage, arena timing/completion, final income and multiplayer behavior remain pending; see BUILD_AND_TEST.md.
+
+## Test v2 continuation
+
+Three economy integration tests pass against the supplied private packages. They verify four-package semantic re-read, output preservation, invalid Camp reward rejection and previously patched Camp-default rejection before output creation. Final v2 PAK has 19 entries; integrity and exact unpack comparison passed. Hunt data is unchanged from v1; its eight existing tests remain applicable. Test Camp wallet delta when chest is available; do not interpret native daily/unlock availability as a failed amount patch. Guaranteed Ancient acceptance tests are in ANCIENT_GUARANTEE.md and remain pending.

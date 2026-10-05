@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "Design targets; not yet bound to retail game assets",
+  "status": "Mixed design targets and implemented serialized reward fields; see docs/CURRENT_STATE.md",
   "smiths": {
     "commonToRareEmeralds": 750,
     "rareToUniqueEmeralds": 2500,
@@ -57,7 +57,10 @@
     "maxArenaWaveCount": 24,
     "maxArenaWaves": 10,
     "maxSidePathLength": 4,
-    "maxMobTypeCount": 4
+    "maxMobTypeCount": 4,
+    "guaranteedRandomAncientGoal": true,
+    "minimumRandomAncientEncountersPerStartedHunt": 1,
+    "guaranteeImplemented": false
   },
   "multiplayer": {
     "sharedGoldGoal": true,
