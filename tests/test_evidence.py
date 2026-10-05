@@ -1,5 +1,5 @@
 """Integration checks using a permitted external UE4.22 fixture; never retail game inputs."""
-import argparse, hashlib, json, shutil, subprocess, tempfile, unittest
+import argparse, hashlib, json, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 parser = argparse.ArgumentParser()
@@ -42,7 +42,7 @@ class EvidenceTests(unittest.TestCase):
             data.write_text('{"fixture": true, "count": 17}')
         paks=self.root/'game/Dungeons/Content/Paks'
         paks.mkdir(parents=True)
-        subprocess.run(['python3',args.packager,'pack',str(paks/'fixture.pak'),'Dungeons','-p'],cwd=stage,check=True,capture_output=True)
+        subprocess.run([sys.executable,args.packager,'pack',str(paks/'fixture.pak'),'Dungeons','-p'],cwd=stage,check=True,capture_output=True)
         return stage,paks
 
     def test_manifest_rejects_traversal_and_ambiguity(self):

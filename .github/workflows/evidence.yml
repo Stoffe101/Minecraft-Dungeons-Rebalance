@@ -31,6 +31,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Mod Kit clone failed' }
           git -C .tools/modkit checkout c30e88ec5e99e401eadedddbe82af0265a056fe7
           if ($LASTEXITCODE -ne 0) { throw 'Mod Kit checkout failed' }
+          $fixturePaks = @(Get-ChildItem .tools/fixture -Recurse -Filter *.pak)
+          if ($fixturePaks.Count -ne 1) { throw 'Expected one permitted fixture PAK' }
+          python .tools/modkit/Tools/py/u4pak.py unpack $fixturePaks[0].FullName -C .tools/fixture-unpacked
+          if ($LASTEXITCODE -ne 0) { throw 'Fixture unpack failed' }
       - name: Compile and integration-test archive collection
         shell: pwsh
         run: |
@@ -41,7 +45,9 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Invalid target manifest' }
           dotnet .tools/RebalanceEvidence/RebalanceEvidence.dll --validate-targets config/evidence-ancient-targets.json
           if ($LASTEXITCODE -ne 0) { throw 'Invalid Ancient spawn target manifest' }
-          $fixture = (Get-ChildItem .tools/fixture -Recurse -Filter BP_WASD_Movement.uasset).FullName
+          $fixtures = @(Get-ChildItem .tools/fixture-unpacked -Recurse -Filter BP_WASD_Movement.uasset)
+          if ($fixtures.Count -ne 1) { throw 'Expected exactly one unpacked fixture asset' }
+          $fixture = $fixtures[0].FullName
           python tests/test_evidence.py --dotnet (Get-Command dotnet).Source --exporter .tools/RebalanceEvidence/RebalanceEvidence.dll --libraries $libraries --fixture $fixture --packager .tools/modkit/Tools/py/u4pak.py -v
           if ($LASTEXITCODE -ne 0) { throw 'Collector integration tests failed' }
           foreach ($file in Get-ChildItem scripts/*.ps1) {

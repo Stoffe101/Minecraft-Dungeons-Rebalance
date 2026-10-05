@@ -35,6 +35,14 @@ class NativeCallTests(unittest.TestCase):
             {'index': -5, 'name': 'Query', 'outer': -4, 'className': 'Function'}]
         self.assertEqual(len(module.index_report(source)['calls'][0]['importCandidates']), 2)
 
+    def test_argument_call_does_not_inherit_callee_receiver(self):
+        source = fixture([{'Inst': 'Context', 'Context': {'Inst': 'Self'},
+                           'Expression': {'Inst': 'FinalFunction', 'Function': 'Query', 'Parameters': [
+                               {'Inst': 'LocalFinalFunction', 'Function': 'Query', 'Parameters': []}]}}])
+        calls = module.index_report(source)['calls']
+        self.assertEqual(calls[0]['receiverExpression'], {'Inst': 'Self'})
+        self.assertIsNone(calls[1]['receiverExpression'])
+
     def test_serializer_pointer_errors_are_flagged(self):
         source = fixture([{'Inst': 'Context', 'Context': {'Inst': 'Self'},
                            'RValuePropertyOuter': '#Pointer Error#', 'Expression': {

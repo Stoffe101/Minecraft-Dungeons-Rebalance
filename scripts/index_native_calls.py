@@ -61,7 +61,10 @@ def index_report(report):
                                   'nativeSignatureVerified': False})
             for key, child in node.items():
                 if isinstance(child, (dict, list)):
-                    walk(child, location + '/' + key, context, result)
+                    # Calls inside argument expressions evaluate independently of the callee receiver.
+                    walk(child, location + '/' + key,
+                         None if key == 'Parameters' else context,
+                         None if key == 'Parameters' else result)
 
     for export in report['exports']:
         if export.get('script'):

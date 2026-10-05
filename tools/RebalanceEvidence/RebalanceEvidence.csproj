@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="UAssetAPI" Version="1.1.0" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.4" />
     <Reference Include="CUE4Parse"><HintPath>$(InspectorDirectory)/CUE4Parse.dll</HintPath></Reference>
     <Reference Include="Zlib-ng.NET"><HintPath>$(InspectorDirectory)/Zlib-ng.NET.dll</HintPath></Reference>
     <Reference Include="Oodle.NET"><HintPath>$(InspectorDirectory)/Oodle.NET.dll</HintPath></Reference>
