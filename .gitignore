@@ -1,0 +1,15 @@
+bin/
+obj/
+build/
+dist/
+out/
+artifacts/
+extracted/
+cooked/
+uncooked/
+GameContent/
+.vs/
+.idea/
+.vscode/
+tmp/
+temp/
