@@ -6,7 +6,9 @@
     "rareToUniqueEmeralds": 2500,
     "addGildedGold": 150,
     "rerollGildedGold": 250,
-    "powersmithEmeralds": null
+    "powersmithEmeralds": null,
+    "uniqueOutcomeChoiceRequired": true,
+    "nativeBridgeImplemented": false
   },
   "gold": {
     "huntCompletion": 50,

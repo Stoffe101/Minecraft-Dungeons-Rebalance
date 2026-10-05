@@ -8,7 +8,7 @@ A standalone Minecraft Dungeons gameplay rebalance mod focused on making Ancient
 
 See [BUILD_AND_TEST.md](docs/BUILD_AND_TEST.md) for installation, exact implemented features and runtime checks. The test PAK increases gold chest rewards, sets Camp emerald chest reward to 100, doubles the base urn amount range, and adapts bounded Better Ancient Hunt waves/enemies/side paths. It does not yet implement guaranteed random Ancient selection, paid Camp smiths or shared gold.
 
-The targeted asset upload has been received and inspected; no repeat collection of those 72 targets is needed. See [verified findings](docs/NATIVE_ASSET_RESEARCH.md) and [current implementation status](docs/CURRENT_STATE.md).
+The targeted asset upload has been received and inspected; no repeat collection of those 72 targets is needed. The supplemental 15-target Ancient upload is also received. Upgrade choice/confirmation source work has started; see [UPGRADES.md](docs/UPGRADES.md), which distinguishes policy models from native gameplay integration. See [verified findings](docs/NATIVE_ASSET_RESEARCH.md) and [current implementation status](docs/CURRENT_STATE.md).
 
 ## Core goals
 

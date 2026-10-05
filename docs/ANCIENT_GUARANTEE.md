@@ -41,3 +41,9 @@ A statistical average alone cannot prove the guarantee: generation-level validat
 ## Supplemental collection
 
 Extract `Minecraft-Dungeons-Rebalance-Ancient-Collector.zip` outside the game, double-click `Collect-AncientSpawnEvidence.cmd`, and return the newly generated `.research/rebalance-ancient-evidence-*.zip`. The bundle uses the already-tested pinned collector executable; the new allowlist is validated. It does not modify the game, read saves/executables, or collect the previous 72 assets. This collection may expose native-only delegation rather than a patchable graph; that limitation will be documented.
+
+## Supplemental evidence received
+
+All 15 reads succeeded; all 29 preserved hashes match. Native hypermission config contains 29 hyperdungeons and uses `hypermission-mobs`, unlike the upstream mod's `mobs` key; do not import that upstream root wholesale. All 26 Ancient entries have archetype requirements; gold entries remain separate. No guaranteed-count/spawn-probability control is exposed in this file.
+
+UMG_MissionProbabilities calls `/Script/Dungeons.Default__MissionChancesUtil.GetMissionProbabilities` with MissionState and receives an array of native MissionProbability structures for presentation. BPL_MissionOfferings opens the merchant; offering widgets prepare requests/refresh summaries. HyperDungeonDoor supplied Kismet is BeginPlay/light presentation, not the authoritative encounter selection implementation. No label-only patch or eligibility removal was shipped. Native generation contract remains unresolved; do not ask for the same asset collection again.

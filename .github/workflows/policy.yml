@@ -1,0 +1,19 @@
+name: Upgrade policy models
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify upgrade choices and confirmation guards
+        run: python tests/test_upgrades.py -v
+      - name: Check source syntax
+        run: python -m py_compile src/rebalance/upgrades.py tests/test_upgrades.py tests/test_contract_probe.py

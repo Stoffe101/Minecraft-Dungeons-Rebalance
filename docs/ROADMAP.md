@@ -152,3 +152,7 @@ Initial source collection received. Implemented and structurally validated Hunts
 ## Latest continuation priorities
 
 Camp emerald chest scalar 50 -> 100 implemented and structurally validated in v2. Guaranteed random Ancient minimum added as a new requirement; it needs the separate hypermission configuration and offering/door-selection evidence, not another copy of the initial collection. Run supplemental collector, establish the authoritative generation contract, implement guaranteed random fallback/reservation and execute the acceptance matrix. Continue native paid merchant and shared-gold research; neither milestone is completed.
+
+## Supplemental / upgrade-choice continuation
+
+Supplemental Ancient sources received and inspected. Upgrade option/pricing/confirmation models started and tested; no native adapter, Camp UI or upgraded-item gameplay milestone closed. Exact native mutation and generator contracts are the next gate.

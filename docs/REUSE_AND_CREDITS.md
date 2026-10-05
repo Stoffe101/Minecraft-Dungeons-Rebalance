@@ -110,3 +110,7 @@ Better Ancient Hunt collector-stage status: credited Onetoeisenough; permission 
 ## Better Ancient Hunt 1.0 actual adaptation
 
 Original author: **Onetoeisenough**. Source PAK supplied by user from Nexus mod 173/file 378. Adapted the mob groups, default mob configuration, finite arena wave/timing changes and side-path definitions from `ancientdungeons.json` and ten `hm_*.json` files. Output is composed against the user's installed level originals. Density/count/path requests are bounded. Native routes, objectives, triggers, gates and rewards are preserved. Original singular-path st_gold entry and extra hyperpermission level are excluded pending a verified reference. No third-party native code is included; the upstream PAK contains JSON only. Raw game files/generated PAKs remain private and are not checked into git.
+
+## Supplemental / upgrade-choice continuation
+
+UpgradeCore and read-only Lua reflection inventory are project-authored. No native transaction ABI, game family database, item icon or SDK implementation copied. Official UE4SS API documentation was consulted; no UE4SS code/binary is bundled or enabled. QoL identity-capture/state-guard design informed this model; no QoL source function was copied in this pass.

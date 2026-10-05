@@ -36,3 +36,5 @@ A meaningful feature/research pass is not considered complete until:
 - [BUILD_AND_TEST.md](BUILD_AND_TEST.md): first playable subset, installation and outstanding gameplay checks.
 
 - [Guaranteed random Ancient investigation](ANCIENT_GUARANTEE.md)
+
+- [Camp upgrade and Unique choice implementation status](UPGRADES.md)

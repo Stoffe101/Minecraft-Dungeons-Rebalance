@@ -102,3 +102,11 @@ Accept the user request for at least one random reachable Ancient per successful
 ## D-016 — Camp reward scalar
 
 The actual BP_LobbyChest CDO contains EmeraldsReward=50 and derives from native LobbyChest. Set this single native field to 100 without altering availability or other chest graphs. Validate the vanilla value, bound configuration, serialize/re-open and reject mixed already-patched inputs before writing. Retail wallet measurement is still required.
+
+## D-017 — Player-selected Unique outcome
+
+For a native item family with multiple Unique variants, show localized names, native icons, descriptions/innate effects and native stat preview where available. Require explicit selection and confirmation of the exact result and price. Never fall back to random conversion or infer families from cooked filename suffixes. One-result families still show the outcome for confirmation.
+
+## D-018 — Model before unverified native mutation
+
+Implement choice/pricing/state/receipt guards as a tested reference model, clearly excluded from game PAKs until a native bridge exists. Default native capabilities false. Run on serialized native authority; actual atomic payment/state preservation and reconnect receipts require native validation. Prepare a source-only bounded reflection inventory using documented APIs, without enabling a new loader dependency or guessed native transaction.

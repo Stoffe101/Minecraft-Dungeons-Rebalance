@@ -32,3 +32,7 @@ Local integration tests exercised an unencrypted UE4.22 third-party mod fixture 
 ## Supplemental Ancient spawn evidence
 
 The initial 72 targets and upstream mod were received successfully. For the new guarantee request, use **Collect-AncientSpawnEvidence.cmd** from the Ancient collector bundle. It collects 14 offering/chance/door/merchant packages plus the separate netherhypermission-hyper.json configuration: 15 catalog-confirmed new targets, zero overlap. It produces rebalance-ancient-evidence-*.zip. Do not resend the initial upload or mod. See ANCIENT_GUARANTEE.md for why these are needed. Source checkout can use -TargetSet AncientSpawn; Baseline stays the default.
+
+## Supplemental / upgrade-choice continuation
+
+The supplemental 15-target upload was received, all targets read and all 29 source hashes verified. No repeat of baseline or supplemental collection is currently needed. Further native contract work requires runtime research rather than repeating asset collection.

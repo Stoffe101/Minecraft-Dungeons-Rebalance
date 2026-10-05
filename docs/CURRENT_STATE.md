@@ -47,6 +47,10 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 Retail-test the playable subset while researching native merchant transaction/currency classes, native pickup/store authority and completion rewards. Determine safe charge-before-mutation/commit-on-success semantics, persistent item preservation and repeatability before enabling Camp smiths. Avoid placing free Tower merchants into Camp and calling that a completed paid upgrade system. Source package collection is complete for the initial targets; do not ask for the same upload again.
 
-## Latest dependency
+## Latest continuation
 
-`Collect-AncientSpawnEvidence.cmd` collects 15 **new** catalog-confirmed targets with no overlap with the received 72. This includes `netherhypermission-hyper.json` and offering/chance/door Blueprints. No repeat upload of the initial evidence or Better Ancient Hunt is needed. See ANCIENT_GUARANTEE.md. Native smith/shared-gold contract research remains ongoing and unimplemented.
+Supplemental Ancient collection received: 15/15 targets, zero errors, 29/29 source hashes verified. The offering/chance/door inspection resolves to native probability/request paths and presentation, not an exposed guaranteed encounter writer. Guaranteed Ancient selection remains unimplemented. No repeat collection is needed.
+
+Started upgrade choice/confirmation source foundation in src/rebalance/upgrades.py, including selected Unique outcomes with name/icon/description/effect/stat row data, agreed prices and item/ownership/catalog/balance/receipt guards. Seventeen synthetic-adapter policy tests pass. **No native adapter or in-game picker is implemented**; this Python module is not loaded by Minecraft Dungeons. Two developer-only Lua reflection API-shim tests pass; UE4SS compatibility remains unverified and no runtime loader is enabled. See UPGRADES.md.
+
+Next: current native selected-variant/transaction contracts, native presentation/family resolution, native UMG picker and persistent Camp integration; native authoritative Hunt generation; shared-gold authority. Latest game test remains v2.

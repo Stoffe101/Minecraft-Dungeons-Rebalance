@@ -150,3 +150,7 @@ Every implementation pass updates:
 ## v2 reward coverage and guarantee boundary
 
 Economy patcher now validates all four originals before output and changes six DropData integers plus the LobbyChest EmeraldsReward scalar. Builder packages 19 entries and explicitly lists the Ancient guarantee as excluded. New config guarantee fields are design goals, never fabricated native properties. Supplemental evidence uses an independent allowlist through the existing collector; baseline workflow remains unchanged.
+
+## Supplemental / upgrade-choice continuation
+
+UpgradeCore is a serialized-authority reference policy model. NativeAdapter is an unimplemented boundary for authoritative item/catalog/eligibility/presentation snapshots and atomic selected-result payment/mutation. Native UMG/runtime implementation must be supplied separately; Python is not embedded in the PAK.

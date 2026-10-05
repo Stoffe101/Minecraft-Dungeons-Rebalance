@@ -241,3 +241,7 @@ All 97 collected-source hashes matched. Three cooked reward packages patched and
 ## Test v2 continuation
 
 Three economy integration tests pass against the supplied private packages. They verify four-package semantic re-read, output preservation, invalid Camp reward rejection and previously patched Camp-default rejection before output creation. Final v2 PAK has 19 entries; integrity and exact unpack comparison passed. Hunt data is unchanged from v1; its eight existing tests remain applicable. Test Camp wallet delta when chest is available; do not interpret native daily/unlock availability as a failed amount patch. Guaranteed Ancient acceptance tests are in ANCIENT_GUARANTEE.md and remain pending.
+
+## Supplemental / upgrade-choice continuation
+
+Seventeen synthetic-adapter upgrade policy tests and two Lua 5.4 API-shim tests passed. These are not native upgrade/charge, UMG, loader, Hunt guarantee or retail tests. Actual game tests remain pending; v2 PAK unchanged.

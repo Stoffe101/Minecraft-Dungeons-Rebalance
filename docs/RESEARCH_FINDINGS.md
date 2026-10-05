@@ -183,3 +183,7 @@ See [NATIVE_ASSET_RESEARCH.md](NATIVE_ASSET_RESEARCH.md) for actual Store catalo
 ## Actual package contents supersede earlier assumptions
 
 Initial source collection is now complete. See NATIVE_ASSET_RESEARCH.md's superseding findings. The urn base amount is 3–7, so the observed first-pass field tuning is 6–14. This is a component amount range, not a measured guarantee of final emeralds per urn or 2x whole-mission income. Tower transactions and currency ownership reside in native classes; supplying actors/widgets did not reveal a safe paid Camp transaction or shared award API. The implemented PAK therefore covers the proven Hunt/chest/urn subset only.
+
+## Supplemental / upgrade-choice continuation
+
+Supplemental inputs confirm chance calculation is a native MissionChancesUtil call used by UI; native encounter selection is not supplied Kismet. Upgrade option/pricing models are developer source only, with no real family/name/icon mapping invented.
