@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "status": "Design targets; not yet bound to retail game assets",
+  "smiths": {
+    "commonToRareEmeralds": 750,
+    "rareToUniqueEmeralds": 2500,
+    "addGildedGold": 150,
+    "rerollGildedGold": 250,
+    "powersmithEmeralds": null
+  },
+  "gold": {
+    "huntCompletion": 50,
+    "normalChest": [
+      10,
+      15
+    ],
+    "rareChest": [
+      20,
+      30
+    ],
+    "goldRoomOpportunityMultiplierRange": [
+      1.5,
+      1.75
+    ],
+    "typicalRunTarget": [
+      150,
+      220
+    ],
+    "luckyRunTarget": [
+      250,
+      300
+    ]
+  },
+  "emeralds": {
+    "urn": [
+      30,
+      60
+    ],
+    "campChest": 100,
+    "effectiveIncomeMultiplierTarget": 2.0,
+    "changeSalvage": false,
+    "preserveProspector": true
+  },
+  "ancients": {
+    "extraWaves": 1,
+    "extraAncientsPerWave": 2,
+    "spawnCaps": "Must be bound to observed spawning mechanism and tested before release"
+  },
+  "multiplayer": {
+    "sharedGoldGoal": true,
+    "hostOnlyVerified": false
+  }
+}

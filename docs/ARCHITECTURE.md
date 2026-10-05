@@ -136,3 +136,8 @@ Every implementation pass updates:
 - TEST_PLAN results
 - DECISIONS when architecture changes
 - REUSE_AND_CREDITS when copied/reused material changes
+
+
+## Implemented tooling as of 2026-10-05
+
+`tools/RebalanceEvidence` reads targeted UE4.22 package metadata/defaults and exact raw companions plus Lovika JSON from game archives. `scripts/Collect-RebalanceEvidence.ps1` validates the installation/output, checksum-pins dependencies and produces a private evidence ZIP. `config/evidence-targets.json` contains catalog-verified exact paths; `config/balance.json` contains design values only. The gameplay architecture described above remains proposed, with native item/reward/replication bindings pending actual source collection.

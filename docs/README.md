@@ -29,3 +29,6 @@ A meaningful feature/research pass is not considered complete until:
 4. Testing and results are recorded.
 5. The next work item is clear.
 6. Third-party reuse is added to REUSE_AND_CREDITS before distribution.
+
+- [NATIVE_ASSET_RESEARCH.md](NATIVE_ASSET_RESEARCH.md): verified paths and concrete asset blockers.
+- [EVIDENCE_COLLECTION.md](EVIDENCE_COLLECTION.md): one-click targeted source collection.

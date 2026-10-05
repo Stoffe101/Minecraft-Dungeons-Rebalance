@@ -225,3 +225,10 @@ With both mods installed:
 - Ancient Hunts unaffected by inventory UI patches
 
 Neither mod should require the other.
+
+
+## 2026-10-05 tooling results
+
+Five local integration tests passed: valid/invalid exact manifests; real UE4.22 fixture archive collection with synthetic JSON, tagged defaults and exact SHA/byte preservation; missing-target failure with retained partial evidence; refusal to overwrite output; refusal to write within the game directory. Traversal, duplicate/case ambiguity and unsupported extensions are included in negative cases. PowerShell syntax parsing passed for both scripts. Ordinary local MSBuild was blocked by a container dotnet CLI process-information failure; direct Roslyn compilation succeeded. Windows CI added, pending separately verified results.
+
+These are collector tests. All gameplay, economy-distribution, item preservation, save/reload and multiplayer tests remain pending. No Rebalance PAK currently exists.

@@ -173,3 +173,8 @@ Need to establish:
 - whether gold is collector-only in current retail behavior
 - whether a host mod can safely award rewards to unmodded clients
 - duplicate-award and reconnect edge cases
+
+
+## 2026-10-05 native input audit
+
+See [NATIVE_ASSET_RESEARCH.md](NATIVE_ASSET_RESEARCH.md) for actual Store catalog paths, primary-source permission checks and the distinction between path evidence and runtime contracts. No native smith/reward constant or replication signature has been established from package contents yet. The prior inventory upload is insufficient for these different systems.

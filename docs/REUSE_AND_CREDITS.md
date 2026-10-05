@@ -96,3 +96,12 @@ Key topics:
 - Loot Urn and Camp Emerald Chest values
 
 See SOURCES.md.
+
+
+## Actual reuse in 2026-10-05 pass
+
+Minecraft-Dungeons-QoL at `ce7002779f0b47db8986a2a230628399027f5586`: adapted LegacyEvidenceExporter Program/csproj, evidence-tool pin configuration, collector/bootstrap script and the path/process helpers from Common.ps1. Same owner requested reuse. No project-wide third-party license is inferred from that authorization. No QoL runtime assets or retail assets copied into this git repository.
+
+Pinned UAssetAPI 1.1.0 and CUE4Parse libraries from UeBlueprintDumper 1.2.0 are tool dependencies (upstream notices retained in the portable dependency archive). LetMeMove 1.1.0 is an MIT fixture for local/CI tests, not Rebalance runtime content. Dokucraft Dungeons-Mod-Kit at `c30e88ec5e99e401eadedddbe82af0265a056fe7` supplies the MIT u4pak test packager.
+
+Better Ancient Hunt: credited Onetoeisenough; permission verified October 5. Zero binary/source assets copied so far. Its actual file must be inspected before adaptation. See NATIVE_ASSET_RESEARCH.md.

@@ -138,3 +138,8 @@ Only after the core rebalance is stable:
 - additional meaningful gold sinks
 - additional emerald sinks
 - Camp visual dressing around the Tower smith area
+
+
+## Immediate dependency gate (2026-10-05)
+
+Collector implementation is complete for the known targets; retail collection is pending. Obtain its output and Better Ancient Hunt PAK, then proceed with native-field research, gameplay patching, packaging and runtime validation. No gameplay milestone is marked complete by collector tests.

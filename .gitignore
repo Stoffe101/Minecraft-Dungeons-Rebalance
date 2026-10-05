@@ -13,3 +13,13 @@ GameContent/
 .vscode/
 tmp/
 temp/
+
+# Private retail inputs, local toolchains and distributables
+.tools/
+.research/
+*.pak
+*.uasset
+*.uexp
+*.umap
+*.ubulk
+*.zip

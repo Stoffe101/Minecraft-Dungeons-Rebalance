@@ -1,0 +1,53 @@
+name: Rebalance evidence collector
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  collector:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch pinned inspector and permitted fixture
+        shell: pwsh
+        run: |
+          $cfg = Get-Content config/evidence-tool.json -Raw | ConvertFrom-Json
+          New-Item -ItemType Directory .tools -Force | Out-Null
+          Invoke-WebRequest $cfg.url -OutFile .tools/inspector.zip
+          if ((Get-FileHash .tools/inspector.zip -Algorithm SHA256).Hash.ToLowerInvariant() -ne $cfg.sha256) { throw 'Inspector checksum mismatch' }
+          Expand-Archive .tools/inspector.zip .tools/inspector
+          Invoke-WebRequest https://github.com/StainlessStasis/LetMeMove/releases/download/1.1.0/LetMeMove.zip -OutFile .tools/fixture.zip
+          if ((Get-FileHash .tools/fixture.zip -Algorithm SHA256).Hash.ToLowerInvariant() -ne '9ed80bd696c5124861efe349c30d5e514412bd923364507514db4efb9299c675') { throw 'Fixture checksum mismatch' }
+          Expand-Archive .tools/fixture.zip .tools/fixture
+          git clone https://github.com/Dokucraft/Dungeons-Mod-Kit.git .tools/modkit
+          if ($LASTEXITCODE -ne 0) { throw 'Mod Kit clone failed' }
+          git -C .tools/modkit checkout c30e88ec5e99e401eadedddbe82af0265a056fe7
+          if ($LASTEXITCODE -ne 0) { throw 'Mod Kit checkout failed' }
+      - name: Compile and integration-test archive collection
+        shell: pwsh
+        run: |
+          $libraries = (Get-ChildItem .tools/inspector -Recurse -Filter CUE4Parse.dll).Directory.FullName
+          dotnet build tools/RebalanceEvidence/RebalanceEvidence.csproj -c Release -o .tools/RebalanceEvidence "-p:InspectorDirectory=$libraries"
+          if ($LASTEXITCODE -ne 0) { throw 'Collector build failed' }
+          dotnet .tools/RebalanceEvidence/RebalanceEvidence.dll --validate-targets config/evidence-targets.json
+          if ($LASTEXITCODE -ne 0) { throw 'Invalid target manifest' }
+          $fixture = (Get-ChildItem .tools/fixture -Recurse -Filter BP_WASD_Movement.uasset).FullName
+          python tests/test_evidence.py --dotnet (Get-Command dotnet).Source --exporter .tools/RebalanceEvidence/RebalanceEvidence.dll --libraries $libraries --fixture $fixture --packager .tools/modkit/Tools/py/u4pak.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Collector integration tests failed' }
+          foreach ($file in Get-ChildItem scripts/*.ps1) {
+            $tokens=$null; $errors=$null
+            [System.Management.Automation.Language.Parser]::ParseFile($file.FullName,[ref]$tokens,[ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) { throw ($errors -join '; ') }
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RebalanceEvidence-compiled-tools
+          path: .tools/RebalanceEvidence/

@@ -135,3 +135,15 @@ Used for:
 https://github.com/Stoffe101/Minecraft-Dungeons-QoL
 
 Used as the source of reusable internal tooling/research once a formal code audit begins.
+
+
+## Sources checked 2026-10-05
+
+- User-provided Store catalog in `game-evidence-4.zip` (October 4): exact path evidence, 131,164 entries.
+- User-provided `game-evidence-legacy.zip` and inventory-patch-source archive: existing inventory ABI/metadata only.
+- https://github.com/Stoffe101/Minecraft-Dungeons-QoL/tree/ce7002779f0b47db8986a2a230628399027f5586 — actual reused collector source and prior evidence limitations.
+- https://www.nexusmods.com/minecraftdungeons/mods/173 — Better Ancient Hunt author, permission terms and advertised features.
+- https://www.nexusmods.com/minecraftdungeons/mods/173?tab=files — v1.0 PAK file listing, file id 378.
+- https://github.com/Saad5400/minecraft-dungeons-arabic/blob/c1a8c20ea714ab63ea33b04025bc84c08747f12a/tools/pak.js — primary-source published archive key; same key already verified by user catalog collection.
+- https://github.com/StainlessStasis/LetMeMove/releases/tag/1.1.0 — MIT UE4.22 test fixture.
+- https://github.com/Dokucraft/Dungeons-Mod-Kit/tree/c30e88ec5e99e401eadedddbe82af0265a056fe7 — MIT test packager.

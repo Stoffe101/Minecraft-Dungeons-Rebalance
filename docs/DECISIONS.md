@@ -76,3 +76,12 @@ We will:
 Where technically feasible, gold should benefit the party rather than only the collector.
 
 Implementation must be tested for duplication exploits and host/client desync.
+
+
+## D-011 — Exact retail evidence before native transactions
+
+Use catalog-verified targets and preserve raw originals/defaults rather than inventing mutation signatures, spawn fields or shared-gold RPCs. Build the collector to unblock implementation. Collection errors retain raw originals and partial metadata; they do not authorize a gameplay release. Accepted design remains unchanged.
+
+## D-012 — Prefer observed Lovika inputs for layout research
+
+Camp/Hunt generation and Tower NPC definitions have actual JSON catalog paths. Inspect those alongside actor/widgets before choosing a Blueprint-loader spawning scheme or replacing a Camp map.

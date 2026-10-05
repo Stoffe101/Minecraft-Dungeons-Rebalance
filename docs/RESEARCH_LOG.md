@@ -100,3 +100,8 @@ Decision:
 2. Obtain and diff Better Ancient Hunt v1.0.
 3. Locate Tower merchant assets and native mutation functions.
 4. Build a read-only/diagnostic proof before destructive item mutations.
+
+
+## 2026-10-05 — Work Mode asset and tooling pass
+
+Recovered agreement, cloned both repositories, inspected Store catalog plus prior inventory upload, verified Nexus permissions/file metadata and public archive-key provenance. Implemented standalone evidence tooling derived from QoL. Locally compiled via Roslyn against .NET 8 and pinned libraries. Five integration tests passed after correcting the test library location to the full pinned dependency directory; PowerShell scripts parsed. Attempting ordinary `dotnet build` in this container failed before MSBuild due to a host process-information error, so it is not claimed as a local MSBuild pass. Windows CI added for that build route. No game execution, new reward values or NPC transactions tested. Next input: targeted collector output and Better Ancient Hunt PAK.
