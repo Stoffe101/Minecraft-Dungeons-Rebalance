@@ -23,3 +23,6 @@ temp/
 *.umap
 *.ubulk
 *.zip
+
+__pycache__/
+*.pyc

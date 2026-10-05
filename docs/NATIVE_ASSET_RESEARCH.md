@@ -51,3 +51,14 @@ The Files tab identifies `zAncient_Hunt_Mod`, 157 KB, a PAK containing all conte
 ## Concrete unblocker
 
 Run the provided Windows collector and send its output ZIP plus the original Better Ancient Hunt `.pak`. The collector reads the active game's top-level archives and preserves the allowlisted package headers/bytecode companions and JSON, hashes each output, and includes defaults/imports/Kismet metadata. It does not read saves or executables or write to the installation. Keep the resulting raw game assets private.
+
+
+## Superseding findings after the actual uploads
+
+The previously missing inputs were supplied in this turn. All 72 target reads succeeded and all 97 preserved source hashes match. The Better Ancient Hunt PAK contains 13 JSON entries. Its `data/lovika/objectgroup/st_gold` path is singular while the installed reference is `objectgroups/st_gold`; its extra `netherhypermission-hyper` file has no same-named target in this collection. Neither entry is adopted without a proven native reference.
+
+Gold chest ranges are confirmed in `ConsumableDrop_GEN_VARIABLE.DropData`, Gold category: small 4–6, rare 8–10. Base urn `EmeraldDrop_GEN_VARIABLE.DropData` is Emerald category 3–7. The first patch changes only those six integers; all imported objects, property metadata and Blueprint scripts remain identical after output re-read.
+
+Smith actor `MerchantDef.MerchantDefinition` references native TowerArtisanMerchantDef, TowerBlacksmithMerchantDef and TowerGilderMerchantDef classes. CDOs set both one-transaction flags true. Content widgets prioritize native GildItem, UniqueCollectItem and UpgradeTowerItem transactions. Their implementation and pricing/commit semantics are not serialized Kismet in these widgets. Gold item derives from native StorableItem; its supplied graph concerns initialization/visibility/effects, not an exposed party currency award function. A path/class name alone still does not authorize an invented ABI.
+
+Better Ancient Hunt densities reach 3.5 and side-path probabilities exceed 1 in places. Its Ancient waves use `[1, group], [2, group], [1, raid]` and native arena interval/rest controls. The adaptation retains these finite waves, bounds density/path counts, preserves original routing/gates/rewards, and rejects new unresolved wave-group references. Mod array-shaped `arena.reward` additions are not adopted: native supplied challenge rewards use different observed structures, and their semantics remain unproven. Main-route length changes are also excluded to bound mission expansion; permitted harder enemy groups and side-path changes are retained.

@@ -232,3 +232,8 @@ Neither mod should require the other.
 Five local integration tests passed: valid/invalid exact manifests; real UE4.22 fixture archive collection with synthetic JSON, tagged defaults and exact SHA/byte preservation; missing-target failure with retained partial evidence; refusal to overwrite output; refusal to write within the game directory. Traversal, duplicate/case ambiguity and unsupported extensions are included in negative cases. PowerShell syntax parsing passed for both scripts. Ordinary local MSBuild was blocked by a container dotnet CLI process-information failure; direct Roslyn compilation succeeded. Windows CI added, pending separately verified results.
 
 These are collector tests. All gameplay, economy-distribution, item preservation, save/reload and multiplayer tests remain pending. No Rebalance PAK currently exists.
+
+
+## HuntsEconomy-Test-v1 actual results
+
+All 97 collected-source hashes matched. Three cooked reward packages patched and re-opened with full semantic equality to expected mutation; imports, field schema and every Blueprint script separately matched originals. Eight Hunt tests passed: eleven real levels with bounded adaptation and input preservation; preserved original reward fields; rejected identity mismatch, unknown added wave groups, excessive wave count, native route mutation and gate mutation; JSON comment markers inside strings preserved. Builder packaged 17 entries, u4pak integrity passed, and every extracted byte/path equaled the staging input. Retail loading, reward field units, urn subclass coverage, arena timing/completion, final income and multiplayer behavior remain pending; see BUILD_AND_TEST.md.

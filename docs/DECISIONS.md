@@ -85,3 +85,12 @@ Use catalog-verified targets and preserve raw originals/defaults rather than inv
 ## D-012 — Prefer observed Lovika inputs for layout research
 
 Camp/Hunt generation and Tower NPC definitions have actual JSON catalog paths. Inspect those alongside actor/widgets before choosing a Blueprint-loader spawning scheme or replacing a Camp map.
+
+
+## D-013 — Deliver proven Hunt/economy subset for retail testing
+
+Produce a clearly named test PAK from verified reward fields and adapted Lovika JSON while marking all native smith/shared-gold work unfinished. Do not silently treat native Tower's free transaction classes as priced Camp services. Do not infer network sharing from replicated actors or native presentation graphs.
+
+## D-014 — Bounds and native-flow preservation
+
+Bound adapted density at 1.75, per-type counts at 4, arena requests at 24 per wave/10 waves, side-path probability at 1 and maximum length at 4. These are experimental request limits, not a global active-mob cap. Preserve current native objectives/main-route geometry/triggers/gates/rewards. Keep the permitted extra two-Ancient wave and later raid captain; preserve upstream native arena timing controls pending runtime observation.

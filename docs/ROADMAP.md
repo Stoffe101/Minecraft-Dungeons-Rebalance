@@ -143,3 +143,8 @@ Only after the core rebalance is stable:
 ## Immediate dependency gate (2026-10-05)
 
 Collector implementation is complete for the known targets; retail collection is pending. Obtain its output and Better Ancient Hunt PAK, then proceed with native-field research, gameplay patching, packaging and runtime validation. No gameplay milestone is marked complete by collector tests.
+
+
+## Superseding milestone update
+
+Initial source collection received. Implemented and structurally validated HuntsEconomy-Test-v1; retail testing is next for this subset. Native Camp services, full economy coverage/completion rewards, explicit Gold Room weighting and shared-gold contracts are still open. Collect measurable run totals and arena timing before expanding/tuning. No full-design completion milestone is closed.

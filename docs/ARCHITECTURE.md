@@ -141,3 +141,8 @@ Every implementation pass updates:
 ## Implemented tooling as of 2026-10-05
 
 `tools/RebalanceEvidence` reads targeted UE4.22 package metadata/defaults and exact raw companions plus Lovika JSON from game archives. `scripts/Collect-RebalanceEvidence.ps1` validates the installation/output, checksum-pins dependencies and produces a private evidence ZIP. `config/evidence-targets.json` contains catalog-verified exact paths; `config/balance.json` contains design values only. The gameplay architecture described above remains proposed, with native item/reward/replication bindings pending actual source collection.
+
+
+## Implemented gameplay tooling
+
+`CookedEconomyPatcher` changes six verified integer fields in three cooked reward components, validates native before-values/categories, writes/re-opens output and requires exact semantic equality to expected mutations. `build_hunts.py` adapts whitelisted upstream JSON fields onto installed originals with validation and bounds. `build_test_pak.py` composes a fresh standalone stage, packages seventeen known entries, integrity-tests the archive and unpack-compares every byte. Reports remain outside the runtime PAK. Native smith/party-reward architecture remains unresolved and is excluded from this build.

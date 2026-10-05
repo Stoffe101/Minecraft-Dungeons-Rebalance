@@ -47,6 +47,13 @@ jobs:
             [System.Management.Automation.Language.Parser]::ParseFile($file.FullName,[ref]$tokens,[ref]$errors) | Out-Null
             if ($errors.Count -gt 0) { throw ($errors -join '; ') }
           }
+      - name: Compile economy patcher
+        shell: pwsh
+        run: |
+          dotnet build tools/CookedEconomyPatcher/CookedEconomyPatcher.csproj -c Release -o .tools/CookedEconomyPatcher
+          if ($LASTEXITCODE -ne 0) { throw 'Economy patcher build failed' }
+          python -m py_compile scripts/lovika_json.py scripts/build_hunts.py scripts/build_test_pak.py tests/test_hunts.py
+          if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: RebalanceEvidence-compiled-tools

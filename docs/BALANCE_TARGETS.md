@@ -153,3 +153,8 @@ For at least 10 runs per test configuration:
 - emeralds per normal mission
 - emeralds with and without Prospector
 - smith uses affordable per hour of normal play
+
+
+## Measured-input correction and implemented first pass
+
+Actual base Loot Urn package amount range is **3–7**, not the earlier community estimate of 15–30. First-pass patch doubles its serialized range to **6–14**. Native field/bundle semantics and child override coverage need retail verification before expressing that as exact final emeralds. Normal/rare chest defaults directly confirm 4–6 and 8–10 and are patched to 10–15 and 20–30. Completion stays unchanged in this first test subset. The 150–220/250–300 Hunt totals, approximately 2x overall emerald income and +50–75% Gold Room opportunities remain unmeasured design targets.

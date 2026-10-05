@@ -32,3 +32,5 @@ A meaningful feature/research pass is not considered complete until:
 
 - [NATIVE_ASSET_RESEARCH.md](NATIVE_ASSET_RESEARCH.md): verified paths and concrete asset blockers.
 - [EVIDENCE_COLLECTION.md](EVIDENCE_COLLECTION.md): one-click targeted source collection.
+
+- [BUILD_AND_TEST.md](BUILD_AND_TEST.md): first playable subset, installation and outstanding gameplay checks.

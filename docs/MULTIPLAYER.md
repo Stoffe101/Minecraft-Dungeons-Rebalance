@@ -65,3 +65,8 @@ Test matrix should eventually include:
 5. Unmodded host + modded client, for failure/compatibility characterization.
 
 The supported release configuration should be the simplest one proven reliable. Do not claim host-only compatibility based on theory.
+
+
+## Current build behavior
+
+HuntsEconomy-Test-v1 does not introduce a party wallet grant or claim host-only compatibility. It preserves existing reward actor bytecode/replication and changes component amounts plus level generation requests. Initially test with the same PAK on host/client, comparing both wallets per chest and pickup to establish the native baseline. Increased physical drops are not proof of shared currency; explicit sharing and duplication prevention remain unfinished.

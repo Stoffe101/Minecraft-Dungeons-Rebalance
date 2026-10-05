@@ -66,9 +66,9 @@ Even where credit is not explicitly required for asset reuse, this project will 
 - a second wave after the first Ancient containing two Ancients
 - raid captains after gold and Ancient battles
 
-### Planned reuse
+### Bootstrap reuse plan (superseded by actual adaptation below)
 
-Not yet imported.
+At bootstrap this was not yet imported.
 
 Before importing:
 
@@ -104,4 +104,9 @@ Minecraft-Dungeons-QoL at `ce7002779f0b47db8986a2a230628399027f5586`: adapted Le
 
 Pinned UAssetAPI 1.1.0 and CUE4Parse libraries from UeBlueprintDumper 1.2.0 are tool dependencies (upstream notices retained in the portable dependency archive). LetMeMove 1.1.0 is an MIT fixture for local/CI tests, not Rebalance runtime content. Dokucraft Dungeons-Mod-Kit at `c30e88ec5e99e401eadedddbe82af0265a056fe7` supplies the MIT u4pak test packager.
 
-Better Ancient Hunt: credited Onetoeisenough; permission verified October 5. Zero binary/source assets copied so far. Its actual file must be inspected before adaptation. See NATIVE_ASSET_RESEARCH.md.
+Better Ancient Hunt collector-stage status: credited Onetoeisenough; permission verified October 5. No assets had been copied at that stage. The later upload and actual adaptation below supersede this status. See NATIVE_ASSET_RESEARCH.md.
+
+
+## Better Ancient Hunt 1.0 actual adaptation
+
+Original author: **Onetoeisenough**. Source PAK supplied by user from Nexus mod 173/file 378. Adapted the mob groups, default mob configuration, finite arena wave/timing changes and side-path definitions from `ancientdungeons.json` and ten `hm_*.json` files. Output is composed against the user's installed level originals. Density/count/path requests are bounded. Native routes, objectives, triggers, gates and rewards are preserved. Original singular-path st_gold entry and extra hyperpermission level are excluded pending a verified reference. No third-party native code is included; the upstream PAK contains JSON only. Raw game files/generated PAKs remain private and are not checked into git.

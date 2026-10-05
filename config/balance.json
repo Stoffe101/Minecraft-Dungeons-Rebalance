@@ -39,12 +39,25 @@
     "campChest": 100,
     "effectiveIncomeMultiplierTarget": 2.0,
     "changeSalvage": false,
-    "preserveProspector": true
+    "preserveProspector": true,
+    "observedBaseUrnVanilla": [
+      3,
+      7
+    ],
+    "observedBaseUrnFirstPass": [
+      6,
+      14
+    ]
   },
   "ancients": {
     "extraWaves": 1,
     "extraAncientsPerWave": 2,
-    "spawnCaps": "Must be bound to observed spawning mechanism and tested before release"
+    "spawnCaps": "Must be bound to observed spawning mechanism and tested before release",
+    "maxDensity": 1.75,
+    "maxArenaWaveCount": 24,
+    "maxArenaWaves": 10,
+    "maxSidePathLength": 4,
+    "maxMobTypeCount": 4
   },
   "multiplayer": {
     "sharedGoldGoal": true,

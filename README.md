@@ -2,11 +2,13 @@
 
 A standalone Minecraft Dungeons gameplay rebalance mod focused on making Ancient Hunts, currency progression, and gear upgrading more rewarding while keeping the game recognizably vanilla.
 
-> **Status:** native asset research and tested evidence collector implemented. Gameplay changes and a usable Rebalance `.pak` are blocked on the targeted game assets; no gameplay build yet.
+> **Status:** first Hunts/Economy test `.pak` built and structurally verified. Camp smiths, full currency coverage and shared-gold behavior remain unfinished. Retail gameplay testing is pending.
 
-## Current next step
+## Current test build
 
-Run the [targeted Windows collector](docs/EVIDENCE_COLLECTION.md) and provide its output plus the original Better Ancient Hunt PAK. The existing inventory upload does not contain these smith/reward/generation packages. See [verified native paths](docs/NATIVE_ASSET_RESEARCH.md) and [current implementation status](docs/CURRENT_STATE.md).
+See [BUILD_AND_TEST.md](docs/BUILD_AND_TEST.md) for installation, exact implemented features and runtime checks. The test PAK increases gold chest rewards, doubles the base urn amount range, and adapts bounded Better Ancient Hunt waves/enemies/side paths. It does not yet implement paid Camp smiths or shared gold.
+
+The targeted asset upload has been received and inspected; no repeat collection of those 72 targets is needed. See [verified findings](docs/NATIVE_ASSET_RESEARCH.md) and [current implementation status](docs/CURRENT_STATE.md).
 
 ## Core goals
 

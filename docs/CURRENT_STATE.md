@@ -1,37 +1,42 @@
 # Current state
 
-Updated 2026-10-05.
+Updated 2026-10-05 after receiving the targeted collection and Better Ancient Hunt.
 
-**Targeted asset-collection tooling implemented and locally tested. No Rebalance gameplay `.pak` has been produced.**
+**First Hunts/Economy test PAK built and structurally verified. Full design is unfinished; no retail gameplay validation yet.**
 
-## Completed in this pass
+## Input and research results
 
-- Recovered exact accepted design; centralized it in `config/balance.json` without asserting those values are installed-game facts.
-- Inspected the prior Store catalog and inventory sources; identified actual smith, chest, currency, Camp and Ancient Hunt generator paths.
-- Verified Better Ancient Hunt reuse permissions and exact downloadable file identity. Its binary remains unavailable.
-- Adapted QoL's legacy UE4.22 exporter and Windows bootstrap into a standalone collector for 25 cooked packages and 47 JSON files.
-- Added tagged export defaults (needed for reward/replication research), bytecode metadata, raw companion preservation, per-file hashes, bounded exact target validation and partial failure reporting.
-- Added five passing integration tests and a Windows CI build/test workflow; CI status is separate from local test status.
-- Prepared a portable one-click collector using compiled tools and checksum-pinned dependencies.
+All 72 targets collected without errors. All 97 raw package/companion/JSON hashes verified against the collection manifest. Input lists 47 top-level game archives and no apparent directly installed mod archive. Better Ancient Hunt 1.0 contains 13 JSON files, no cooked Blueprints or source scripts.
 
-## Gameplay status
+Gold chest native defaults confirm ranges 4–6 and 8–10. Loot Urn base defaults specify 3–7 (not the earlier assumed 15–30); native unit/bundle semantics and subclass overrides still need testing. Smith actors point to native `/Script/Dungeons` merchant definition classes. Their widgets select native GildItem, UniqueCollectItem and UpgradeTowerItem transactions. Those implementations are not editable Blueprint graphs supplied by these packages.
+
+## Implemented build: HuntsEconomy-Test-v1
+
+- Normal/rare chest component ranges patched to 10–15 / 20–30.
+- Base Loot Urn component amount range doubled to 6–14.
+- Eleven original Hunt levels adapted with permitted mod enemy groups, arena waves and side paths.
+- Twenty-six Ancient encounter definitions contain first wave of one, extra wave of two, and one raid captain.
+- Finite generation-request bounds and exact native route/trigger/gate/reward preservation.
+- Standalone 17-entry PAK produced, integrity checked and unpack-compared byte-for-byte.
+- Three cooked package outputs re-opened; all imports, property schema and Blueprint scripts match their originals.
+- Eight Hunt tests pass, including all eleven real levels and negative route/gate/reference/identity checks.
+
+See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
+
+## Full design status
 
 | Feature | State |
 | --- | --- |
-| Three native Tower smith NPCs in Camp | Asset paths found; placement and runtime adaptation not implemented |
-| 750/2,500 emerald rarity upgrades | Accepted prices only; mutation contracts unresolved |
-| 150/250 gold gild services | Accepted prices only; persistent-item transactions unresolved |
-| Powersmith | Native paths found; pricing/cap TBD as agreed |
-| 50 completion / 10–15 normal / 20–30 rare chest gold | Targets preserved; native reward writers not available |
-| More Gold Rooms / mobs / Ancients | Generator paths found; original JSON and Better Ancient Hunt binary needed |
-| Approximately 2x natural emerald income | Targets preserved; reward writers not available |
-| Multiplayer shared gold | Goal preserved; native award/replication contract not established |
-| Gameplay packaging / retail testing | Not reached |
+| Three Tower NPCs and paid smith services in Camp | Unfinished; native definition/transaction adaptation required |
+| Chest gold ranges | Implemented, retail untested |
+| Completion 50 gold | Unfinished; reward writer not identified in supplied Blueprint graphs |
+| More enemies / Ancient waves / longer side paths | Implemented adaptation, retail untested |
+| Gold Room opportunities +50–75% | Still a tuning goal; explicit native room weighting unresolved |
+| Base urn drop amount doubling | Implemented; effective income/variant coverage unmeasured |
+| Global mob emerald/gold income, Camp chest | Unfinished |
+| Party-wide gold awards | Unfinished; native pickup/store authority contract unresolved |
+| Typical 150–220 / lucky 250–300 gold | Target only; not measured |
 
-## Current blocker
+## Next work
 
-Available raw game sources cover inventory UI only. This workspace has neither the retail game archives nor the targeted smith/reward/generation package contents. A path listing, old SDK method name, or mod description cannot establish safe currency/item mutation or replication semantics. The concrete next input is the collector ZIP output plus Better Ancient Hunt's original PAK; see EVIDENCE_COLLECTION.md.
-
-## Next implementation pass
-
-Inspect original defaults/Kismet/JSON and compare the third-party mod; bind centralized prices/rewards to observed fields/functions; implement finite encounter changes and native Camp placement; validate transaction success/currency order and ownership; build and re-open a standalone PAK; then test solo and co-op on retail. Keep runtime and structural validation results distinct.
+Retail-test the playable subset while researching native merchant transaction/currency classes, native pickup/store authority and completion rewards. Determine safe charge-before-mutation/commit-on-success semantics, persistent item preservation and repeatability before enabling Camp smiths. Avoid placing free Tower merchants into Camp and calling that a completed paid upgrade system. Source package collection is complete for the initial targets; do not ask for the same upload again.
