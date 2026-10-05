@@ -1,4 +1,15 @@
-# Guaranteed random Ancient — October 5 continuation
+# Ancient encounter chance — current goal
+
+Updated October 6, 2026: the user withdrew the guaranteed random Ancient requirement. The current goal is a higher chance of one or more native Ancient encounters, with unlucky zero-Ancient Hunts allowed. Keep normal offerings, gold rooms and native encounter loot/progression. Do not invent a fixed multiplier or a numeric percentage before establishing the selection control and measuring it.
+
+**The current v2 PAK does not change the native encounter selection chance.** Its two extra Ancients are a later wave inside an encounter that has already been generated. Those waves remain part of the design but are not a probability increase.
+
+The received root hypermission configuration exposes rune eligibility requirements, not a verified probability/count multiplier. Reducing requirements could broaden the eligible pool, but would not by itself establish higher actual encounter probability. MissionChancesUtil.GetMissionProbabilities is called for UI presentation. The exact authoritative probability/count control still requires native research; dropping the guarantee does not turn those display calls into a generation hook.
+
+Validation for the revised goal: compare the same offerings, enchantment investment, difficulty and biome across vanilla and patched runs; record zero/one/multiple encounter counts, complete normal encounters and exits, retain gold rooms, and verify host/client agreement. Zero-Ancient runs are no longer failures by definition. A displayed chance alone is not sufficient evidence.
+
+## Historical guarantee investigation (superseded requirement)
+
 
 ## Required behavior
 

@@ -156,3 +156,7 @@ Camp emerald chest scalar 50 -> 100 implemented and structurally validated in v2
 ## Supplemental / upgrade-choice continuation
 
 Supplemental Ancient sources received and inspected. Upgrade option/pricing/confirmation models started and tested; no native adapter, Camp UI or upgraded-item gameplay milestone closed. Exact native mutation and generator contracts are the next gate.
+
+## October 6 revision: Ancient selection
+
+Guaranteed random Ancient minimum is removed from active scope. Target a higher chance of one or more native Ancient encounters; zero remains possible. Keep the implemented extra waves. Identify a verified native probability/count control, compare matched offerings before/after, and measure real encounter counts; do not call extra waves, broader rune eligibility or a chance-label edit a probability increase. Paid Camp upgrades and shared gold remain unchanged goals.

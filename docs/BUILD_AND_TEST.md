@@ -37,7 +37,7 @@ No fixed 150–220 run payout is promised. That target still needs measured tuni
 - Common -> Rare (750 emeralds), Rare -> Unique (2,500), gilding (150 gold) and rerolling (250).
 - Powersmith price/power-cap policy (explicitly TBD in the accepted design).
 - Hunt completion reward and global mob currency bundle sizes/chance.
-- Guaranteed random Ancient encounter independent of offerings.
+- Increased native Ancient encounter-selection chance (October 6 goal; guarantee withdrawn).
 - A verified direct increase in Gold Room weighting separate from extra side-path opportunities.
 - Shared gold grants and host-only installation support.
 
@@ -68,4 +68,4 @@ The builder verifies package serialization/re-read, validates level identities/p
 
 ## Delivered artifact
 
-PAK SHA-256: `349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00`. Includes 19 package entries. ZIP includes installation/test instructions, attribution and reports. Guaranteed Ancient selection is **not in this PAK**. Remove v1 before installing v2.
+PAK SHA-256: `349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00`. Includes 19 package entries. ZIP includes installation/test instructions, attribution and reports. Native Ancient encounter-selection chance is unchanged in this PAK; the guarantee goal was withdrawn on October 6. Remove v1 before installing v2.

@@ -98,12 +98,7 @@ Therefore:
 
 Important research question: the Tower Uniquesmith natively converts gear to a Unique variant. Common -> Rare may require a separate mutation path.
 
-If a base item has multiple Unique variants, the final UX is still undecided:
-
-- vanilla-like random result, or
-- player choice at a higher cost.
-
-Default preference is to preserve native Tower behavior unless testing shows it is frustrating.
+If a base item has multiple Unique variants, the user must choose the exact outcome from native names/icons/details before confirmation. The agreed Rare -> Unique price remains 2,500 emeralds; no extra selection surcharge is agreed.
 
 ### Gildsmith
 
@@ -161,4 +156,4 @@ Actual base Loot Urn package amount range is **3–7**, not the earlier communit
 
 ## Current v2 bindings
 
-Camp emerald chest native EmeraldsReward=50 is now patched to the agreed 100; availability remains native and wallet effect is retail untested. The guaranteed random Ancient minimum of one per successfully started Hunt is accepted but not yet bound to the native generation contract. Full gold/run and effective emerald-income goals remain unmeasured.
+Camp emerald chest native EmeraldsReward=50 is now patched to the agreed 100; availability remains native and wallet effect is retail untested. The October 6 goal is a higher chance of one or more Ancient encounters, with no guaranteed minimum; its probability/count control is not implemented in v2. Full gold/run and effective emerald-income goals remain unmeasured.

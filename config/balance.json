@@ -60,9 +60,12 @@
     "maxArenaWaves": 10,
     "maxSidePathLength": 4,
     "maxMobTypeCount": 4,
-    "guaranteedRandomAncientGoal": true,
-    "minimumRandomAncientEncountersPerStartedHunt": 1,
-    "guaranteeImplemented": false
+    "guaranteedRandomAncientGoal": false,
+    "minimumRandomAncientEncountersPerStartedHunt": 0,
+    "guaranteeImplemented": false,
+    "higherEncounterChanceGoal": true,
+    "encounterChanceImplemented": false,
+    "encounterChanceMultiplierTarget": null
   },
   "multiplayer": {
     "sharedGoldGoal": true,

@@ -36,7 +36,7 @@ Official references inspected: [dumpers](https://docs.ue4ss.com/feature-overview
 1. Establish native item family/presentation and selected-result conversion contracts, with persistent inventory ownership and preservation of item state.
 2. Implement a native authority adapter with payment and mutation committed atomically, or a demonstrated recoverable transaction. Validate failure, duplicate confirmation and reconnect cases before exposing paid Camp services.
 3. Build the native UMG names/icons/details picker and bind its explicit selection to that adapter; place the three native NPCs in Camp once their services work there.
-4. Reserve one reachable native Ancient encounter in authoritative generation; test no-match and one-item offerings across seeds and multiplayer.
+4. Identify and tune authoritative native encounter probability/count to increase the chance of one or more Ancients. The user withdrew the guaranteed minimum on October 6. Compare matched offerings across runs and verify multiplayer agreement; retain gold rooms.
 5. Establish native gold award authority and idempotency; implement party distribution and completion reward through it.
 6. Measure income, Prospector, salvage, loot variant coverage and Gold Room generation in retail; tune against the agreed targets and complete the full test matrix.
 

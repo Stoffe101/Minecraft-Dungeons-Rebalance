@@ -31,6 +31,6 @@ report=dict(build='HuntsEconomy-Test-v2',gameplayVerified=False,completeDesignIm
             pakSha256=hashlib.sha256(pak.read_bytes()).hexdigest(),
             entries=[dict(path=n,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data)) for n,data in expected.items()],
             features=['normal gold chests 10-15','rare gold chests 20-30','base Loot Urn emerald drops 6-14','Camp emerald chest reward 100','adapted bounded Hunt mobs/sidepaths/arenas','26 Ancient encounter extra waves'],
-            excluded=['guaranteed random Ancient encounter','Camp smith NPC placement/paid transactions','Hunt completion gold change','global mob currency bundle multipliers','party-wide gold grants'])
+            excluded=['increased Ancient encounter selection chance','Camp smith NPC placement/paid transactions','Hunt completion gold change','global mob currency bundle multipliers','party-wide gold grants'])
 (a.output/'BUILD_REPORT.json').write_text(json.dumps(report,indent=2)+'\n')
 print('Built, integrity-tested and unpack-compared all 19 PAK entries:',pak)

@@ -110,3 +110,7 @@ For a native item family with multiple Unique variants, show localized names, na
 ## D-018 — Model before unverified native mutation
 
 Implement choice/pricing/state/receipt guards as a tested reference model, clearly excluded from game PAKs until a native bridge exists. Default native capabilities false. Run on serialized native authority; actual atomic payment/state preservation and reconnect receipts require native validation. Prepare a source-only bounded reflection inventory using documented APIs, without enabling a new loader dependency or guessed native transaction.
+
+## D-019 — Higher Ancient chance replaces guaranteed minimum
+
+On October 6 the user withdrew D-015's guaranteed random Ancient requirement. Aim for a higher chance of one or more Ancient encounters; unlucky zero-Ancient Hunts are permitted. Keep native offering admission, gold rooms and the existing extra Ancient waves. No multiplier/percentage is agreed yet. The probability increase remains unimplemented until an authoritative control is verified and actual encounters are measured. This supersedes D-015's guarantee acceptance criteria.

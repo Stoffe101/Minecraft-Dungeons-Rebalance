@@ -39,7 +39,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 | Base urn drop amount doubling | Implemented; effective income/variant coverage unmeasured |
 | Camp emerald chest | Implemented scalar 50 -> 100, retail untested |
 | Global mob emerald/gold income | Unfinished |
-| Guaranteed random Ancient per started Hunt | Supplemental inputs received and inspected; authoritative native generation contract unresolved |
+| Higher chance of one or more Ancient encounters | New goal replaces guarantee; native probability/count control unresolved, v2 unchanged |
 | Party-wide gold awards | Unfinished; native pickup/store authority contract unresolved |
 | Typical 150–220 / lucky 250–300 gold | Target only; not measured |
 
@@ -60,3 +60,7 @@ Next: current native selected-variant/transaction contracts, native presentation
 Indexed all 39 supplied cooked-package metadata reports, recording 247 native call sites with exact serialized argument/receiver expressions and source hashes. Twenty-two sites contain unresolved serializer pointer/name markers and are flagged. Five evidence-indexing tests pass; two updated Lua shim tests pass for the expanded 32-class probe. No game integration was enabled and no new PAK build is claimed. Existing v2 SHA-256 remains 349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00.
 
 The hard dependency is current live native reflection and access to the running game for acceptance testing. There is no game executable/runtime in this workspace. See [NATIVE_RUNTIME.md](NATIVE_RUNTIME.md) for actual call paths, required contracts, runtime diagnostic scope and implementation sequence. Repeating the asset collection or adding more synthetic upgrade tests will not resolve that dependency.
+
+## October 6 scope revision
+
+The user withdrew the guaranteed Ancient minimum and requested a higher chance of one or more encounters instead. Configuration and active roadmap now reflect that goal, with no fixed multiplier chosen and encounterChanceImplemented=false. Existing Ancient extra waves remain implemented, but native encounter-selection probability remains unchanged in delivered v2. Rune eligibility and UI chance presentation are not treated as actual spawn probability controls. See ANCIENT_GUARANTEE.md for the superseding goal and retained historical research.
