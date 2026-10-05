@@ -39,7 +39,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 | Base urn drop amount doubling | Implemented; effective income/variant coverage unmeasured |
 | Camp emerald chest | Implemented scalar 50 -> 100, retail untested |
 | Global mob emerald/gold income | Unfinished |
-| Guaranteed random Ancient per started Hunt | Goal accepted; supplementary generation/offerings inputs needed |
+| Guaranteed random Ancient per started Hunt | Supplemental inputs received and inspected; authoritative native generation contract unresolved |
 | Party-wide gold awards | Unfinished; native pickup/store authority contract unresolved |
 | Typical 150–220 / lucky 250–300 gold | Target only; not measured |
 
@@ -54,3 +54,9 @@ Supplemental Ancient collection received: 15/15 targets, zero errors, 29/29 sour
 Started upgrade choice/confirmation source foundation in src/rebalance/upgrades.py, including selected Unique outcomes with name/icon/description/effect/stat row data, agreed prices and item/ownership/catalog/balance/receipt guards. Seventeen synthetic-adapter policy tests pass. **No native adapter or in-game picker is implemented**; this Python module is not loaded by Minecraft Dungeons. Two developer-only Lua reflection API-shim tests pass; UE4SS compatibility remains unverified and no runtime loader is enabled. See UPGRADES.md.
 
 Next: current native selected-variant/transaction contracts, native presentation/family resolution, native UMG picker and persistent Camp integration; native authoritative Hunt generation; shared-gold authority. Latest game test remains v2.
+
+## Native call indexing continuation
+
+Indexed all 39 supplied cooked-package metadata reports, recording 247 native call sites with exact serialized argument/receiver expressions and source hashes. Twenty-two sites contain unresolved serializer pointer/name markers and are flagged. Four evidence-indexing tests pass; two updated Lua shim tests pass for the expanded 32-class probe. No game integration was enabled and no new PAK build is claimed. Existing v2 SHA-256 remains 349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00.
+
+The hard dependency is current live native reflection and access to the running game for acceptance testing. There is no game executable/runtime in this workspace. See [NATIVE_RUNTIME.md](NATIVE_RUNTIME.md) for actual call paths, required contracts, runtime diagnostic scope and implementation sequence. Repeating the asset collection or adding more synthetic upgrade tests will not resolve that dependency.

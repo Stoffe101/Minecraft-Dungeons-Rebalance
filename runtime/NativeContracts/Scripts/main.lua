@@ -17,7 +17,9 @@ local names = {
     "TowerArtisanMerchantDef", "TowerBlacksmithMerchantDef", "TowerGilderMerchantDef",
     "MissionChancesUtil", "MissionStateUtil", "MissionRequestUtil", "MissionSelectorComponent",
     "MissionDefs", "MissionOfferingsUtil", "OfferHyperMissionOfferings", "StorableItem",
-    "PickupStorableComponent"
+    "PickupStorableComponent", "MerchantBaseWidget", "MerchantActor", "MerchantActorUtil",
+    "MissionOfferingsTransactionBase", "MissionProgressComponent", "WalkPickupComponent",
+    "PlayerCharacter", "BasePlayerController", "TowerFunctionLibrary"
 }
 local running = false
 local function dump()

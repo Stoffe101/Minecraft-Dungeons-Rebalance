@@ -37,6 +37,6 @@ cls.GetSuperStruct=function() return invalid end
 StaticFindObject=function(path) lookups=lookups+1;if path=="/Script/Dungeons.InventoryItem" then return cls else return invalid end end
 ''')
         self.run_lua(SOURCE)
-        self.run_lua('''assert(lookups==0);key_callback();assert(queued==1 and lookups==23)
+        self.run_lua('''assert(lookups==0);key_callback();assert(queued==1 and lookups==32)
 local text=table.concat(logs);assert(string.find(text,"FUNCTION Function /Script/Dungeons.InventoryItem:Example flags=1024",1,true));assert(string.find(text,"PROPERTY IntProperty",1,true));assert(string.find(text,"MISSING /Script/Dungeons.UniqueCollectItem",1,true));assert(string.find(text,"END Names/flags only",1,true))''')
 if __name__=='__main__':unittest.main()

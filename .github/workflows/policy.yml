@@ -15,5 +15,7 @@ jobs:
           python-version: '3.12'
       - name: Verify upgrade choices and confirmation guards
         run: python tests/test_upgrades.py -v
+      - name: Verify native call evidence indexing
+        run: python tests/test_native_calls.py -v
       - name: Check source syntax
         run: python -m py_compile src/rebalance/upgrades.py tests/test_upgrades.py tests/test_contract_probe.py

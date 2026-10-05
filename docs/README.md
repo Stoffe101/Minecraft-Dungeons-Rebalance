@@ -38,3 +38,5 @@ A meaningful feature/research pass is not considered complete until:
 - [Guaranteed random Ancient investigation](ANCIENT_GUARANTEE.md)
 
 - [Camp upgrade and Unique choice implementation status](UPGRADES.md)
+- [Native integration gate and current call paths](NATIVE_RUNTIME.md)
+- [Observed native call index](research/native-calls.md)
