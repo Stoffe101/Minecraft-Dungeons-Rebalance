@@ -1,5 +1,7 @@
 # Camp upgrades and choosing a Unique
 
+**Current milestone: CampPlacement-Test-v3 is available as a host-only, non-interactive NPC placement preview. Owned actor/root/content bindings are packaged, but paid/persistent/repeatable upgrades and the custom Unique picker remain unfinished. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier pass notes below are historical.**
+
 Updated October 5, 2026, after the supplemental collection.
 
 ## Implemented source foundation
