@@ -166,3 +166,12 @@ Prepared collector v4 with 11 additional exact parent/struct targets and bounded
 
 
 Collector v4 additionally requests referenced Dungeons enum symbols/values and underlying numeric types from source-grounded UE4.22 metadata layouts. Local collector checks now total 57; Windows/retail validation follows. No rarity/currency numeric values are guessed or enabled in gameplay.
+
+
+## Dependency collector v4 Windows and bundle validation
+
+Source ebecf590f3fd055db8697e4dc7444441d7e16c9a: native reader workflow 37476889616 passed normal Windows compilation (zero warnings/errors), all 58 synthetic/self-process checks, PowerShell parse/incomplete/report preservation and unpacked runner/archive checks. Upgrade policy workflow 37476889740 and evidence tooling workflow 37476889618 passed. Prior selected-item implementation ff74774352f72e5c8ed1e6fea8521962565b8ab1 also passed all three workflows (37476198325, 37476198286, 37476198223), including normal CampSmithStager compilation. Six private asset integration tests and their eleven deliberate graph-rejection cases passed locally; CI lacks retail input assets.
+
+Downloaded artifact 11419715783 and matched its outer SHA-256 6d3df97af71a5b8464bd3887cd737dafdd9e3f7b04f79924f501c13434e7dc05 before extraction. NativeCollector-v4.zip is 124,625 bytes, nine entries, SHA-256 696d52d3eeff3ad42bff8a3a984a2fc2ed48204051c16a2069f20b5e226a5a4d; DLL SHA-256 7c3b00513caec5c8c49f341be5bc57f03eb15775812674e6865404448c77155a. Both ZIP integrity checks passed, and bundle README includes the new dependency and enum scope. Compiled research bundle made available for private testing; no game assets or loader included. This is not a gameplay PAK.
+
+Required next input: one v4 dependency capture with Dungeons at Camp, using the same PowerShell command from a fresh extracted v4 folder. The original successful v3 capture is retained/accepted. Newly targeted inherited transaction APIs, full record field dimensions and enum identities/values are the remaining declaration input; native payment/mutation/save behavior then still requires implementation and gameplay acceptance. No paid upgrade or shared-gold completion is claimed.
