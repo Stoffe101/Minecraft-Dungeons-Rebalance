@@ -249,3 +249,7 @@ Seventeen synthetic-adapter upgrade policy tests and two Lua 5.4 API-shim tests 
 ## October 6 Drive and withdrawn diagnostic checks
 
 Eight original archives mounted; six targeted reads completed without export errors; ten preserved hashes verified, four gold-chest files exactly match previous sources. Three local Lua shim tests pass, including withdrawn-default no-key/no-query/no-queue behavior. No game runtime, native loader compatibility, new chance/paid upgrade/shared-gold feature or retail PAK execution is tested. Complete archive contents remain unaudited.
+
+## Retail result — October 6, 2026
+
+Camp emerald chest reward check passed by user observation: 100 emeralds instead of 50. Accept this as feature-specific confirmation in the tested setup. Test count and multiplayer role are unspecified. Other reward changes, Hunt progression, aggregate income and multiplayer behavior remain pending; synthetic checks do not substitute for these observations. No code or artifact changed, so tests were not rerun for this documentation-only update.

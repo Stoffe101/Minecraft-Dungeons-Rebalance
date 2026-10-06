@@ -1,6 +1,6 @@
 # Hunts / Economy test build v2
 
-This is the first playable test subset, **not the complete Rebalance design**. Structural validation passed; actual game loading, generated mission progression, item drops and co-op remain untested.
+This is the first playable test subset, **not the complete Rebalance design**. Structural validation passed. On October 6, the user confirmed the Camp chest pays 100 emeralds instead of 50 in game. Generated mission progression, other reward changes and co-op remain unverified.
 
 ## Install on the known Store installation
 
@@ -20,7 +20,7 @@ To uninstall, remove this PAK and restart the game. It does not edit saves direc
 | --- | --- |
 | Normal gold chest | `ConsumableDrop_GEN_VARIABLE.DropData` Gold amount range 4–6 -> 10–15 |
 | Rare gold chest | Same verified Gold component range 8–10 -> 20–30 |
-| Camp emerald chest | Native `BP_LobbyChest` CDO `EmeraldsReward`: 50 -> 100; native availability unchanged |
+| Camp emerald chest | Native `BP_LobbyChest` CDO `EmeraldsReward`: 50 -> 100; user confirmed 100 emeralds in game on October 6; native availability unchanged |
 | Base Loot Urn | `EmeraldDrop_GEN_VARIABLE.DropData` amount range 3–7 -> 6–14; field/bundle units and subclass coverage still require retail measurement |
 | Hunt enemies and paths | Selected Better Ancient Hunt changes applied onto 11 original retail levels |
 | Extra Ancients | 26 native encounter definitions retain first Ancient and add a wave of two plus one raid captain |
@@ -69,3 +69,7 @@ The builder verifies package serialization/re-read, validates level identities/p
 ## Delivered artifact
 
 PAK SHA-256: `349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00`. Includes 19 package entries. ZIP includes installation/test instructions, attribution and reports. Native Ancient encounter-selection chance is unchanged in this PAK; the guarantee goal was withdrawn on October 6. Remove v1 before installing v2.
+
+## Retail results — October 6, 2026
+
+**Camp emerald chest: PASS (user observation).** The user reports 100 emeralds instead of 50. This is sufficient confirmation for the reward change in the tested setup; no test count or multiplayer role was supplied. Remaining priority checks are normal gold chests (10–15), rare gold chests (20–30), extra Ancient waves with working exits, and urn reward deltas. The result does not establish overall income targets or unimplemented features. No rebuild is required for this documentation update.

@@ -1,8 +1,8 @@
 # Current state
 
-Updated 2026-10-05 after receiving the targeted collection and Better Ancient Hunt.
+Updated 2026-10-06 after the user confirmed the Camp chest reward in game.
 
-**First Hunts/Economy test PAK built and structurally verified. Full design is unfinished; no retail gameplay validation yet.**
+**First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; other gameplay changes remain unverified.**
 
 ## Input and research results
 
@@ -37,7 +37,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 | More enemies / Ancient waves / longer side paths | Implemented adaptation, retail untested |
 | Gold Room opportunities +50–75% | Still a tuning goal; explicit native room weighting unresolved |
 | Base urn drop amount doubling | Implemented; effective income/variant coverage unmeasured |
-| Camp emerald chest | Implemented scalar 50 -> 100, retail untested |
+| Camp emerald chest | Implemented 50 -> 100; user confirmed 100 emeralds in game on October 6 |
 | Global mob emerald/gold income | Unfinished |
 | Higher chance of one or more Ancient encounters | New goal replaces guarantee; native probability/count control unresolved, v2 unchanged |
 | Party-wide gold awards | Unfinished; native pickup/store authority contract unresolved |
@@ -67,6 +67,10 @@ The user withdrew the guaranteed Ancient minimum and requested a higher chance o
 
 ## Drive source and runtime diagnostic correction
 
-The user supplied the installation copy on Drive and has not yet tested v2. Traversed all 51 descendant folders/215 descendant files; read both manifests (1.17.0.0 x64), mounted eight archives/622 paths, and read six targeted assets with zero export errors. All ten preserved hashes match, including four gold-chest files identical to the earlier collection. Two additional Ancient doors have zero Blueprint functions and no chance control. Main archive download is limited by the connector; complete archive contents have not been audited.
+At the time of this Drive audit, the user had supplied the installation copy and had not yet tested v2. The subsequent Camp chest confirmation is recorded below. Traversed all 51 descendant folders/215 descendant files; read both manifests (1.17.0.0 x64), mounted eight archives/622 paths, and read six targeted assets with zero export errors. All ten preserved hashes match, including four gold-chest files identical to the earlier collection. Two additional Ancient doors have zero Blueprint functions and no chance control. Main archive download is limited by the connector; complete archive contents have not been audited.
 
 Inspected the related QoL reflection ZIP: capture incomplete, no headers/object dump, only a three-line startup log. That project's user-reported UE4SS startup crash supersedes the earlier suggested diagnostic route. Rebalance's source-only probe is now disabled by default and the recommendation withdrawn; three Lua shim checks pass. This cannot repair a native loader crash. No new gameplay PAK/features or retail results are claimed. See DRIVE_GAME_RESEARCH.md.
+
+## Retail observation — October 6, 2026
+
+The user confirmed that Camp chests now give 100 emeralds instead of 50. This passes the Camp chest reward check for the tested setup. No screenshot or repeat is needed to accept that observation. Test count, multiplayer role and broader compatibility were not reported. This does not validate urn rewards, gold chest ranges, Hunt generation/progression, income totals, smith upgrades or shared gold. The v2 artifact is unchanged. Next retail checks: normal/rare gold chest payouts, extra Ancient waves and exit progression, then urn wallet deltas.

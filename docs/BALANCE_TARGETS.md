@@ -156,4 +156,4 @@ Actual base Loot Urn package amount range is **3–7**, not the earlier communit
 
 ## Current v2 bindings
 
-Camp emerald chest native EmeraldsReward=50 is now patched to the agreed 100; availability remains native and wallet effect is retail untested. The October 6 goal is a higher chance of one or more Ancient encounters, with no guaranteed minimum; its probability/count control is not implemented in v2. Full gold/run and effective emerald-income goals remain unmeasured.
+Camp emerald chest native EmeraldsReward=50 is now patched to the agreed 100; availability remains native. On October 6, the user confirmed the in-game reward is 100 emeralds instead of 50. The October 6 goal is a higher chance of one or more Ancient encounters, with no guaranteed minimum; its probability/count control is not implemented in v2. Full gold/run and effective emerald-income goals remain unmeasured.
