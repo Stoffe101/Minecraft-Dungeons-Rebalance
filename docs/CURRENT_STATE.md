@@ -207,3 +207,7 @@ Additional public searches for existing Camp Tower-merchant mods and MerchantPri
 ## Camp placement preview Windows validation — October 6, 2026
 
 At implementation commit 7972a9127c4ebaf1c90ad51452618afe9b4c9fc4, evidence run 37521291248 passed normal Windows CampSmithStager compilation, existing permitted-fixture integration checks and Python syntax validation of the preview builder/tests. Native declaration reader run 37521290998 and upgrade policy run 37521290989 also passed. Local private-source checks passed nine tests, including eight placement corruption rejections; an additional packager check preserved an existing output directory. Windows CI does not have private retail assets or a Dungeons runtime. The final 37-entry PAK hash is 6f13bc4f04f2f5d4a4782803158e41943c29d647b98968cae2066a9495fd409a (6,075,200 bytes). Test artifact is saved and source/documentation published; retail NPC placement remains pending.
+
+## Purchase/payment reuse proposal — October 6
+
+Prioritize combining native Camp payment/affordability infrastructure with native Tower smith transactions, as proposed by the user. Existing Camp Blacksmith bindings reference UpgradeInsertItem/UpgradeCollectItem, and both merchant families use the shared transaction framework. The actual custom price-provider connection and persistent mutation coupling remain unverified; no new PAK or upgrade activation occurred. See CAMP_SMITH_IMPLEMENTATION.md for exact findings.
