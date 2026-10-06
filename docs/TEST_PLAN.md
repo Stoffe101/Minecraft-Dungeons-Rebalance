@@ -332,3 +332,11 @@ Prepared collector v4 with 11 additional exact parent/struct targets and bounded
 ## October 6 v4 capture accepted
 
 All 29 requested native types and 16 enum declarations captured successfully. Camp staging now rejects changed native record shapes and sparse enum values; six real-source integration tests include 15 rejection checks. Native pricing/selection dependencies revealed by this capture are being resolved through bounded parent/struct closure. No paid upgrade, picker, Camp placement or shared-gold runtime is enabled. See CAMP_SMITH_IMPLEMENTATION.md and NATIVE_DECLARATION_RESEARCH.md for exact findings, tests and next work. Retail acceptance still requires actual payment, selected outcome, item-state preservation, repeated upgrades and save/reload tests.
+
+## Transitive collector Windows validation and v5 bundle
+
+At implementation commit de006824189a335033958f084ac1d98737ece46f, native reader workflow 37481190026 passed (job 112329420111): normal Windows build with zero warnings/errors, 63 checks including self-process reads, PowerShell parsing, no-game incomplete reporting, existing-report preservation, bundle preparation and packaged runner execution. Evidence workflow 37481190032 also passed (job 112329420366), including normal CampSmithStager build with zero warnings/errors. Policy workflow 37481190004 passed. These are tooling/source results; retail merchant transactions are not tested.
+
+Artifact 11421416403 outer digest d79a12cc53980ce0170cf88e4adba8061bf9be29d9aa67d71dc8ebc51942c611 matched before extraction. NativeCollector-v5.zip: 127,660 bytes, nine entries, SHA-256 4e76ac087cff0ce2fee3175e64bc8ee5a93425aa9f2c21eea1be3127236a6ef5; DLL SHA-256 8bab5ecd7b6f1df493fdccce2badf786920d78e9ef8b8cb4c9817d6c1b92fb02. Both ZIP integrity checks pass. Bundle made available for the newly exposed merchant dependency capture; no game assets, loader or upgrades included.
+
+Required next input: run the capture command from a fresh extracted v5 folder with Dungeons at Camp and return its output ZIP. The accepted v4 result is retained; this targets merchant/selection roots and their transitive native parent/struct dependencies. This is the concrete declaration blocker before native paid service integration. No new gameplay PAK or full-project completion is claimed.

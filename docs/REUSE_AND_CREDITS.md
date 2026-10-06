@@ -143,3 +143,9 @@ At the user's explicit request to reuse same-owner Minecraft-Dungeons-QoL, adapt
 ## Selected record/dependency continuation
 
 Reviewed same-owner QoL 24d3d39c1c58e1f28ee5b806a48c1b291e3c18a6 and its completed 134806 capture as permitted research. Reused its bounded nested-array declaration approach, retaining Rebalance's independent header/property bounds and existing process rights. SelectedItemReaders is project-authored using the earlier graph/import/preload approach authorized by the user. No game source/assets or third-party loader binaries published.
+
+## October 6 v4 native record research
+
+No additional third-party source or retail assets are bundled in collector v5. The record ABI and enum values are from the user's successful native declaration capture; new validators and bounded closure code are project-owned. Existing Camp graph construction continues the documented QoL pattern under the previously recorded permission.
+
+Historical mcd-pe source at be646dcd82a689e24709b7abd4cff30fb60b7c9f was consulted for SerializableItemId's optional cached ID and InventoryItemData's optional subitem/store-count state and delegate. It supports investigating hidden native state, but its older source does not prove the current retail layout or save behavior. Epic UE4.22.3 Class.h at 99a530d4ccbe6bea1e8f49df20acfeb294006962 defines default WithCopy for non-POD structs. This explains why native struct operations matter; it does not certify current retail CppStructOps. No source text or guessed private fields were copied into the runtime.
