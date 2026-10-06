@@ -77,3 +77,8 @@ PAK SHA-256: `349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00`.
 ## Additional user results — October 6, 2026
 
 Emerald urn: wallet 241 -> 266, observed +25 emeralds. Gold chests: user requests marking the feature complete; recorded as gameplay acceptance passed by user confirmation, with exact per-chest measurements unspecified. These observations do not establish aggregate income, all urn subclasses, Prospector behavior or multiplayer distribution. Camp NPCs and paid upgrade mechanics, including the Unique variant picker, are the user’s highest priority.
+
+
+## Native contract research bundle (separate from v2)
+
+The October 6 Windows-validated NativeCollector ZIP is a research tool, not a PAK and not installed in ~mods. Extract it outside the game folder, start Dungeons normally at Camp, then run the command in its README from normal Windows x64 PowerShell. Return the generated native-contracts-<timestamp>.zip, including an incomplete capture if reported. It runs checks before query/read access, invokes no game/save functions and writes no game memory. Access denial stops capture; do not elevate or use a protection workaround. No Dungeons capture or paid service acceptance is claimed. Full validation, checksum and next integration steps: NATIVE_DECLARATION_RESEARCH.md.
