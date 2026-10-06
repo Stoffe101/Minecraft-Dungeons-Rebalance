@@ -11,42 +11,73 @@ static class Fixtures {
         });
         foreach (int delta in new[] { 4, 6 }) foreach (int offset in new[] { 0x98, 0xb0 }) Check("bootstrap and six controls at header " + offset + "/" + delta, () => {
             var arena = new Arena(offset, delta);
-            var reflection = Reflection.Discover(arena, [arena.Module]);
+            var reflection = Reflection.Discover(arena, [arena.Region]);
             if (reflection.FunctionHeaderOffset != offset || reflection.FunctionNumParmsDelta != delta) throw new Exception("Wrong inferred function header.");
             Contracts.Validate(reflection.Capture());
+        });
+        foreach (bool inline in new[] { false, true }) foreach (int children in new[] { 0x38, 0x48 })
+        foreach (int target in new[] { 0x70, 0x78, 0x80 }) foreach (int chars in new[] { 12, 16 })
+            Check($"names/field layout {inline}/{children:x}/{target:x}/{chars}", () => {
+                var a = new Arena(0x98, children: children, typeTarget: target, chars: chars);
+                if (inline) a.InlineNames();
+                var diagnostics = new DiscoveryDiagnostics();
+                var reader = Reflection.Discover(a, [a.Region], diagnostics);
+                if (reader.ChildrenOffset != children || reader.PropertyTargetOffset != target || reader.NameCharactersOffset != chars)
+                    throw new Exception("Wrong accepted field/name layout.");
+                if (inline && diagnostics.InlineNameHeaderCandidates != 1) throw new Exception("Inline header was not detected.");
+                Contracts.Validate(reader.Capture());
+            });
+        Reject("distinct valid name tables ambiguous", () => {
+            var a = new Arena(0x98);
+            a.InlineNames();
+            a.RestoreNamePointer();
+            Reflection.Discover(a, [a.Region]);
+        });
+        foreach (bool inline in new[] { false, true }) Check("256-chunk names and reserved 33 object chunks " + inline, () => {
+            var a = new Arena(0x98, capacity: 256);
+            a.ReserveObjects(33);
+            if (inline) a.InlineNames();
+            var reader = Reflection.Discover(a, [a.Region]);
+            if (reader.NameChunkCapacity != 256) throw new Exception("Wrong name capacity.");
+            Contracts.Validate(reader.Capture());
+        });
+        Reject("inconsistent reserved capacity", () => {
+            var a = new Arena(0x98); a.ReserveObjects(33);
+            BitConverter.GetBytes(65536).CopyTo(a.Module, 80);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("ambiguous function headers", () => {
             var arena = new Arena(0x98);
             foreach (var (p, size) in arena.Functions.Where(f => f.Size is 4 or 16)) arena.Header(p, 0xb0, 1, size, 0);
-            Reflection.Discover(arena, [arena.Module]);
+            Reflection.Discover(arena, [arena.Region]);
         });
         Reject("cyclic child chain", () => {
             var a = new Arena(0x98); a.U64(a.Functions[0].Address + 0x28, a.Functions[0].Address);
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("wrong Guid target", () => {
             var a = new Arena(0x98); a.U64(a.GuidResult + 0x70, a.Obj("Vector", a.StructClass, 0));
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("parameter count mismatch", () => {
             var a = new Arena(0x98); a.Raw[(int)(a.Functions[0].Address - Arena.Base + 0x98 + 6)] = 0;
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("child owner mismatch", () => {
             var a = new Arena(0x98); a.U64(a.GuidResult + 32, a.StructClass);
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("input out-only", () => {
             var a = new Arena(0x98); a.U64(a.FirstInput + 0x38, 0x180);
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("name entry identity mismatch", () => {
             var a = new Arena(0x98); a.I32(a.NoneEntry + 8, 2);
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("object index identity mismatch", () => {
             var a = new Arena(0x98); a.I32(a.StructClass + 12, 900);
-            Reflection.Discover(a, [a.Module]);
+            Reflection.Discover(a, [a.Region]);
         });
         Reject("null read", () => Bytes.Range(0, 4));
         Reject("overflow/out-of-range read", () => Bytes.Range(ulong.MaxValue, 4));
@@ -63,7 +94,7 @@ static class Fixtures {
             var noisy = new byte[210001 * 8];
             for (int i = 0; i < 210001; i++) BitConverter.GetBytes(0x100000000UL + (ulong)i * 8).CopyTo(noisy, i * 8);
             var diagnostics = new DiscoveryDiagnostics();
-            Contracts.Validate(Reflection.Discover(a, [a.Module, noisy], diagnostics).Capture());
+            Contracts.Validate(Reflection.Discover(a, [a.Region, new ModuleRegion(Arena.Base + 0x100000, noisy)], diagnostics).Capture());
             if (diagnostics.RawPointerCandidates <= 200000 || diagnostics.MappedDataCandidates > 200000 || a.Queries > 10)
                 throw new Exception("Noisy candidates were not removed/cached efficiently.");
         });
@@ -95,10 +126,12 @@ sealed class Arena : IRegionMemory {
     public const ulong Base = 0x100000;
     public readonly byte[] Raw = new byte[4 * 1024 * 1024];
     public readonly byte[] Module = new byte[4096];
+    public const ulong ModuleAddress = Base + 0x80000;
+    public ModuleRegion Region { get { Module.CopyTo(Raw, (int)(ModuleAddress - Base)); return new(ModuleAddress, Module); } }
     readonly ulong table = Base + 0x1000, names = Base + 0x2000, chunks = Base + 0x30000, items = Base + 0x31000;
     ulong next = Base + 0x40000, nameNext = Base + 0x60000;
     int objects, namesCount;
-    readonly int numParmsDelta;
+    readonly int numParmsDelta, childrenOffset, targetOffset, charactersOffset, nameCapacity;
     readonly Dictionary<string, int> ids = new();
     readonly Dictionary<string, ulong> types = new();
     public readonly List<(ulong Address, int Size)> Functions = [];
@@ -110,8 +143,8 @@ sealed class Arena : IRegionMemory {
         if (address >= 0x100000000 && address < 0x110000000) return new(0x100000000, 0x10000000, 0x10000, 0);
         return new(address & ~0xfffUL, 4096, 0x10000, 0);
     }
-    public Arena(int header, int delta = 6) {
-        numParmsDelta = delta;
+    public Arena(int header, int delta = 6, int children = 0x48, int typeTarget = 0x70, int chars = 12, int capacity = 128) {
+        numParmsDelta = delta; childrenOffset = children; targetOffset = typeTarget; charactersOffset = chars; nameCapacity = capacity;
         U64(table, names);
         NameId("None"); NoneEntry = Bytes.U64(Read(names, 8), 0);
         foreach (string n in new[] { "ByteProperty", "IntProperty", "BoolProperty", "FloatProperty", "ObjectProperty", "NameProperty", "DelegateProperty" }) NameId(n);
@@ -129,7 +162,7 @@ sealed class Arena : IRegionMemory {
         foreach (var c in Contracts.Controls) {
             ulong owner = c.Owner == "PlayerCharacterSaveSlot" ? slot : controller;
             var function = Obj(c.Method, functionClass, owner);
-            if (last.TryGetValue(owner, out var previous)) U64(previous + 0x28, function); else U64(owner + 0x48, function);
+            if (last.TryGetValue(owner, out var previous)) U64(previous + 0x28, function); else U64(owner + (ulong)childrenOffset, function);
             last[owner] = function;
             var parameters = new List<ulong>(); int offset = 0;
             foreach (string input in c.Inputs) {
@@ -142,7 +175,7 @@ sealed class Arena : IRegionMemory {
             ulong target = c.Target switch { "/Script/CoreUObject.Guid" => guid, "/Script/Dungeons.CharacterSaveData" => save, "/Script/Dungeons.PlayerCharacterSaveSlot" => slot, _ => 0 };
             var result = Prop("ReturnValue", c.Type, function, c.Size, offset, 0x580, target);
             if (c.Method == "GetCloudPlayerId") GuidResult = result;
-            parameters.Add(result); U64(function + 0x48, parameters[0]);
+            parameters.Add(result); U64(function + (ulong)childrenOffset, parameters[0]);
             for (int i = 0; i < parameters.Count - 1; i++) U64(parameters[i] + 0x28, parameters[i + 1]);
             Header(function, header, parameters.Count, offset + c.Size, offset);
             Functions.Add((function, offset + c.Size));
@@ -153,7 +186,17 @@ sealed class Arena : IRegionMemory {
         BitConverter.GetBytes(65536).CopyTo(Module, 80);
         BitConverter.GetBytes(100).CopyTo(Module, 84);
         BitConverter.GetBytes(1).CopyTo(Module, 88); BitConverter.GetBytes(1).CopyTo(Module, 92);
-        I32(table + 1024, namesCount); I32(table + 1028, 1);
+        I32(table + (ulong)nameCapacity * 8, namesCount); I32(table + (ulong)nameCapacity * 8 + 4, 1);
+    }
+    public void InlineNames() {
+        Read(table, nameCapacity * 8 + 8).CopyTo(Module, 1024);
+        Array.Clear(Module, 0, 8);
+    }
+    public void RestoreNamePointer() => WriteModule(0, table);
+    public void ReserveObjects(int chunks) {
+        BitConverter.GetBytes(chunks * 65536).CopyTo(Module, 80);
+        BitConverter.GetBytes(chunks).CopyTo(Module, 88);
+        BitConverter.GetBytes(chunks).CopyTo(Module, 92);
     }
     public byte[] Read(ulong address, int size) {
         Bytes.Range(address, size);
@@ -168,18 +211,18 @@ sealed class Arena : IRegionMemory {
         id = namesCount++; ids[name] = id;
         ulong entry = nameNext; nameNext += 512;
         U64(names + (ulong)(id * 8), entry); I32(entry + 8, id << 1);
-        System.Text.Encoding.ASCII.GetBytes(name).CopyTo(Raw, (int)(entry + 12 - Base));
+        System.Text.Encoding.ASCII.GetBytes(name).CopyTo(Raw, (int)(entry + (ulong)charactersOffset - Base));
         return id;
     }
     public ulong Obj(string name, ulong type, ulong outer) {
         ulong p = next; next += 512;
         I32(p + 12, objects); U64(p + 16, type); I32(p + 24, NameId(name)); U64(p + 32, outer);
-        U64(items + (ulong)(objects++ * 24), p); I32(table + 1024, namesCount);
+        U64(items + (ulong)(objects++ * 24), p); I32(table + (ulong)nameCapacity * 8, namesCount);
         return p;
     }
     ulong Prop(string name, string type, ulong owner, int size, int offset, ulong flags, ulong target) {
         ulong p = Obj(name, types[type], owner);
-        I32(p + 0x30, 1); I32(p + 0x34, size); U64(p + 0x38, flags); I32(p + 0x44, offset); U64(p + 0x70, target);
+        I32(p + 0x30, 1); I32(p + 0x34, size); U64(p + 0x38, flags); I32(p + 0x44, offset); U64(p + (ulong)targetOffset, target);
         return p;
     }
     public void Header(ulong p, int offset, int count, int size, int ret) {

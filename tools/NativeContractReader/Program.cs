@@ -25,6 +25,10 @@ try {
             var reflection = Reflection.Discover(memory, regions, report.Discovery);
             report.FunctionHeaderOffset = reflection.FunctionHeaderOffset;
             report.FunctionNumParmsDelta = reflection.FunctionNumParmsDelta;
+            report.ChildrenOffset = reflection.ChildrenOffset;
+            report.PropertyTargetOffset = reflection.PropertyTargetOffset;
+            report.NameCharactersOffset = reflection.NameCharactersOffset;
+            report.NameChunkCapacity = reflection.NameChunkCapacity;
             report.Classes = reflection.Capture();
             Contracts.Validate(report.Classes);
             report.ControlContractsPassed = true;
@@ -52,6 +56,10 @@ sealed class CaptureReport {
     public bool DungeonsRuntimeCompatibilityPreviouslyVerified { get; init; } = false;
     public int? FunctionHeaderOffset { get; set; }
     public int? FunctionNumParmsDelta { get; set; }
+    public int? ChildrenOffset { get; set; }
+    public int? PropertyTargetOffset { get; set; }
+    public int? NameCharactersOffset { get; set; }
+    public int? NameChunkCapacity { get; set; }
     public long BytesRead { get; set; }
     public int ReadCalls { get; set; }
     public int RegionQueries { get; set; }
@@ -74,6 +82,8 @@ sealed class DiscoveryDiagnostics {
     public int RawPointerCandidates { get; set; }
     public int MappedDataCandidates { get; set; }
     public int ValidatedNameTables { get; set; }
+    public int InlineNameHeaderCandidates { get; set; }
+    public int PointerNameHeaderCandidates { get; set; }
     public int ObjectTableShapeCandidates { get; set; }
     public List<string> RejectedObjectReasons { get; init; } = [];
 }
@@ -115,7 +125,8 @@ sealed class ProcessMemory : IRegionMemory, IDisposable {
     }
     public byte[] Read(ulong address, int size) {
         Bytes.Range(address, size);
-        if (clock.Elapsed.TotalSeconds > 60 || ReadCalls >= 500000 || BytesRead + size > 128L * 1024 * 1024)
+        // Two bounded name-header variants plus up to 1M live UObject headers require more than the old 500K call ceiling.
+        if (clock.Elapsed.TotalSeconds > 60 || ReadCalls >= 2000000 || BytesRead + size > 128L * 1024 * 1024)
             throw new BudgetExceededException();
         ReadCalls++; BytesRead += size;
         var result = new byte[size];
@@ -147,7 +158,7 @@ sealed class ProcessMemory : IRegionMemory, IDisposable {
 sealed class BudgetExceededException : Exception { public BudgetExceededException() : base("The bounded read/time budget was exhausted. No offsets or declarations were guessed.") { } }
 
 static class ModuleData {
-    public static List<byte[]> Read(IMemory memory, ulong image) {
+    public static List<ModuleRegion> Read(IMemory memory, ulong image) {
         var header = memory.Read(image, 4096);
         var pe = Bytes.I32(header, 0x3c);
         if (header[0] != 'M' || header[1] != 'Z' || pe < 0x40 || pe > 2048 || Bytes.U32(header, pe) != 0x4550 || Bytes.U16(header, pe + 4) != 0x8664)
@@ -156,7 +167,7 @@ static class ModuleData {
         if (count is < 1 or > 96 || optional < 112 || Bytes.U16(header, pe + 24) != 0x20b || pe + 24 + optional + count * 40 > header.Length)
             throw new InvalidDataException("Invalid PE section table.");
         uint imageSize = Bytes.U32(header, pe + 24 + 56);
-        var result = new List<byte[]>();
+        var result = new List<ModuleRegion>();
         for (int i = 0; i < count; i++) {
             int s = pe + 24 + optional + i * 40;
             uint flags = Bytes.U32(header, s + 36), size = Bytes.U32(header, s + 8), rva = Bytes.U32(header, s + 12);
@@ -169,21 +180,26 @@ static class ModuleData {
                 var block = memory.Read(image + rva + (ulong)j, Math.Min(1024 * 1024, data.Length - j));
                 block.CopyTo(data, j);
             }
-            result.Add(data);
+            result.Add(new(image + rva, data));
         }
         if (result.Count == 0) throw new InvalidDataException("No eligible module data section.");
         return result;
     }
 }
+record ModuleRegion(ulong Address, byte[] Data);
 
 sealed class Names {
     readonly IMemory memory; readonly ulong table; readonly int count;
+    public int CharactersOffset { get; }
+    public int ChunkCapacity { get; }
     readonly Dictionary<int, string> cache = new();
-    public Names(IMemory memory, ulong table) {
+    public Names(IMemory memory, ulong table, int charactersOffset, int capacity) {
         this.memory = memory; this.table = table;
-        var header = memory.Read(table + 1024, 8);
+        CharactersOffset = charactersOffset;
+        ChunkCapacity = capacity;
+        var header = memory.Read(table + (ulong)capacity * 8, 8);
         count = Bytes.I32(header, 0); int chunks = Bytes.I32(header, 4);
-        if (count is < 8 or > 2000000 || chunks is < 1 or > 128 || chunks != (count + 16383) / 16384)
+        if (count is < 8 or > 2000000 || chunks < (count + 16383) / 16384 || chunks > capacity)
             throw new InvalidDataException("Invalid legacy name table dimensions.");
         if (Get(0) != "None" || Enumerable.Range(1, 7).Count(i => Get(i).EndsWith("Property", StringComparison.Ordinal)) < 4)
             throw new InvalidDataException("Legacy name table controls failed.");
@@ -196,14 +212,19 @@ sealed class Names {
         ulong entry = Bytes.U64(memory.Read(chunk + (ulong)(index % 16384 * 8), 8), 0);
         if (!Bytes.Pointer(entry)) throw new InvalidDataException("Invalid name entry pointer.");
         var prefix = memory.Read(entry, 12); uint encoded = Bytes.U32(prefix, 8);
-        if ((encoded >> 1) != index || (encoded & 1) != 0) throw new InvalidDataException("Unsupported/mismatched legacy name entry.");
+        if ((encoded >> 1) != index) throw new InvalidDataException("Mismatched legacy name entry.");
+        bool wide = (encoded & 1) != 0;
         // Small bounded blocks avoid reading an entire 256-byte buffer beyond a valid entry/page.
         var bytes = new List<byte>();
         for (int i = 0; i < 256; i++) {
-            var b = memory.Read(entry + 12 + (ulong)i, 1)[0];
-            if (b == 0) return cache[index] = Encoding.ASCII.GetString(bytes.ToArray());
-            if (b is < 32 or > 126) throw new InvalidDataException("Unsupported name characters.");
-            bytes.Add(b);
+            var part = memory.Read(entry + (ulong)CharactersOffset + (ulong)i * (wide ? 2UL : 1UL), wide ? 2 : 1);
+            if (part.All(b => b == 0)) {
+                string text = wide ? new UnicodeEncoding(false, false, true).GetString(bytes.ToArray()) : Encoding.ASCII.GetString(bytes.ToArray());
+                if (text.Length == 0 || text.Any(char.IsControl)) throw new InvalidDataException("Invalid name characters.");
+                return cache[index] = text;
+            }
+            if (!wide && part[0] is < 32 or > 126) throw new InvalidDataException("Unsupported ANSI name characters.");
+            bytes.AddRange(part);
         }
         throw new InvalidDataException("Name exceeds bounded length.");
     }
@@ -215,44 +236,75 @@ sealed class Reflection {
     readonly Dictionary<string, ulong> classes;
     public int FunctionHeaderOffset { get; private set; }
     public int FunctionNumParmsDelta { get; private set; }
+    public int ChildrenOffset { get; private set; }
+    public int PropertyTargetOffset { get; private set; }
+    public int NameCharactersOffset => names.CharactersOffset;
+    public int NameChunkCapacity => names.ChunkCapacity;
     Reflection(IMemory memory, Names names, Dictionary<string, ulong> classes) { this.memory = memory; this.names = names; this.classes = classes; }
-    public static Reflection Discover(IMemory memory, List<byte[]> regions, DiscoveryDiagnostics? diagnostics = null) {
+    public static Reflection Discover(IMemory memory, List<ModuleRegion> regions, DiscoveryDiagnostics? diagnostics = null) {
         diagnostics ??= new();
         var candidates = new HashSet<ulong>();
-        foreach (var data in regions) for (int i = 0; i + 8 <= data.Length; i += 8) {
+        var inline = new HashSet<(ulong Address, int Capacity)>();
+        foreach (var region in regions) for (int i = 0; i + 8 <= region.Data.Length; i += 8) {
+            var data = region.Data;
             ulong p = Bytes.U64(data, i);
             if (Bytes.Pointer(p)) candidates.Add(p);
             if (candidates.Count > 1000000) throw new InvalidDataException("Raw candidate workspace limit exceeded.");
+            foreach (int capacity in new[] { 128, 256 }) if (i + capacity * 8 + 8 <= data.Length) {
+                int count = Bytes.I32(data, i + capacity * 8), chunks = Bytes.I32(data, i + capacity * 8 + 4);
+                if (count is >= 8 and <= 2000000 && chunks >= (count + 16383) / 16384 && chunks <= capacity
+                    && Bytes.Pointer(p)) inline.Add((region.Address + (ulong)i, capacity));
+            }
         }
         diagnostics.RawPointerCandidates = candidates.Count;
         var filtered = CandidateFilter.Select(memory, candidates);
         diagnostics.MappedDataCandidates = filtered.Length;
+        diagnostics.InlineNameHeaderCandidates = inline.Count;
         var validated = new List<Names>();
-        foreach (var candidate in filtered) {
-            try { validated.Add(new Names(memory, candidate)); } catch (InvalidDataException) { }
+        foreach (var specification in inline.Union(filtered.SelectMany(address => new[] { (address, 128), (address, 256) }))) {
+            ulong candidate = specification.Item1; int capacity = specification.Item2;
+            try {
+                var dimensions = memory.Read(candidate + (ulong)capacity * 8, 8);
+                int count = Bytes.I32(dimensions, 0), chunks = Bytes.I32(dimensions, 4);
+                if (count is < 8 or > 2000000 || chunks < (count + 16383) / 16384 || chunks > capacity) continue;
+                if (!inline.Contains(specification)) diagnostics.PointerNameHeaderCandidates++;
+                foreach (int offset in new[] { 12, 16 }) {
+                    try { validated.Add(new Names(memory, candidate, offset, capacity)); } catch (InvalidDataException) { }
+                }
+            } catch (InvalidDataException) { }
         }
         diagnostics.ValidatedNameTables = validated.Count;
         if (validated.Count != 1) throw new InvalidDataException("Expected one independently validated legacy name table, found " + validated.Count + ".");
         var nameTable = validated.Single();
         var matches = new List<Reflection>();
-        foreach (var data in regions) for (int i = 0; i + 32 <= data.Length; i += 8) {
+        foreach (var region in regions) for (int i = 0; i + 32 <= region.Data.Length; i += 8) {
+            var data = region.Data;
             ulong chunks = Bytes.U64(data, i);
             int max = Bytes.I32(data, i + 16), count = Bytes.I32(data, i + 20), maxChunks = Bytes.I32(data, i + 24), usedChunks = Bytes.I32(data, i + 28);
-            if (!Bytes.Pointer(chunks) || count is < 100 or > 1000000 || max < count || max > 2000000 || usedChunks is < 1 or > 32 || maxChunks < usedChunks || maxChunks > 32 || usedChunks != (count + 65535) / 65536) continue;
+            if (!Bytes.Pointer(chunks) || count is < 100 or > 1000000 || max < count || max > 4 * 1024 * 1024
+                || usedChunks < (count + 65535) / 65536 || maxChunks < usedChunks || maxChunks > 64
+                || max != maxChunks * 65536) continue;
             diagnostics.ObjectTableShapeCandidates++;
             try {
-                var objects = ReadClasses(memory, nameTable, chunks, count, usedChunks);
+                var objects = ReadClasses(memory, nameTable, chunks, count, (count + 65535) / 65536);
                 if (!objects.ContainsKey("PlayerCharacterSaveSlot") || !objects.ContainsKey("PlayerControllerBase")) continue;
-                var candidate = new Reflection(memory, nameTable, objects);
-                (candidate.FunctionHeaderOffset, candidate.FunctionNumParmsDelta) = candidate.InferFunctionHeader();
-                Contracts.Validate(candidate.Capture());
-                matches.Add(candidate);
+                foreach (int childOffset in new[] { 0x38, 0x48 }) foreach (int targetOffset in new[] { 0x70, 0x78, 0x80 }) {
+                    try {
+                        var candidate = new Reflection(memory, nameTable, objects) { ChildrenOffset = childOffset, PropertyTargetOffset = targetOffset };
+                        (candidate.FunctionHeaderOffset, candidate.FunctionNumParmsDelta) = candidate.InferFunctionHeader();
+                        Contracts.Validate(candidate.CaptureControls());
+                        matches.Add(candidate);
+                    } catch (InvalidDataException error) { RecordRejection(error.Message); }
+                }
             } catch (InvalidDataException error) {
-                if (diagnostics.RejectedObjectReasons.Count < 8 && !diagnostics.RejectedObjectReasons.Contains(error.Message)) diagnostics.RejectedObjectReasons.Add(error.Message);
+                RecordRejection(error.Message);
             }
         }
         if (matches.Count != 1) throw new InvalidDataException("Expected one validated object/layout candidate, found " + matches.Count + ".");
         return matches.Single();
+        void RecordRejection(string message) {
+            if (diagnostics.RejectedObjectReasons.Count < 8 && !diagnostics.RejectedObjectReasons.Contains(message)) diagnostics.RejectedObjectReasons.Add(message);
+        }
     }
     static Dictionary<string, ulong> ReadClasses(IMemory memory, Names names, ulong chunks, int count, int usedChunks) {
         var result = new Dictionary<string, ulong>();
@@ -298,7 +350,7 @@ sealed class Reflection {
     string Name(ulong obj) => names.Get(Bytes.I32(memory.Read(obj, 40), 24));
     string Type(ulong obj) { var p = Bytes.U64(memory.Read(obj + 16, 8), 0); return Name(p); }
     IEnumerable<ulong> Children(ulong obj) {
-        ulong p = Bytes.U64(memory.Read(obj + 0x48, 8), 0); var visited = new HashSet<ulong>();
+        ulong p = Bytes.U64(memory.Read(obj + (ulong)ChildrenOffset, 8), 0); var visited = new HashSet<ulong>();
         while (p != 0) {
             if (!Bytes.Pointer(p) || !visited.Add(p) || visited.Count > 4096) throw new InvalidDataException("Invalid/cyclic legacy UField chain.");
             if (Bytes.U64(memory.Read(p + 32, 8), 0) != obj) throw new InvalidDataException("Legacy child owner mismatch.");
@@ -323,8 +375,8 @@ sealed class Reflection {
         return offsets.Single();
     }
     PropertyDeclaration Property(ulong p) {
-        var h = memory.Read(p, 0x80); string type = Type(p); string? target = null;
-        int targetOffset = type == "ClassProperty" ? 0x78 : 0x70;
+        var h = memory.Read(p, 0x90); string type = Type(p); string? target = null;
+        int targetOffset = PropertyTargetOffset + (type == "ClassProperty" ? 8 : 0);
         if (type is "ObjectProperty" or "ClassProperty" or "StructProperty" or "ByteProperty" or "InterfaceProperty" or "WeakObjectProperty" or "SoftObjectProperty") {
             ulong reference = Bytes.U64(h, targetOffset);
             if (reference != 0) {
@@ -346,11 +398,13 @@ sealed class Reflection {
         return new(Name(p), Bytes.U32(h, o), size, ret, parameters);
     }
     public List<ClassDeclaration> Capture() => classes.OrderBy(k => k.Key).Select(k => {
-        var children = Children(k.Value).ToArray(); ulong super = Bytes.U64(memory.Read(k.Value + 0x40, 8), 0);
+        var children = Children(k.Value).ToArray(); ulong super = Bytes.U64(memory.Read(k.Value + (ulong)ChildrenOffset - 8, 8), 0);
         return new ClassDeclaration(k.Key, super == 0 ? null : Name(super),
             children.Where(p => Type(p).EndsWith("Property", StringComparison.Ordinal)).Select(Property).ToList(),
             children.Where(p => Type(p) == "Function").Select(Function).ToList());
     }).ToList();
+    List<ClassDeclaration> CaptureControls() => classes.Where(k => Contracts.Controls.Any(c => c.Owner == k.Key)).Select(k =>
+        new ClassDeclaration(k.Key, null, [], Children(k.Value).Where(p => Type(p) == "Function" && Contracts.Controls.Any(c => c.Owner == k.Key && c.Method == Name(p))).Select(Function).ToList())).ToList();
 }
 
 static class Contracts {

@@ -1,0 +1,18 @@
+{
+  "inputSha256": "038b78fbc867f3061433f16cef008146c606acaee2f980d4dff42afafa7c83a4",
+  "completed": false,
+  "error": "Expected one independently validated legacy name table, found 0.",
+  "bytesRead": 7571532,
+  "readCalls": 153233,
+  "regionQueries": 1054,
+  "discovery": {
+    "RawPointerCandidates": 211959,
+    "MappedDataCandidates": 153213,
+    "ValidatedNameTables": 0,
+    "ObjectTableShapeCandidates": 0,
+    "RejectedObjectReasons": []
+  },
+  "gameMemoryWritten": false,
+  "gameplayFunctionsInvoked": false,
+  "classesCollected": 0
+}

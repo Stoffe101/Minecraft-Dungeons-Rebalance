@@ -157,3 +157,5 @@ Used as the source of reusable internal tooling/research once a formal code audi
 - Microsoft [ReadProcessMemory](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-readprocessmemory) and [process security/access rights](https://learn.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights).
 
 - Microsoft [VirtualQueryEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualqueryex) and [MEMORY_BASIC_INFORMATION](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-memory_basic_information): read-only memory-region filtering; no additional handle rights.
+
+- Epic-authored UE4.22.3 [NameTypes.h](https://github.com/folgerwang/UnrealEngine/blob/99a530d4ccbe6bea1e8f49df20acfeb294006962/Engine/Source/Runtime/Core/Public/UObject/NameTypes.h) and [UObjectArray.h](https://github.com/folgerwang/UnrealEngine/blob/99a530d4ccbe6bea1e8f49df20acfeb294006962/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectArray.h): 256-slot name table and reserved-capacity behavior; layouts still require current independent native-control validation.

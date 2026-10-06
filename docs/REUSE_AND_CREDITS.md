@@ -128,3 +128,8 @@ NativeContractReader and its synthetic arena are project-authored. Same-owner Qo
 ## Retail collector correction
 
 Memory-region filtering and regression fixtures are project-authored using Microsoft's VirtualQueryEx documentation. Reviewed same-owner QoL 3914fec's newer LegacyNativeEvidence reader as a comparison, without copying code or assuming retail compatibility. No game bytes or user-path logs are published; the supplied capture is summarized as sanitized diagnostics.
+
+
+## Source-grounded layout correction
+
+Reused the same-owner QoL research/validation approach for inline name storage, 128/256 capacities, alternate child/target layouts and reserved object capacity; implementation and fixtures remain project-authored. Reviewed Epic-authored UE4.22.3 NameTypes.h/UObjectArray.h at 99a530d4ccbe6bea1e8f49df20acfeb294006962 as primary evidence; no engine source, SDK or protected executable copied/bundled. Related private QoL capture contributed its failure-stage evidence only; no accepted native declarations were present.
