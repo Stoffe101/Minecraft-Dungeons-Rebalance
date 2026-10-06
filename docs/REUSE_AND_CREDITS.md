@@ -138,3 +138,8 @@ Reused the same-owner QoL research/validation approach for inline name storage, 
 ## Captured native presentation implementation
 
 At the user's explicit request to reuse same-owner Minecraft-Dungeons-QoL, adapted its Graph.cs and FeatureValidation.RepairAdded property/function/import/preload construction approach (reviewed local ce7002779f0b47db8986a2a230628399027f5586 and origin/main e535cab78a11999329ff3ae5d5c5608dd7986f07). UniquePresentation.cs is a focused project-authored adaptation with capture-specific signatures and validators, rather than a wholesale helper copy. QoL has no root license granting general third-party reuse; authorization here is the owner's explicit instruction for these two repositories. This does not confer permission for unrelated third-party assets. Original-derived cooked game output stays private. Better Ancient Hunt remains used only in the previously documented Hunt adaptation.
+
+
+## Selected record/dependency continuation
+
+Reviewed same-owner QoL 24d3d39c1c58e1f28ee5b806a48c1b291e3c18a6 and its completed 134806 capture as permitted research. Reused its bounded nested-array declaration approach, retaining Rebalance's independent header/property bounds and existing process rights. SelectedItemReaders is project-authored using the earlier graph/import/preload approach authorized by the user. No game source/assets or third-party loader binaries published.

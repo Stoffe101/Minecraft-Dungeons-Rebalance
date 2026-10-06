@@ -29,3 +29,6 @@ dotnet CampSmithStager.dll --self-test-presentation <original-Artisan.uasset>
 ```
 
 These seven checks deliberately invalidate generated graphs in memory; they execute no native gameplay calls and write no assets.
+
+
+All three cloned content widgets also contain `RebalanceSelectedSlotItem(InventoryItemSlot)` and `RebalanceSelectedItemData(InventoryItem)`. These read the physical slot's existing object and its full 120-byte native record through captured UProperty names. They do not recreate gear, mutate the record or save anything. Return construction, owning classes, context skip offsets and preload bindings are checked before writing and after reopening. Four deliberate rejection checks run with `--self-test-selection <original-Artisan.uasset>`.

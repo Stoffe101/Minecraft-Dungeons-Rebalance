@@ -60,3 +60,10 @@ Existing upgrade policy tests (17) and native call indexing tests (5) pass after
 ## Native presentation Windows validation — October 6
 
 Implementation 5f5b0a33b9109e7f5ba0c495cd5296ced58c6818 passed evidence tooling workflow 37474277976, including normal Windows CampSmithStager compilation with its embedded captured manifest, the existing collector fixtures, economy compilation and source syntax checks. Upgrade policy workflow 37474278027 and native reader workflow 37474278115 also passed. Private game assets are not available to CI; the five Camp asset tests and seven negative graph checks were run locally against the supplied originals. These results do not certify in-game names/icons, choice UI, payment or persistent upgrades.
+
+
+## Selected-item native integration — October 6
+
+Added native physical-slot/item and full-record read functions to all three cloned smith screens, validated against captured InventoryItemSlot.Item and InventoryItem.Item declarations. Six private asset tests pass (11 deliberate graph rejection cases); no currency/item/save mutation is enabled. The newer QoL capture succeeded and confirms item-record field names/nested array types, but lacks transaction parent classes and field sizes/offsets.
+
+Prepared collector v4 with 11 additional exact parent/struct targets and bounded nested array declarations; 54 local checks pass. Full paid Camp services still require that added capture and native behavior validation. No repeat v3 or asset collection is required. Detailed findings, source pins and next work: [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md). Gameplay PAK remains v2.

@@ -58,3 +58,10 @@ Corrected discovery to use cached, sorted VirtualQueryEx region queries and filt
 Capture native-contracts-20261006-133711.zip validates all six control signatures and contains all 18 requested classes. Selected contracts are preserved in research/native-upgrade-contracts-v1.json. CampSmithStager now adds native item-ID name/description/icon presentation functions to the isolated Uniquesmith widget; these helpers have no visible choice list or native adapter yet. Details, tests and remaining superclass/struct/payment dependencies: [CAMP_SMITH_IMPLEMENTATION.md](CAMP_SMITH_IMPLEMENTATION.md).
 
 WalletComponent.Deduct returns void, and the three smith classes inherit their selection behavior from the uncaptured InventoryItemSlotTransactionBase. OnTransactionDecisionMade accepts a full InventoryItemData, but outcome validation/payment/save behavior is unverified. Do not infer an atomic paid upgrade from these declarations or use TryUpgradeItem's name as a rarity contract. Native services remain disabled until those behaviors are implemented and tested. Existing v2 is the last playable PAK.
+
+
+## Selected-item native integration — October 6
+
+Added native physical-slot/item and full-record read functions to all three cloned smith screens, validated against captured InventoryItemSlot.Item and InventoryItem.Item declarations. Six private asset tests pass (11 deliberate graph rejection cases); no currency/item/save mutation is enabled. The newer QoL capture succeeded and confirms item-record field names/nested array types, but lacks transaction parent classes and field sizes/offsets.
+
+Prepared collector v4 with 11 additional exact parent/struct targets and bounded nested array declarations; 54 local checks pass. Full paid Camp services still require that added capture and native behavior validation. No repeat v3 or asset collection is required. Detailed findings, source pins and next work: [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md). Gameplay PAK remains v2.

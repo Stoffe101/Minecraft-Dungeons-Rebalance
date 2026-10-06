@@ -1,0 +1,114 @@
+{
+  "sourceArchiveSha256": "79bff728efe3d524a65e39f211b56fc475a9918271bed1ff09027a8c04ee4c84",
+  "readerRevision": "legacy-batched-slots-v5",
+  "Completed": true,
+  "gameProcessModified": false,
+  "runtimeSemanticsVerified": false,
+  "Declarations": [
+    {
+      "Name": "/Script/Dungeons.InventoryItemData",
+      "Super": null,
+      "Properties": [
+        {
+          "Name": "ItemId",
+          "Kind": "StructProperty",
+          "Type": "/Script/Dungeons.SerializableItemId",
+          "Flags": "0028080000000005"
+        },
+        {
+          "Name": "ItemPower",
+          "Kind": "FloatProperty",
+          "Type": null,
+          "Flags": "0018001040000205"
+        },
+        {
+          "Name": "Enchantments",
+          "Kind": "ArrayProperty",
+          "Type": "array<StructProperty:/Script/Dungeons.EnchantmentData>",
+          "Flags": "0010000000000215"
+        },
+        {
+          "Name": "ArmorProperties",
+          "Kind": "ArrayProperty",
+          "Type": "array<StructProperty:/Script/Dungeons.ArmorPropertyData>",
+          "Flags": "0010000000000215"
+        },
+        {
+          "Name": "Rarity",
+          "Kind": "EnumProperty",
+          "Type": null,
+          "Flags": "0018001040000205"
+        },
+        {
+          "Name": "bIsUpgraded",
+          "Kind": "BoolProperty",
+          "Type": null,
+          "Flags": "0018001040000215"
+        },
+        {
+          "Name": "bIsGifted",
+          "Kind": "BoolProperty",
+          "Type": null,
+          "Flags": "0018001040000215"
+        },
+        {
+          "Name": "bIsModified",
+          "Kind": "BoolProperty",
+          "Type": null,
+          "Flags": "0018001040000215"
+        },
+        {
+          "Name": "timesModified",
+          "Kind": "IntProperty",
+          "Type": null,
+          "Flags": "0018001040000215"
+        },
+        {
+          "Name": "bHasNetherite",
+          "Kind": "BoolProperty",
+          "Type": null,
+          "Flags": "0048001040000200"
+        },
+        {
+          "Name": "NetheriteEnchantData",
+          "Kind": "StructProperty",
+          "Type": "/Script/Dungeons.EnchantmentData",
+          "Flags": "0040001000000000"
+        }
+      ],
+      "Functions": []
+    },
+    {
+      "Name": "/Script/Dungeons.InventoryItemMetaData",
+      "Super": null,
+      "Properties": [
+        {
+          "Name": "MarkedNew",
+          "Kind": "BoolProperty",
+          "Type": null,
+          "Flags": "0018001040000215"
+        },
+        {
+          "Name": "Cloned",
+          "Kind": "BoolProperty",
+          "Type": null,
+          "Flags": "0018001040000215"
+        }
+      ],
+      "Functions": []
+    },
+    {
+      "Name": "/Script/Dungeons.SerializableItemId",
+      "Super": null,
+      "Properties": [
+        {
+          "Name": "SerializedId",
+          "Kind": "NameProperty",
+          "Type": null,
+          "Flags": "0048001040010201"
+        }
+      ],
+      "Functions": []
+    }
+  ]
+}

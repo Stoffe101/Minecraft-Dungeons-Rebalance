@@ -1,3 +1,15 @@
+# Native upgrade dependency collector (v4)
+
+This version builds on the successful v3 capture. It requests 11 additional exact native dependencies, rather than repeating only the original 18 classes: InventoryItemSlotTransactionBase, MerchantSubobjectBase, MerchantDef, InventoryItemData, SerializableItemId, MerchantDisplayPrice, EnchantmentData, ArmorPropertyData, ProblemStatus, InventoryItemMetaData and TowerFloorItemUpgrades. It also records bounded nested array element declarations. These are needed to wire selected outcomes and paid transactions; no upgrade or save operation is run.
+
+Extract this v4 bundle into a fresh folder. Leave Dungeons at Camp and run the same command from that folder:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\Capture-NativeContracts.ps1
+```
+
+Return the resulting native-contracts ZIP, including an incomplete report if one occurs. The original v3 capture remains accepted; this is a request for newly targeted dependencies, not a rerun to establish the same discovery result. `Completed` indicates accepted control declarations; `UpgradeDependencyDeclarationsComplete` and `MissingUpgradeDependencyTypes` separately show dependency coverage. Neither certifies upgrade behavior.
+
 # Read-only native declaration collector
 
 Research prototype for the current Dungeons upgrade implementation blocker. **This does not enable Camp NPCs, paid upgrades or a Unique picker. Dungeons Store compatibility is not yet established.**

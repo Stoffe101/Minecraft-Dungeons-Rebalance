@@ -34,6 +34,9 @@ try {
             report.ControlContractsPassed = true;
             report.Completed = true;
             report.MissingAllowlistedClasses = Reflection.Allowlist.Except(report.Classes.Select(c => c.Name)).ToArray();
+            report.MissingUpgradeDependencyTypes = Reflection.DependencyClasses.Concat(Reflection.DependencyStructs)
+                .Except(report.Classes.Select(c => c.Name)).ToArray();
+            report.UpgradeDependencyDeclarationsComplete = report.MissingUpgradeDependencyTypes.Length == 0;
         } finally { report.BytesRead = memory.BytesRead; report.ReadCalls = memory.ReadCalls; report.RegionQueries = memory.RegionQueries; }
     } finally { foreach (var process in processes) process.Dispose(); }
 } catch (Exception error) { report.Error = error.Message; }
@@ -46,7 +49,7 @@ Console.WriteLine(output);
 return report.Completed ? 0 : 1;
 
 sealed class CaptureReport {
-    public string Schema { get; init; } = "rebalance-native-declarations-v1";
+    public string Schema { get; init; } = "rebalance-native-declarations-v2";
     public string EngineLayoutCandidate { get; init; } = "UE4.22 x64 legacy UProperty; independently validated control declarations required";
     public bool Completed { get; set; }
     public bool ControlContractsPassed { get; set; }
@@ -67,10 +70,12 @@ sealed class CaptureReport {
     public string? Error { get; set; }
     public string[] MissingAllowlistedClasses { get; set; } = [];
     public List<ClassDeclaration> Classes { get; set; } = [];
+    public string[] MissingUpgradeDependencyTypes { get; set; } = [];
+    public bool UpgradeDependencyDeclarationsComplete { get; set; }
 }
-record PropertyDeclaration(string Name, string Type, string? Target, int ArrayDim, int Size, int Offset, ulong Flags);
+record PropertyDeclaration(string Name, string Type, string? Target, int ArrayDim, int Size, int Offset, ulong Flags, PropertyDeclaration? Inner = null);
 record FunctionDeclaration(string Name, uint Flags, int ParameterSize, int ReturnOffset, List<PropertyDeclaration> Parameters);
-record ClassDeclaration(string Name, string? Super, List<PropertyDeclaration> Fields, List<FunctionDeclaration> Functions);
+record ClassDeclaration(string Name, string? Super, List<PropertyDeclaration> Fields, List<FunctionDeclaration> Functions, string Kind = "Class");
 
 interface IMemory { byte[] Read(ulong address, int size); }
 interface IRegionMemory : IMemory { MemoryRegion Query(ulong address); }
@@ -232,6 +237,10 @@ sealed class Names {
 
 sealed class Reflection {
     public static readonly string[] Allowlist = ["PlayerCharacterSaveSlot", "PlayerControllerBase", "InventoryItem", "InventoryItemSlot", "ItemStashComponent", "WalletComponent", "MerchantTransactionBase", "MerchantTransactionUtil", "TowerMerchantUtil", "TowerArtisanMerchantDef", "TowerBlacksmithMerchantDef", "TowerGilderMerchantDef", "UniqueCollectItem", "GildItem", "UpgradeTowerItem", "InventoryItemDataFunctionLibrary", "ItemFunctionLibrary", "TowerFunctionLibrary"];
+    // These exact dependencies are referenced by the accepted retail classes
+    // and item records. This is not an unrestricted SDK/object dump.
+    public static readonly string[] DependencyClasses = ["InventoryItemSlotTransactionBase", "MerchantSubobjectBase", "MerchantDef"];
+    public static readonly string[] DependencyStructs = ["InventoryItemData", "SerializableItemId", "MerchantDisplayPrice", "EnchantmentData", "ArmorPropertyData", "ProblemStatus", "InventoryItemMetaData", "TowerFloorItemUpgrades"];
     readonly IMemory memory; readonly Names names;
     readonly Dictionary<string, ulong> classes;
     public int FunctionHeaderOffset { get; private set; }
@@ -336,9 +345,9 @@ sealed class Reflection {
                     ulong type = Bytes.U64(h, 16);
                     if (!Bytes.Pointer(type)) throw new InvalidDataException("Invalid object class.");
                     if (!typeCache.TryGetValue(type, out var typeName)) typeCache[type] = typeName = names.Get(Bytes.I32(memory.Read(type, 40), 24));
-                    if (typeName != "Class") continue;
+                    if (typeName is not "Class" and not "ScriptStruct") continue;
                     string name = names.Get(Bytes.I32(h, 24));
-                    if (!Allowlist.Contains(name)) continue;
+                    if (!(typeName == "Class" ? Allowlist.Contains(name) || DependencyClasses.Contains(name) : DependencyStructs.Contains(name))) continue;
                     ulong outer = Bytes.U64(h, 32);
                     if (!Bytes.Pointer(outer) || names.Get(Bytes.I32(memory.Read(outer, 40), 24)) != "/Script/Dungeons") continue;
                     if (!result.TryAdd(name, obj)) throw new InvalidDataException("Duplicate allowlisted native class.");
@@ -374,8 +383,12 @@ sealed class Reflection {
         if (offsets.Length != 1) throw new InvalidDataException("Function header inference is missing or ambiguous.");
         return offsets.Single();
     }
-    PropertyDeclaration Property(ulong p) {
+    PropertyDeclaration Property(ulong p) => Property(p, new HashSet<ulong>());
+    PropertyDeclaration Property(ulong p, HashSet<ulong> path) {
+        if (path.Count >= 16 || !path.Add(p)) throw new InvalidDataException("Invalid/cyclic nested property type.");
         var h = memory.Read(p, 0x90); string type = Type(p); string? target = null;
+        if (!type.EndsWith("Property", StringComparison.Ordinal)) throw new InvalidDataException("Non-property nested type.");
+        PropertyDeclaration? inner = null;
         int targetOffset = PropertyTargetOffset + (type == "ClassProperty" ? 8 : 0);
         if (type is "ObjectProperty" or "ClassProperty" or "StructProperty" or "ByteProperty" or "InterfaceProperty" or "WeakObjectProperty" or "SoftObjectProperty") {
             ulong reference = Bytes.U64(h, targetOffset);
@@ -387,7 +400,12 @@ sealed class Reflection {
         }
         int dim = Bytes.I32(h, 0x30), size = Bytes.I32(h, 0x34), offset = Bytes.I32(h, 0x44);
         if (dim is < 1 or > 65536 || size is < 1 or > 1048576 || offset is < 0 or > 16777216) throw new InvalidDataException("Invalid legacy property layout.");
-        return new(Name(p), type, target, dim, size, offset, Bytes.U64(h, 0x38));
+        if (type == "ArrayProperty") {
+            ulong reference = Bytes.U64(h, PropertyTargetOffset);
+            if (!Bytes.Pointer(reference)) throw new InvalidDataException("Invalid nested array property.");
+            inner = Property(reference, path);
+        }
+        return new(Name(p), type, target, dim, size, offset, Bytes.U64(h, 0x38), inner);
     }
     FunctionDeclaration Function(ulong p) {
         var h = memory.Read(p, 0xd0); int o = FunctionHeaderOffset, delta = FunctionNumParmsDelta;
@@ -401,7 +419,7 @@ sealed class Reflection {
         var children = Children(k.Value).ToArray(); ulong super = Bytes.U64(memory.Read(k.Value + (ulong)ChildrenOffset - 8, 8), 0);
         return new ClassDeclaration(k.Key, super == 0 ? null : Name(super),
             children.Where(p => Type(p).EndsWith("Property", StringComparison.Ordinal)).Select(Property).ToList(),
-            children.Where(p => Type(p) == "Function").Select(Function).ToList());
+            children.Where(p => Type(p) == "Function").Select(Function).ToList(), Type(k.Value));
     }).ToList();
     List<ClassDeclaration> CaptureControls() => classes.Where(k => Contracts.Controls.Any(c => c.Owner == k.Key)).Select(k =>
         new ClassDeclaration(k.Key, null, [], Children(k.Value).Where(p => Type(p) == "Function" && Contracts.Controls.Any(c => c.Owner == k.Key && c.Method == Name(p))).Select(Function).ToList())).ToList();

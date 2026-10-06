@@ -321,3 +321,10 @@ NativeCollector-v3.zip: 118,244 bytes; SHA-256 9b21fc20fd416a76939662a9da381b99b
 ## Native Unique presentation increment (October 6)
 
 Five Camp private-source tests pass, including seven rejected graph mutations: missing out-parameter function flag, wrong owner, missing argument, wrong input field, wrong native declaring owner, missing preload dependency, and duplicate patch. Six package pairs are written/reopened and source hashes retained; three presentation functions are added only to Uniquesmith content. These are asset checks, not in-game widget calls. Future retail acceptance must cover localized names/icons/descriptions, choice list completeness, selection cancellation, native transaction item identity, exact balance changes, failure/refusal, save/reload preservation and online host/join roles. No upgrade gameplay test has passed.
+
+
+## Selected-item native integration — October 6
+
+Added native physical-slot/item and full-record read functions to all three cloned smith screens, validated against captured InventoryItemSlot.Item and InventoryItem.Item declarations. Six private asset tests pass (11 deliberate graph rejection cases); no currency/item/save mutation is enabled. The newer QoL capture succeeded and confirms item-record field names/nested array types, but lacks transaction parent classes and field sizes/offsets.
+
+Prepared collector v4 with 11 additional exact parent/struct targets and bounded nested array declarations; 54 local checks pass. Full paid Camp services still require that added capture and native behavior validation. No repeat v3 or asset collection is required. Detailed findings, source pins and next work: [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md). Gameplay PAK remains v2.

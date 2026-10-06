@@ -69,6 +69,17 @@
             }
           ]
         }
+      ],
+      "Fields": [
+        {
+          "Name": "Item",
+          "Type": "StructProperty",
+          "Target": "/Script/Dungeons.InventoryItemData",
+          "ArrayDim": 1,
+          "Size": 120,
+          "Offset": 40,
+          "Flags": 4503599627370516
+        }
       ]
     },
     {
@@ -310,6 +321,22 @@
               "Flags": 6755469234276224
             }
           ]
+        }
+      ]
+    },
+    {
+      "Name": "InventoryItemSlot",
+      "Super": "Object",
+      "Functions": [],
+      "Fields": [
+        {
+          "Name": "Item",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.InventoryItem",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 48,
+          "Flags": 6755469234274836
         }
       ]
     }

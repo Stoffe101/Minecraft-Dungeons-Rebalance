@@ -88,6 +88,38 @@ static class Fixtures {
             if (report.Completed || report.GameplayFunctionsInvoked || report.GameMemoryWritten || report.UpgradeSemanticsVerified)
                 throw new Exception("Unsafe report defaults.");
         });
+        Check("bounded native transaction dependencies and nested item arrays", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies();
+            var declarations = Reflection.Discover(a, [a.Region]).Capture();
+            foreach (var name in Reflection.DependencyClasses.Concat(Reflection.DependencyStructs))
+                if (!declarations.Any(d => d.Name == name)) throw new Exception("Dependency absent: " + name);
+            var data = declarations.Single(d => d.Name == "InventoryItemData");
+            if (data.Kind != "ScriptStruct" || data.Fields.Single().Inner?.Target != "/Script/Dungeons.EnchantmentData")
+                throw new Exception("Nested native struct type missing.");
+            if (declarations.Single(d => d.Name == "GildItem").Super != "InventoryItemSlotTransactionBase")
+                throw new Exception("Native superclass not preserved.");
+        });
+        Reject("cyclic nested array property", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.U64(a.DependencyArray + 0x70, a.DependencyArray);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
+        Reject("null nested array property", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.U64(a.DependencyArray + 0x70, 0);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
+        Reject("non-property nested array target", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.U64(a.DependencyArray + 0x70, a.StructClass);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
+        Check("wrong-kind dependency excluded", () => {
+            var a = new Arena(0x98); var cls = Bytes.U64(a.Read(a.StructClass + 16, 8), 0);
+            var function = Bytes.U64(a.Read(a.FirstInput + 32, 8), 0);
+            var owner = Bytes.U64(a.Read(function + 32, 8), 0);
+            var package = Bytes.U64(a.Read(owner + 32, 8), 0);
+            a.Obj("InventoryItemData", cls, package);
+            if (Reflection.Discover(a, [a.Region]).Capture().Any(d => d.Name == "InventoryItemData"))
+                throw new Exception("Wrong-kind dependency admitted.");
+        });
         Check("only query/read rights", () => { if (ProcessMemory.Access != 0x0410) throw new Exception("Unexpected process rights."); });
         Check("large numeric noise filtered before table limit", () => {
             var a = new Arena(0x98);
@@ -136,6 +168,7 @@ sealed class Arena : IRegionMemory {
     readonly Dictionary<string, ulong> types = new();
     public readonly List<(ulong Address, int Size)> Functions = [];
     public ulong GuidResult, FirstInput, NoneEntry, StructClass;
+    public ulong DependencyArray;
     public int Queries;
     public MemoryRegion Query(ulong address) {
         Queries++;
@@ -220,7 +253,22 @@ sealed class Arena : IRegionMemory {
         U64(items + (ulong)(objects++ * 24), p); I32(table + (ulong)nameCapacity * 8, namesCount);
         return p;
     }
+    public void AddUpgradeDependencies() {
+        var classClass = Bytes.U64(Read(StructClass + 16, 8), 0);
+        var package = Obj("/Script/Dungeons", classClass, 0);
+        var declarations = new Dictionary<string, ulong>();
+        foreach (var name in Reflection.DependencyClasses) declarations[name] = Obj(name, classClass, package);
+        foreach (var name in Reflection.DependencyStructs) declarations[name] = Obj(name, StructClass, package);
+        var gild = Obj("GildItem", classClass, package);
+        U64(gild + (ulong)childrenOffset - 8, declarations["InventoryItemSlotTransactionBase"]);
+        DependencyArray = Prop("Enchantments", "ArrayProperty", declarations["InventoryItemData"], 16, 24, 0x215, 0);
+        var inner = Prop("Enchantments_Inner", "StructProperty", DependencyArray, 16, 0, 0, declarations["EnchantmentData"]);
+        U64(DependencyArray + (ulong)targetOffset, inner);
+        U64(declarations["InventoryItemData"] + (ulong)childrenOffset, DependencyArray);
+        BitConverter.GetBytes(Math.Max(100, objects)).CopyTo(Module, 84);
+    }
     ulong Prop(string name, string type, ulong owner, int size, int offset, ulong flags, ulong target) {
+        if (!types.ContainsKey(type)) types[type] = Obj(type, Bytes.U64(Read(StructClass + 16, 8), 0), 0);
         ulong p = Obj(name, types[type], owner);
         I32(p + 0x30, 1); I32(p + 0x34, size); U64(p + 0x38, flags); I32(p + 0x44, offset); U64(p + (ulong)targetOffset, target);
         return p;
