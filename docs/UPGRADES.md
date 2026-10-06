@@ -44,23 +44,16 @@ The Tower Artisan's provided Blueprint opens the native inventory selection view
 
 Native widgets already reference UMG_InventoryItemIcon and UMG_InventoryInspectorItemIcon. Reuse those native presentation paths after tracing their item-type and inspector bindings. Do not substitute a static external icon collection or guessed family database.
 
-## Research tooling
+## Runtime investigation status
 
-`runtime/NativeContracts/Scripts/main.lua` is a **developer-only, not-installed** UE4SS reflection inventory. It uses documented StaticFindObject, UStruct function/property iteration, function flags, a key callback and ExecuteInGameThread. F8 schedules a bounded names/flags scan of 23 native classes directly observed in the provided imports. No native upgrade/transaction is called; no hook, item/currency setter, actor spawn or save modification is included.
+The historical UE4SS reflection probe is withdrawn and disabled after the related QoL startup crash. Do not install or re-enable it on the user's game. See NATIVE_RUNTIME.md for the superseding compatibility requirements.
 
-Primary API references:
+## Native asset implementation — October 6
 
-- https://docs.ue4ss.com/lua-api/global-functions/staticfindobject.html
-- https://docs.ue4ss.com/lua-api/classes/ustruct.html
-- https://docs.ue4ss.com/lua-api/classes/ufunction.html
-- https://docs.ue4ss.com/lua-api/classes/property.html
-- https://docs.ue4ss.com/lua-api/global-functions/registerkeybind.html
-- https://docs.ue4ss.com/lua-api/global-functions/executeingamethread.html
-
-Two Lua 5.4 API-shim tests pass (missing-loader disablement and bounded read-only inventory). This does not verify UE4SS installation, wrapper behavior or compatibility with this Store build. The script does not produce offsets or parameter-direction metadata and cannot by itself certify an ABI. No new loader dependency is enabled or bundled into the gameplay PAK. Check exact-build loader compatibility before considering a runtime probe.
+CampSmithStager now creates isolated copies of all three native NPC actors and their content widgets, with exact parsed write/reopen checks and original source preservation. Four integration checks pass against the real original assets. This supplies reusable native cooked assets for the Camp implementation, but no Camp spawn/dispatch, paid transaction or custom Unique picker is connected. See CAMP_SMITH_IMPLEMENTATION.md for precise native UI bindings and remaining work.
 
 ## Tests and next work
 
 Seventeen upgrade policy tests pass with a synthetic adapter: explicit second-result selection, complete presentation rows, eligibility, family/ownership/item/catalog/balance revalidation, fixed prices, expiration, duplicate confirmation, and ambiguous/failure receipt handling. These tests prove source-model behavior only, not native mutation or payment.
 
-Next: verify native runtime diagnostic compatibility; obtain current selected-result and currency transaction contracts; trace native item-family/name/icon/stat presentation; implement a native bridge and native UMG picker; add Camp placement; then verify real saved items, currency and co-op. Existing v2 remains the latest gameplay test PAK and contains no upgrade service.
+Next: establish a compatible native transaction route and current selected-result and currency contracts; trace native item-family/name/icon/stat presentation; implement a native bridge and native UMG picker; add Camp placement; then verify real saved items, currency and co-op. Existing v2 remains the latest gameplay test PAK and contains no upgrade service.

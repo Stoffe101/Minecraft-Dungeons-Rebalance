@@ -1,6 +1,6 @@
 # Hunts / Economy test build v2
 
-This is the first playable test subset, **not the complete Rebalance design**. Structural validation passed. On October 6, the user confirmed the Camp chest pays 100 emeralds instead of 50 in game. Generated mission progression, other reward changes and co-op remain unverified.
+This is the first playable test subset, **not the complete Rebalance design**. Structural validation passed. On October 6, the user confirmed the Camp chest pays 100 emeralds instead of 50 in game. The user subsequently marked gold chests complete and observed +25 emeralds from an urn (241 -> 266). Generated mission progression, broader urn coverage and co-op remain unverified.
 
 ## Install on the known Store installation
 
@@ -73,3 +73,7 @@ PAK SHA-256: `349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00`.
 ## Retail results — October 6, 2026
 
 **Camp emerald chest: PASS (user observation).** The user reports 100 emeralds instead of 50. This is sufficient confirmation for the reward change in the tested setup; no test count or multiplayer role was supplied. Remaining priority checks are normal gold chests (10–15), rare gold chests (20–30), extra Ancient waves with working exits, and urn reward deltas. The result does not establish overall income targets or unimplemented features. No rebuild is required for this documentation update.
+
+## Additional user results — October 6, 2026
+
+Emerald urn: wallet 241 -> 266, observed +25 emeralds. Gold chests: user requests marking the feature complete; recorded as gameplay acceptance passed by user confirmation, with exact per-chest measurements unspecified. These observations do not establish aggregate income, all urn subclasses, Prospector behavior or multiplayer distribution. Camp NPCs and paid upgrade mechanics, including the Unique variant picker, are the user’s highest priority.

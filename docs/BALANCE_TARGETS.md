@@ -157,3 +157,7 @@ Actual base Loot Urn package amount range is **3–7**, not the earlier communit
 ## Current v2 bindings
 
 Camp emerald chest native EmeraldsReward=50 is now patched to the agreed 100; availability remains native. On October 6, the user confirmed the in-game reward is 100 emeralds instead of 50. The October 6 goal is a higher chance of one or more Ancient encounters, with no guaranteed minimum; its probability/count control is not implemented in v2. Full gold/run and effective emerald-income goals remain unmeasured.
+
+## October 6 retail observations
+
+The user marked gold chests complete; feature acceptance passed by user confirmation without individual normal/rare payout values. An emerald urn changed the wallet from 241 to 266 (+25). This is an observed payout, not proof of a global 2x emerald multiplier, the previous urn baseline, or all subclasses. Camp smiths are now the top implementation priority.

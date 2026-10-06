@@ -114,3 +114,7 @@ Original author: **Onetoeisenough**. Source PAK supplied by user from Nexus mod 
 ## Supplemental / upgrade-choice continuation
 
 UpgradeCore and read-only Lua reflection inventory are project-authored. No native transaction ABI, game family database, item icon or SDK implementation copied. Official UE4SS API documentation was consulted; no UE4SS code/binary is bundled or enabled. QoL identity-capture/state-guard design informed this model; no QoL source function was copied in this pass.
+
+## Camp smith staging — October 6
+
+CampSmithStager is project-authored using pinned UAssetAPI 1.1.0. Reviewed the same-owner QoL CookedAssetRelocator name-map/write-reopen pattern as a reuse reference; no wholesale source or runtime asset from QoL was copied. Six user-supplied native game packages are cloned privately for NPC/screen reuse; no raw game assets are committed to git. Better Ancient Hunt code/assets are not used in this smith stage.

@@ -1,8 +1,8 @@
 # Current state
 
-Updated 2026-10-06 after the user confirmed the Camp chest reward in game.
+Updated 2026-10-06 after retail reward confirmations and the first Camp smith asset implementation.
 
-**First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; other gameplay changes remain unverified.**
+**First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; gold chests are accepted by user confirmation, and one urn payout of +25 emeralds was observed. Hunt progression and broader reward coverage remain unverified.**
 
 ## Input and research results
 
@@ -31,12 +31,12 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 | Feature | State |
 | --- | --- |
-| Three Tower NPCs and paid smith services in Camp | Unfinished; native definition/transaction adaptation required |
-| Chest gold ranges | Implemented, retail untested |
+| Three Tower NPCs and paid smith services in Camp | Six isolated native actor/widget packages staged and validated; Camp placement/payment/picker unfinished |
+| Chest gold ranges | Implemented; user marked gold chests complete on October 6 (individual amounts not supplied) |
 | Completion 50 gold | Unfinished; reward writer not identified in supplied Blueprint graphs |
 | More enemies / Ancient waves / longer side paths | Implemented adaptation, retail untested |
 | Gold Room opportunities +50–75% | Still a tuning goal; explicit native room weighting unresolved |
-| Base urn drop amount doubling | Implemented; effective income/variant coverage unmeasured |
+| Base urn drop amount doubling | Implemented; observed +25 emeralds (241 -> 266), baseline/effective multiplier/variant coverage unmeasured |
 | Camp emerald chest | Implemented 50 -> 100; user confirmed 100 emeralds in game on October 6 |
 | Global mob emerald/gold income | Unfinished |
 | Higher chance of one or more Ancient encounters | New goal replaces guarantee; native probability/count control unresolved, v2 unchanged |
@@ -45,7 +45,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 ## Next work
 
-Retail-test the playable subset while researching native merchant transaction/currency classes, native pickup/store authority and completion rewards. Determine safe charge-before-mutation/commit-on-success semantics, persistent item preservation and repeatability before enabling Camp smiths. Avoid placing free Tower merchants into Camp and calling that a completed paid upgrade system. Source package collection is complete for the initial targets; do not ask for the same upload again.
+Prioritize Camp smith implementation: native selected-result transactions, currency payment, persistent inventory and presentation bindings. Remaining Hunt retail checks can proceed separately. Determine safe charge-before-mutation/commit-on-success semantics, persistent item preservation and repeatability before enabling Camp smiths. Avoid placing free Tower merchants into Camp and calling that a completed paid upgrade system. Source package collection is complete for the initial targets; do not ask for the same upload again.
 
 ## Latest continuation
 
@@ -74,3 +74,11 @@ Inspected the related QoL reflection ZIP: capture incomplete, no headers/object 
 ## Retail observation — October 6, 2026
 
 The user confirmed that Camp chests now give 100 emeralds instead of 50. This passes the Camp chest reward check for the tested setup. No screenshot or repeat is needed to accept that observation. Test count, multiplayer role and broader compatibility were not reported. This does not validate urn rewards, gold chest ranges, Hunt generation/progression, income totals, smith upgrades or shared gold. The v2 artifact is unchanged. Next retail checks: normal/rare gold chest payouts, extra Ancient waves and exit progression, then urn wallet deltas.
+
+## Retail observations and priority — October 6, 2026
+
+The user reports an emerald urn wallet increase from 241 to 266 (+25 emeralds) and asks to mark gold chests complete. Gold chest gameplay acceptance is recorded as passed by user confirmation; no individual normal/rare payout values or multiplayer role were supplied. The urn result is one observed payout, not evidence of a 2x global multiplier or every subclass. Camp NPCs and paid upgrades are now the highest implementation priority, including explicit Unique outcome selection with native names/icons/details.
+
+## Camp smith implementation — October 6, 2026
+
+CampSmithStager creates and reopens three isolated native actor copies and three content widget copies without overriding Tower assets. Four real-source integration checks passed. Exact actor definitions, native merchant enum values, owning-player selection graphs and TransactionClassPrio button bindings were traced. Native price/mutation/selected-result implementations remain unresolved, so no Camp spawner, charge, item upgrade or Unique picker is enabled. See CAMP_SMITH_IMPLEMENTATION.md for code, findings, validation and next work; v2 is unchanged.

@@ -118,3 +118,7 @@ On October 6 the user withdrew D-015's guaranteed random Ancient requirement. Ai
 ## D-020 — Withdraw the unverified UE4SS diagnostic route
 
 The related QoL retail test crashed on startup, and its supplied ZIP contains no native headers/object dump or completed capture. Withdraw Rebalance's UE4SS install/re-enable recommendation and disable the source-only probe by default. A disabled Lua mod cannot prevent earlier native loader hooks and is not a startup repair. Preserve historical shim tests, but require compatibility established in a developer environment before any future runtime diagnostic. Continue direct asset inspection from the supplied Drive copy; keep raw game inputs and Drive identifiers private.
+
+## October 6 — Camp smith priority and isolated assets
+
+Prioritize Camp NPCs and paid upgrades over further reward tuning, as requested by the user. Stage separate native NPC/widget copies in the Rebalance namespace rather than overwrite Tower originals. Retain original Tower transaction flags until repeatable paid Camp semantics are demonstrated. Do not transplant complete Tower floor tiles as Camp NPC props or treat a UMG price label as payment. The stage is not included in the gameplay PAK.

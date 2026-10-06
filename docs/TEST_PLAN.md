@@ -253,3 +253,11 @@ Eight original archives mounted; six targeted reads completed without export err
 ## Retail result — October 6, 2026
 
 Camp emerald chest reward check passed by user observation: 100 emeralds instead of 50. Accept this as feature-specific confirmation in the tested setup. Test count and multiplayer role are unspecified. Other reward changes, Hunt progression, aggregate income and multiplayer behavior remain pending; synthetic checks do not substitute for these observations. No code or artifact changed, so tests were not rerun for this documentation-only update.
+
+## Additional user results — October 6, 2026
+
+Emerald urn: wallet 241 -> 266, observed +25 emeralds. Gold chests: user requests marking the feature complete; recorded as gameplay acceptance passed by user confirmation, with exact per-chest measurements unspecified. These observations do not establish aggregate income, all urn subclasses, Prospector behavior or multiplayer distribution. Camp NPCs and paid upgrade mechanics, including the Unique variant picker, are the user’s highest priority.
+
+## Camp smith asset implementation — October 6, 2026
+
+Implemented CampSmithStager: six native actor/widget clones in an isolated Rebalance namespace; original sources and Tower flags preserved; all outputs re-opened and semantically verified. Four private-source integration checks passed. Native Powersmith uses TowerBlacksmith enum and equipped-gear view; Artisan/Gilder use owning-player inventory selection. Upgrade buttons bind TransactionClassPrio to native transaction classes, not a demonstrated price/selected-result API. Tower NPC objectgroup contains complete floor tiles rather than portable props. See CAMP_SMITH_IMPLEMENTATION.md and research/camp-smith-stage.json. No live Camp placement, payment, persistent mutation or Unique picker was enabled; latest gameplay v2 unchanged. Local SDK/MSBuild process-information failures were bypassed with SDK Roslyn compilation; Windows CI now builds the normal project. Next: compatible native transaction route, paid selected-result mutation and native presentation binding, then Camp spawn/dispatch and real saved-item tests.

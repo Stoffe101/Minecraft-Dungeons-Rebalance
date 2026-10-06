@@ -187,3 +187,7 @@ Initial source collection is now complete. See NATIVE_ASSET_RESEARCH.md's supers
 ## Supplemental / upgrade-choice continuation
 
 Supplemental inputs confirm chance calculation is a native MissionChancesUtil call used by UI; native encounter selection is not supplied Kismet. Upgrade option/pricing models are developer source only, with no real family/name/icon mapping invented.
+
+## Camp smith asset implementation — October 6, 2026
+
+Implemented CampSmithStager: six native actor/widget clones in an isolated Rebalance namespace; original sources and Tower flags preserved; all outputs re-opened and semantically verified. Four private-source integration checks passed. Native Powersmith uses TowerBlacksmith enum and equipped-gear view; Artisan/Gilder use owning-player inventory selection. Upgrade buttons bind TransactionClassPrio to native transaction classes, not a demonstrated price/selected-result API. Tower NPC objectgroup contains complete floor tiles rather than portable props. See CAMP_SMITH_IMPLEMENTATION.md and research/camp-smith-stage.json. No live Camp placement, payment, persistent mutation or Unique picker was enabled; latest gameplay v2 unchanged. Local SDK/MSBuild process-information failures were bypassed with SDK Roslyn compilation; Windows CI now builds the normal project. Next: compatible native transaction route, paid selected-result mutation and native presentation binding, then Camp spawn/dispatch and real saved-item tests.

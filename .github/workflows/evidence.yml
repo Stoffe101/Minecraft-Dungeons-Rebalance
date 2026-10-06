@@ -62,6 +62,13 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Economy patcher build failed' }
           python -m py_compile scripts/lovika_json.py scripts/build_hunts.py scripts/build_test_pak.py tests/test_hunts.py tests/test_economy.py
           if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
+      - name: Compile isolated Camp smith asset stager
+        shell: pwsh
+        run: |
+          dotnet build tools/CampSmithStager/CampSmithStager.csproj -c Release -o .tools/CampSmithStager
+          if ($LASTEXITCODE -ne 0) { throw 'Camp smith stager build failed' }
+          python -m py_compile tests/test_camp_smiths.py
+          if ($LASTEXITCODE -ne 0) { throw 'Camp smith integration-test syntax check failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: RebalanceEvidence-compiled-tools

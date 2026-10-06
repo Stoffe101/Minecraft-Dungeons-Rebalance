@@ -41,3 +41,5 @@ A meaningful feature/research pass is not considered complete until:
 - [Native integration gate and current call paths](NATIVE_RUNTIME.md)
 - [Observed native call index](research/native-calls.md)
 - [Drive game-copy audit and withdrawn runtime diagnostic](DRIVE_GAME_RESEARCH.md)
+
+Camp smith implementation and actual asset-tool validation: [CAMP_SMITH_IMPLEMENTATION.md](CAMP_SMITH_IMPLEMENTATION.md).
