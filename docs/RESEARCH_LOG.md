@@ -194,3 +194,12 @@ Received native-contracts-20261006-131039.zip. All 19 original self-tests passed
 Corrected discovery to use cached, sorted VirtualQueryEx region queries and filter committed readable non-executable data before the existing 200,000 candidate bound. Complete candidate headers must fit their region. Retained byte/read/time bounds; added a 4,096-query bound and 1,000,000 raw-entry workspace bound. No new process rights or protection fallback. Reports include counts and at most eight distinct rejected object-layout reasons, without process addresses or game values. Twenty-one local checks now pass, including >210,000 numeric-noise candidates, memory protection states and boundary rejection; Windows adds its own-process read/query check. Native upgrade work remains blocked on an actual declaration capture. A new corrected capture is needed; no repeat cooked asset collection is requested.
 
 The first local filter run rejected an incorrectly modeled synthetic free region that did not cover the requested high address. Corrected that fixture range; all 21 checks then passed. The containment check correctly remained in the production filter.
+
+
+## Corrected collector Windows result — October 6
+
+At d55fe531e12a84a39d87407d4942b89656ba17a5, Windows native-reader workflow 37469426624 passed normal compilation, all 22 checks (including own-process VirtualQueryEx/ReadProcessMemory), PowerShell parsing, report preservation and execution/archive checks for the unpacked bundle. This validates the filter implementation; the corrected collector has not yet run on Dungeons.
+
+NativeCollector-v2.zip: 113,119 bytes; SHA-256 8068ef6a006f39f0dd389bcc531eda4e3a86bce43fce988588e0dc3019c592f0. DLL SHA-256 16b03d99f63ddc0cbe22f15a9c88faad7cbdd4e40cde8e7d7efd497c3d80d36c. Verified the downloaded Actions wrapper against its advertised digest before extracting the new bundle. No gameplay PAK or paid upgrade is enabled. Next: run the corrected collector from its separate extracted folder with Dungeons at Camp and inspect the new report.
+
+Also reviewed newer same-owner QoL main 3914fec (implementation 44ee500): project-authored LegacyNativeEvidence collector with alternate child/target/name layouts and seven profile/salvage controls. No merchant/currency transaction bridge is implemented there. It remains a useful comparison for subsequent layout failures; no code was copied in this filter correction and its retail result was not assumed.
