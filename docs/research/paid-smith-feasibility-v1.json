@@ -1,0 +1,36 @@
+{
+  "schema": "rebalance-paid-smith-feasibility-v1",
+  "captureSha256": "c709ff9d3d388cab6bc5e981f7c6c956dffaaf6969aa5e56e0fdc4249e45f889",
+  "captureCompleted": true,
+  "source": "successful-v5-declarations-and-supplied-cooked-metadata",
+  "nativePriceFunctions": [
+    {
+      "name": "GetPrice",
+      "flags": "0x54020401",
+      "blueprintEvent": false,
+      "returnType": "StructProperty"
+    },
+    {
+      "name": "HasPrice",
+      "flags": "0x54020401",
+      "blueprintEvent": false,
+      "returnType": "BoolProperty"
+    }
+  ],
+  "pricingComponentReferenced": true,
+  "pricingComponentDeclarationCaptured": false,
+  "nativeCampBlacksmithBindings": [
+    "UpgradeInsertItem",
+    "UpgradeCollectItem"
+  ],
+  "towerUpgradeTransactions": [
+    "UniqueCollectItem",
+    "GildItem",
+    "UpgradeTowerItem"
+  ],
+  "tryUpgradeItemParameters": [],
+  "implementedPriceSetter": false,
+  "paidPersistentCampUpgradeVerified": false,
+  "gameplayFunctionsInvoked": false,
+  "newPakProduced": false
+}

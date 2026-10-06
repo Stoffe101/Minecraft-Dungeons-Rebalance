@@ -211,3 +211,7 @@ At implementation commit 7972a9127c4ebaf1c90ad51452618afe9b4c9fc4, evidence run 
 ## Purchase/payment reuse proposal — October 6
 
 Prioritize combining native Camp payment/affordability infrastructure with native Tower smith transactions, as proposed by the user. Existing Camp Blacksmith bindings reference UpgradeInsertItem/UpgradeCollectItem, and both merchant families use the shared transaction framework. The actual custom price-provider connection and persistent mutation coupling remain unverified; no new PAK or upgrade activation occurred. See CAMP_SMITH_IMPLEMENTATION.md for exact findings.
+
+## Combined paid-upgrade test feasibility — October 6
+
+The requested combined placement/interaction/upgrade build is not available. Rechecking v5 native GetPrice/HasPrice flags and the Camp transaction bindings did not identify a configurable native price route; MerchantPricingComponent body remains unavailable. No native purchase/upgrade execution was enabled, no new PAK produced, and no further capture requested. The latest test artifact remains the host-only non-interactive v3 placement preview. See research/paid-smith-feasibility-v1.json and CAMP_SMITH_IMPLEMENTATION.md for exact findings.
