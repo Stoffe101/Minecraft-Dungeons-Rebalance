@@ -32,6 +32,7 @@ jobs:
           $before = (Get-FileHash .tools/incomplete.json).Hash
           dotnet .tools/NativeContractReader/NativeContractReader.dll --capture .tools/incomplete.json
           if ($LASTEXITCODE -ne 2 -or (Get-FileHash .tools/incomplete.json).Hash -ne $before) { throw 'Existing report was not preserved' }
+          $global:LASTEXITCODE = 0
       - name: Prepare capture bundle
         shell: pwsh
         run: |
@@ -60,6 +61,7 @@ jobs:
               if ($zip.Entries.Name -notcontains $name) { throw "Runner archive missing $name" }
             }
           } finally { $zip.Dispose() }
+          $global:LASTEXITCODE = 0
       - uses: actions/upload-artifact@v4
         with:
           name: Minecraft-Dungeons-Rebalance-NativeCollector
