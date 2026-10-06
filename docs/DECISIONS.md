@@ -114,3 +114,7 @@ Implement choice/pricing/state/receipt guards as a tested reference model, clear
 ## D-019 — Higher Ancient chance replaces guaranteed minimum
 
 On October 6 the user withdrew D-015's guaranteed random Ancient requirement. Aim for a higher chance of one or more Ancient encounters; unlucky zero-Ancient Hunts are permitted. Keep native offering admission, gold rooms and the existing extra Ancient waves. No multiplier/percentage is agreed yet. The probability increase remains unimplemented until an authoritative control is verified and actual encounters are measured. This supersedes D-015's guarantee acceptance criteria.
+
+## D-020 — Withdraw the unverified UE4SS diagnostic route
+
+The related QoL retail test crashed on startup, and its supplied ZIP contains no native headers/object dump or completed capture. Withdraw Rebalance's UE4SS install/re-enable recommendation and disable the source-only probe by default. A disabled Lua mod cannot prevent earlier native loader hooks and is not a startup repair. Preserve historical shim tests, but require compatibility established in a developer environment before any future runtime diagnostic. Continue direct asset inspection from the supplied Drive copy; keep raw game inputs and Drive identifiers private.

@@ -160,3 +160,7 @@ Supplemental Ancient sources received and inspected. Upgrade option/pricing/conf
 ## October 6 revision: Ancient selection
 
 Guaranteed random Ancient minimum is removed from active scope. Target a higher chance of one or more native Ancient encounters; zero remains possible. Keep the implemented extra waves. Identify a verified native probability/count control, compare matched offerings before/after, and measure real encounter counts; do not call extra waves, broader rune eligibility or a chance-label edit a probability increase. Paid Camp upgrades and shared gold remain unchanged goals.
+
+## October 6 diagnostic correction
+
+Direct Drive source is available; eight archives inspected so far. Full contents are not certified, and the largest archives exceed the connector transfer cap. The related UE4SS test crashed on retail; Rebalance's probe is withdrawn/disabled, not the next user test. Establish a compatible developer diagnostic/bridge before native calls, while continuing cooked asset research through supported transfers. See DRIVE_GAME_RESEARCH.md.

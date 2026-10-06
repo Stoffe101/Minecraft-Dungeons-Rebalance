@@ -40,3 +40,4 @@ A meaningful feature/research pass is not considered complete until:
 - [Camp upgrade and Unique choice implementation status](UPGRADES.md)
 - [Native integration gate and current call paths](NATIVE_RUNTIME.md)
 - [Observed native call index](research/native-calls.md)
+- [Drive game-copy audit and withdrawn runtime diagnostic](DRIVE_GAME_RESEARCH.md)

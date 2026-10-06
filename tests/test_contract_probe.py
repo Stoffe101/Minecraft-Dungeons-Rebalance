@@ -2,6 +2,8 @@
 import ctypes,ctypes.util,unittest
 from pathlib import Path
 SOURCE=(Path(__file__).resolve().parents[1]/'runtime/NativeContracts/Scripts/main.lua').read_bytes()
+# Historical API-shim coverage only; production source remains disabled.
+HISTORICAL_SOURCE=SOURCE.replace(b'local diagnosticEnabled = false',b'local diagnosticEnabled = true')
 class ProbeTests(unittest.TestCase):
     def setUp(self):
         path=ctypes.util.find_library('lua5.4')
@@ -20,8 +22,16 @@ class ProbeTests(unittest.TestCase):
         self.assertEqual(rc,0,(self.lua.lua_tolstring(self.state,-1,None) or b'').decode(errors='replace'))
     def test_absent_loader_disables_cleanly(self):
         self.run_lua('logs={};print=function(v) table.insert(logs,v) end')
-        self.run_lua(SOURCE)
+        self.run_lua(HISTORICAL_SOURCE)
         self.run_lua('assert(#logs==1 and string.find(logs[1],"DISABLED"))')
+    def test_withdrawn_probe_does_not_bind_or_find_objects(self):
+        self.run_lua('''logs={};print=function(v) table.insert(logs,v) end
+StaticFindObject=function() error("Withdrawn probe must not query objects") end
+RegisterKeyBind=function() error("Withdrawn probe must not bind a key") end
+ExecuteInGameThread=function() error("Withdrawn probe must not queue work") end
+Key={F8=119}''')
+        self.run_lua(SOURCE)
+        self.run_lua('assert(#logs==1 and string.find(logs[1],"Diagnostic withdrawn",1,true))')
     def test_read_only_inventory_and_missing_classes(self):
         self.run_lua('''
 logs={};print=function(v) table.insert(logs,v) end
@@ -36,7 +46,7 @@ cls.ForEachProperty=function(self,cb) cb({GetFullName=function() return "IntProp
 cls.GetSuperStruct=function() return invalid end
 StaticFindObject=function(path) lookups=lookups+1;if path=="/Script/Dungeons.InventoryItem" then return cls else return invalid end end
 ''')
-        self.run_lua(SOURCE)
+        self.run_lua(HISTORICAL_SOURCE)
         self.run_lua('''assert(lookups==0);key_callback();assert(queued==1 and lookups==32)
 local text=table.concat(logs);assert(string.find(text,"FUNCTION Function /Script/Dungeons.InventoryItem:Example flags=1024",1,true));assert(string.find(text,"PROPERTY IntProperty",1,true));assert(string.find(text,"MISSING /Script/Dungeons.UniqueCollectItem",1,true));assert(string.find(text,"END Names/flags only",1,true))''')
 if __name__=='__main__':unittest.main()

@@ -245,3 +245,7 @@ Three economy integration tests pass against the supplied private packages. They
 ## Supplemental / upgrade-choice continuation
 
 Seventeen synthetic-adapter upgrade policy tests and two Lua 5.4 API-shim tests passed. These are not native upgrade/charge, UMG, loader, Hunt guarantee or retail tests. Actual game tests remain pending; v2 PAK unchanged.
+
+## October 6 Drive and withdrawn diagnostic checks
+
+Eight original archives mounted; six targeted reads completed without export errors; ten preserved hashes verified, four gold-chest files exactly match previous sources. Three local Lua shim tests pass, including withdrawn-default no-key/no-query/no-queue behavior. No game runtime, native loader compatibility, new chance/paid upgrade/shared-gold feature or retail PAK execution is tested. Complete archive contents remain unaudited.

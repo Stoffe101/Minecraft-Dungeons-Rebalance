@@ -21,13 +21,11 @@ Do not use the byte/integer literals above to infer undocumented enum values or 
 
 ## Runtime evidence needed
 
-The existing source-only UE4SS probe now inventories 32 classes, adding nine classes identified by this call index. It still performs bounded metadata reads only. No loader DLL, native call hook, NPC spawn, item setter or wallet mutation is deployed. Its two Lua API-shim tests validate source behavior, not Minecraft Dungeons compatibility.
+The source-only 32-class UE4SS probe is **withdrawn and disabled by default** after the related QoL startup crash. The supplied reflection ZIP has no generated headers or completed capture. Three local Lua shim checks pass, including default disable; none proves game compatibility or fixes native loader startup. No loader DLL or installer is provided. Do not install/re-enable UE4SS for this probe on the user's game.
 
-Current game reflection is the next dependency. The supplied PAK assets cannot contain the native /Script/Dungeons implementations. This Linux workspace has no running game, game executable or current native reflection output. Further offline model tests cannot establish those contracts or fulfill gameplay acceptance.
+Current native contracts remain a dependency. The Drive copy gives direct asset access, but has no game executable, game-specific native DLL, symbols or runtime reflection output. Eight archived source mounts and six targeted reads succeeded; the two additional Ancient door Blueprints contain no functions. See [DRIVE_GAME_RESEARCH.md](DRIVE_GAME_RESEARCH.md) for exact inspected scope and transfer limits.
 
-For a developer environment where UE4SS compatibility has already been established, enable the NativeContracts source mod using that loader's normal mod mechanism, enter Camp and press F8. Retain the `[RebalanceContracts]` log entries. Obtain the loader's C++ headers as well: the official documentation lists Ctrl+H for its header generator. Keep force-loading disabled. Record the precise game build, loader release/commit, whether the game reaches Camp, and which classes are missing. Repeat while the Tower merchant UI and Ancient Hunt offerings UI are loaded if relevant classes are absent. Do not treat header offsets as trustworthy merely because the generator emits them.
-
-UE4SS compatibility with this Store build remains unverified. This document does not direct installation of an untested loader into the user's game, and no automatic loader installer is provided.
+A future diagnostic/bridge must first establish compatibility in a developer environment. Imported names, generated offsets from another build and synthetic models cannot certify the user's native ABI or transaction semantics. The prior F8/Ctrl+H installation/test recommendation is withdrawn. Do not repeat loader installation or guess engine/signature settings.
 
 Official references inspected: [dumpers](https://docs.ue4ss.com/feature-overview/dumpers.html), [UE4SS](https://docs.ue4ss.com/). The release documentation warns that generated memory layout is not accurate, that force-loading can crash the game, and that game-specific compatibility work may be necessary. Development-only jmap features are not assumed available in a release.
 

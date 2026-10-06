@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "archiveContentsFullyAudited": false,
+  "mountedArchiveCount": 8,
+  "visiblePaths": 622,
+  "targetedReads": 6,
+  "extractionErrors": [],
+  "verifiedSourceFileCount": 10,
+  "matchesPriorGoldChestSourceFiles": 4,
+  "archives": [
+    {
+      "name": "pakchunk21-WindowsNoEditor.pak",
+      "bytes": 1086361,
+      "sha256": "b7bb59a760e49bf2c274f84c76d2b1333f530b71dac566affced0beb6104121a"
+    },
+    {
+      "name": "pakchunk22-WindowsNoEditor.pak",
+      "bytes": 24764,
+      "sha256": "d5468ba6a9bf94ed10907a1694d8b3cbc7b0fad7305c47d107c90e4e57db072b"
+    },
+    {
+      "name": "pakchunk23-WindowsNoEditor.pak",
+      "bytes": 165182,
+      "sha256": "dce38008a7a0252ce6c090c1f92a288ccd62d29b0c166dfa23b5e38bf256f99c"
+    },
+    {
+      "name": "pakchunk24-WindowsNoEditor.pak",
+      "bytes": 4534232,
+      "sha256": "84c2d6d6a874b40ad316ab3b96430a74a91034513d3a3217048fce1f0b3547b4"
+    },
+    {
+      "name": "pakchunk25-WindowsNoEditor.pak",
+      "bytes": 99814,
+      "sha256": "d93176ccb50cf05ca11b58e31d6fbe931b62eaf25ab11e306375563281349b9d"
+    },
+    {
+      "name": "pakchunk51-WindowsNoEditor.pak",
+      "bytes": 687879,
+      "sha256": "393b4779acf81cfa4827bc43a8ac863844372cc614efd70644374dec7af05427"
+    },
+    {
+      "name": "pakchunk80-WindowsNoEditor.pak",
+      "bytes": 465384,
+      "sha256": "dad4a1aa14dd67695c992b28d0f16a9623634a4d2cb7c432d4f06646453ed42f"
+    },
+    {
+      "name": "pakchunk99-WindowsNoEditor.pak",
+      "bytes": 3880208,
+      "sha256": "ea22ae76a4e6a437d32b30d1057ed06126c4618fa33d64001db720690832d5fb"
+    }
+  ],
+  "note": "Eight selected archives only. No game executable, symbols or live reflection obtained. Targeted reads verify source preservation, not retail gameplay."
+}

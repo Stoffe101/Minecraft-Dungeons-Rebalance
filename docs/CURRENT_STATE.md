@@ -64,3 +64,9 @@ The hard dependency is current live native reflection and access to the running 
 ## October 6 scope revision
 
 The user withdrew the guaranteed Ancient minimum and requested a higher chance of one or more encounters instead. Configuration and active roadmap now reflect that goal, with no fixed multiplier chosen and encounterChanceImplemented=false. Existing Ancient extra waves remain implemented, but native encounter-selection probability remains unchanged in delivered v2. Rune eligibility and UI chance presentation are not treated as actual spawn probability controls. See ANCIENT_GUARANTEE.md for the superseding goal and retained historical research.
+
+## Drive source and runtime diagnostic correction
+
+The user supplied the installation copy on Drive and has not yet tested v2. Traversed all 51 descendant folders/215 descendant files; read both manifests (1.17.0.0 x64), mounted eight archives/622 paths, and read six targeted assets with zero export errors. All ten preserved hashes match, including four gold-chest files identical to the earlier collection. Two additional Ancient doors have zero Blueprint functions and no chance control. Main archive download is limited by the connector; complete archive contents have not been audited.
+
+Inspected the related QoL reflection ZIP: capture incomplete, no headers/object dump, only a three-line startup log. That project's user-reported UE4SS startup crash supersedes the earlier suggested diagnostic route. Rebalance's source-only probe is now disabled by default and the recommendation withdrawn; three Lua shim checks pass. This cannot repair a native loader crash. No new gameplay PAK/features or retail results are claimed. See DRIVE_GAME_RESEARCH.md.
