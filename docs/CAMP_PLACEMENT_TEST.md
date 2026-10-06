@@ -1,5 +1,7 @@
 # Camp placement test build
 
+**v3 is withdrawn after the user's Camp load crash. The current candidate is MinecraftDungeonsRebalance-CampPlacement-LoadFix-Test-v4.pak. It corrects a proven generated-Function load-contract omission, but resolution of the reported crash has not been confirmed in game. Interactions remain disabled and prices/upgrades remain unfinished. The v3 instructions below describe the unchanged placement scope; substitute the v4 filename and remove v3 before testing.**
+
 October 6, 2026. This is **CampPlacement-Test-v3**, an experimental NPC placement build. It is not the finished paid-upgrade mod.
 
 ## What this build tests
@@ -39,3 +41,17 @@ The next execution dependency is a supported native custom-price/payment and nor
 Agreed prices remain Common-to-Rare 750 emeralds, selected Unique 2500 emeralds, gild 150 gold and gild reroll 250 gold. Powersmith pricing/rules are unresolved. Shared gold, completion rewards and higher native Ancient selection probability remain unfinished.
 
 PAK SHA-256: `6f13bc4f04f2f5d4a4782803158e41943c29d647b98968cae2066a9495fd409a`; bytes: 6075200.
+
+## v3 crash and v4 correction
+
+The user reported v3 crashing and supplied CrashContext(7).runtime-xml, CrashReportClient(7).ini and UE4Minidump(7).dmp. Sanitized summary: research/camp-v3-crash-summary.json. CrashReportClient INI was not used to infer cause; it is reporting configuration. Raw attachments/module paths/registers are not committed.
+
+The exception is 0xc0000005, a write to 0x28 at Dungeons RVA0x11d838c after 36 seconds. The dump contains instruction bytes for loading the last entry of a seven-element child array then writing its Next pointer. The null register and offsets match UE4.22.3 UStruct::Serialize's child-field chain construction. The modified BP_LobbyChest class has seven children (original six plus new function), consistent with this failure. No symbols or referenced heap capture identify the exact loaded object, so this is a strong loading-path inference rather than a symbolized asset diagnosis.
+
+Independent source/package review found generated functions had TemplateIndex zero and omitted native Function class/archetype prerequisites from SerializationBeforeCreateDependencies. Supplied original Function exports retain Default__Function and those prerequisites. v4 retains that original archetype and explicitly schedules native class/archetype serialization before new function creation, along with owner creation. This applies to the spawn function and nine presentation/selection wrapper functions. No operation or price was changed.
+
+FunctionLoadContract validates qualified native Function/Default__Function imports and three required creation prerequisites. The actual retained crashed v3 chest package is now rejected; four corruption checks remove archetype, class prerequisite, archetype prerequisite or owner prerequisite. Eleven private-source tests passed, all ten package pairs reopened exactly and original hashes stayed unchanged. Rebuilt all37 entries and compared exact unpack paths/bytes. A correct parsed round trip alone did not catch the original loader contract omission; new checks target that gap. These checks cannot certify the absence of additional runtime failures.
+
+To test v4: remove v3, place v4 in the same ~mods folder, enter Camp in single-player, and first check whether loading succeeds. Then check the three non-interactive NPCs/duplicates and the unchanged 100-emerald reward. If loading still fails, remove v4 and use v2. Upgrade/payment testing remains unavailable.
+
+v4 PAK SHA-256: `1fc846ee8c0633cd10322a14ac4dedf23f67971ddfc2147a60cd6a1edbd3b527`; bytes: 6075360. Runtime crash correction verified: false.

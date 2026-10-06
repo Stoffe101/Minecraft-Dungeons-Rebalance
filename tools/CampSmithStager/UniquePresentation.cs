@@ -37,13 +37,14 @@ static class UniquePresentation
             if (asset.Exports.Any(e => e.ObjectName.ToString() == spec.Wrapper)) throw new InvalidDataException("Presentation already added.");
             var fn = (FunctionExport)asset.Exports.OfType<FunctionExport>().First(f => f.Children.Length == 0).Clone();
             fn.ObjectName = new FName(asset, spec.Wrapper); fn.OuterIndex = Index(owner);
-            fn.SuperIndex = fn.SuperStruct = fn.TemplateIndex = new FPackageIndex(0);
+            fn.SuperIndex = fn.SuperStruct = new FPackageIndex(0);
             fn.SerialOffset = fn.SerialSize = 0; ClearDependencies(fn);
             fn.Children = Array.Empty<FPackageIndex>();
             fn.FunctionFlags = EFunctionFlags.FUNC_Public | EFunctionFlags.FUNC_BlueprintCallable
                 | EFunctionFlags.FUNC_BlueprintPure | EFunctionFlags.FUNC_HasOutParms;
             asset.Exports.Add(fn);
             fn.CreateBeforeCreateDependencies.Add(Index(owner));
+            FunctionLoadContract.Add(asset, fn);
             owner.Children = owner.Children.Append(Index(fn)).ToArray(); owner.FuncMap.Add(fn.ObjectName, Index(fn));
             owner.SerializationBeforeSerializationDependencies.Add(Index(fn));
             PropertyExport Field(string name, string type, UProperty property, EPropertyFlags flags) {
@@ -93,6 +94,7 @@ static class UniquePresentation
 
     public static void Validate(UAsset asset)
     {
+        FunctionLoadContract.ValidateOwned(asset);
         var owner = asset.Exports.OfType<ClassExport>().Single();
         foreach (var spec in Specs) {
             var fn = asset.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == spec.Wrapper);

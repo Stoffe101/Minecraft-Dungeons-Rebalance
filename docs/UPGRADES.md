@@ -1,5 +1,7 @@
 # Camp upgrades and choosing a Unique
 
+**Latest runtime result: v3 crashes and is withdrawn. v4 restores generated Function archetypes/creation prerequisites and passes eleven private-source checks plus 37-entry PAK verification; this correction is retail-unverified. Prices and paid upgrades remain unfinished. Use v2 as the known reward baseline. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier milestone notes below are historical.**
+
 **Current milestone: CampPlacement-Test-v3 is available as a host-only, non-interactive NPC placement preview. Owned actor/root/content bindings are packaged, but paid/persistent/repeatable upgrades and the custom Unique picker remain unfinished. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier pass notes below are historical.**
 
 Updated October 5, 2026, after the supplemental collection.

@@ -1,0 +1,18 @@
+{
+  "schema": "rebalance-crash-summary-v1",
+  "dumpSha256": "d309538d6e715baec04e602f345e0ac3c2861f4a6ed8620ae759403d46178940",
+  "contextSha256": "abaf3d766fb0c5506661c305c7e2c5c8b77322d4278f43e33ee9006007a9ec7f",
+  "engineVersion": "4.22.3-0+++UE4+Release-4.22",
+  "secondsSinceStart": 36,
+  "exceptionCode": "0xc0000005",
+  "memoryAccess": "write",
+  "targetAddress": "0x28",
+  "faultModules": [
+    {
+      "name": "Dungeons.exe",
+      "rva": "0x11d838c"
+    }
+  ],
+  "privateModulePathsOmitted": true,
+  "symbolsAvailable": false
+}

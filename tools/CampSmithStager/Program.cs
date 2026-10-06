@@ -11,6 +11,8 @@ if (args.Length == 2 && args[0] == "--self-test-presentation") { UniquePresentat
 if (args.Length == 2 && args[0] == "--self-test-selection") { SelectedItemReaders.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-screens") { MerchantScreens.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-placement") { CampPlacement.SelfTest(args[1]); return; }
+if (args.Length == 2 && args[0] == "--self-test-load-contracts") { FunctionLoadContract.SelfTest(args[1]); return; }
+if (args.Length == 2 && args[0] == "--check-load-contracts") { FunctionLoadContract.ValidateOwned(new UAsset(args[1], EngineVersion.VER_UE4_22)); Console.WriteLine("Generated Function load contracts validated."); return; }
 var placementPreview = args.Length == 3 && args[0] == "--placement-preview";
 if (placementPreview) args = args.Skip(1).ToArray();
 if (args.Length != 2) throw new ArgumentException("Usage: CampSmithStager <private-PatchSources-root> <fresh-private-output-root>");
@@ -133,7 +135,7 @@ try {
     }
     File.WriteAllText(Path.Combine(output, "CAMP_SMITH_STAGE_REPORT.json"), JsonConvert.SerializeObject(new {
         status = placementPreview ? "camp_placement_preview_only" : "private_asset_foundation_only", deployable = placementPreview,
-        gameplayVerified = false, campPlacementImplemented = placementPreview, npcPreviewOnly = placementPreview,
+        functionCreationPreloadsValidated = true, gameplayVerified = false, campPlacementImplemented = placementPreview, npcPreviewOnly = placementPreview,
         interactionsDisabledBySpawn = placementPreview,
         paidTransactionsImplemented = false, uniquePickerImplemented = false,
         uniquePresentationBindingsImplemented = true,

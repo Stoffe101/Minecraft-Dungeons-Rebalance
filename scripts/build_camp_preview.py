@@ -38,7 +38,7 @@ def main():
     smith_report = json.loads((smiths / 'CAMP_SMITH_STAGE_REPORT.json').read_text())
     if (smith_report['status'] != 'camp_placement_preview_only' or len(smith_report['packages']) != 10
             or not smith_report['interactionsDisabledBySpawn'] or smith_report['paidTransactionsImplemented']
-            or smith_report['gameplayVerified']):
+            or smith_report['gameplayVerified'] or not smith_report.get('functionCreationPreloadsValidated')):
         raise ValueError('Expected an unverified, non-interactive placement stage')
     smith_files = {}
     for package in smith_report['packages']:
@@ -71,7 +71,7 @@ def main():
         target = stage / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
-    pak = output / 'MinecraftDungeonsRebalance-CampPlacement-Test-v3.pak'
+    pak = output / 'MinecraftDungeonsRebalance-CampPlacement-LoadFix-Test-v4.pak'
     subprocess.run([sys.executable, str(packager), 'pack', str(pak), 'Dungeons', '-p'], cwd=stage, check=True)
     subprocess.run([sys.executable, str(packager), 'test', str(pak)], check=True)
     unpack = output / 'verified-unpack'
@@ -80,8 +80,8 @@ def main():
     expected = {n: p.read_bytes() for n, p in files.items()}
     if actual != expected:
         raise ValueError('PAK did not preserve the exact file set and bytes')
-    report = dict(build='CampPlacement-Test-v3', gameplayVerified=False, completeDesignImplemented=False,
-                  npcInteractionsEnabled=False, npcReplicated=False, paidTransactionsImplemented=False,
+    report = dict(build='CampPlacement-LoadFix-Test-v4', gameplayVerified=False, completeDesignImplemented=False,
+                  crashCorrectionRuntimeVerified=False, functionCreationPreloadsValidated=True, npcInteractionsEnabled=False, npcReplicated=False, paidTransactionsImplemented=False,
                   pakSha256=digest(pak), pakBytes=pak.stat().st_size, baselinePakSha256=BASELINE_HASH,
                   entries=[dict(path=n, bytes=len(b), sha256=hashlib.sha256(b).hexdigest()) for n, b in sorted(expected.items())],
                   replacedBaselineEntries=sorted(replaced), retainedBaselineEntries=17,

@@ -97,6 +97,21 @@ class CampSmithTests(unittest.TestCase):
                     for name, expected in package[key].items():
                         self.assertEqual(hashlib.sha256((root / package[path_key]).with_name(name).read_bytes()).hexdigest(), expected)
 
+    def test_crashed_v3_is_rejected_by_load_contract_check(self):
+        if not ARGS.crashed_stage:
+            self.skipTest('Private crashed v3 stage not supplied')
+        path = Path(ARGS.crashed_stage) / 'Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset'
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--check-load-contracts', str(path)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Generated Function native class/archetype must be imported', result.stderr)
+
+    def test_function_creation_preloads_are_required(self):
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-load-contracts', str(ARGS.source)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Four Function load-contract rejection checks passed', result.stdout)
+
     def test_placement_rejects_unsafe_guards(self):
         result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-placement', str(ARGS.source)],
                                 capture_output=True, text=True, timeout=120)
@@ -136,5 +151,6 @@ if __name__ == '__main__':
     parser.add_argument('--dotnet', required=True)
     parser.add_argument('--stager', required=True)
     parser.add_argument('--source', required=True)
+    parser.add_argument('--crashed-stage')
     ARGS, extra = parser.parse_known_args()
     unittest.main(argv=[__file__, *extra])

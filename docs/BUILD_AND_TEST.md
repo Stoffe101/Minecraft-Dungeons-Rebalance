@@ -1,5 +1,7 @@
 # Hunts / Economy test build v2
 
+**Latest runtime result: v3 crashes and is withdrawn. v4 restores generated Function archetypes/creation prerequisites and passes eleven private-source checks plus 37-entry PAK verification; this correction is retail-unverified. Prices and paid upgrades remain unfinished. Use v2 as the known reward baseline. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier milestone notes below are historical.**
+
 **Current milestone (October 6): CampPlacement-Test-v3 packages a host-only, non-interactive Camp spawn preview, retaining v2 economy/Hunt changes. Ten package pairs and nine integration tests pass; all 37 PAK entries integrity-test and unpack-compare exactly. Paid upgrades/picker/persistence/shared gold remain unfinished and no retail placement result exists. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier sections below record earlier passes.**
 
 This is the first playable test subset, **not the complete Rebalance design**. Structural validation passed. On October 6, the user confirmed the Camp chest pays 100 emeralds instead of 50 in game. The user subsequently marked gold chests complete and observed +25 emeralds from an urn (241 -> 266). Generated mission progression, broader urn coverage and co-op remain unverified.

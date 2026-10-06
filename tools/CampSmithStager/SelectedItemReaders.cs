@@ -33,11 +33,12 @@ static class SelectedItemReaders
             if (asset.Exports.Any(e => e.ObjectName.ToString() == spec.Name)) throw new InvalidDataException("Selected-item readers already added.");
             var fn = (FunctionExport)asset.Exports.OfType<FunctionExport>().First(f => f.Children.Length == 0).Clone();
             fn.ObjectName = new FName(asset, spec.Name); fn.OuterIndex = Index(owner);
-            fn.SuperIndex = fn.SuperStruct = fn.TemplateIndex = new FPackageIndex(0);
+            fn.SuperIndex = fn.SuperStruct = new FPackageIndex(0);
             fn.SerialOffset = fn.SerialSize = 0; Clear(fn); fn.Children = Array.Empty<FPackageIndex>();
             fn.FunctionFlags = EFunctionFlags.FUNC_Public | EFunctionFlags.FUNC_BlueprintCallable
                 | EFunctionFlags.FUNC_BlueprintPure | EFunctionFlags.FUNC_HasOutParms | EFunctionFlags.FUNC_HasDefaults;
             asset.Exports.Add(fn); fn.CreateBeforeCreateDependencies.Add(Index(owner));
+            FunctionLoadContract.Add(asset, fn);
             owner.Children = owner.Children.Append(Index(fn)).ToArray(); owner.FuncMap.Add(fn.ObjectName, Index(fn));
             owner.SerializationBeforeSerializationDependencies.Add(Index(fn));
             PropertyExport Field(string name, string type, UProperty property, EPropertyFlags flags) {
@@ -82,6 +83,7 @@ static class SelectedItemReaders
 
     public static void Validate(UAsset asset)
     {
+        FunctionLoadContract.ValidateOwned(asset);
         var owner = asset.Exports.OfType<ClassExport>().Single();
         foreach (var spec in Specs) {
             var fn = asset.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == spec.Name);

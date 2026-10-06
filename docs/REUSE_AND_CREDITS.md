@@ -157,3 +157,7 @@ MerchantScreens.cs is project-owned. It modifies private copies of the supplied 
 ## Camp placement preview — October 6
 
 SpawnGraph.cs adapts the same-owner Minecraft-Dungeons-QoL graph-building pattern under the user's explicit reuse authorization. CampPlacement's operation ordering/guards are authored here from observed retail calls and pinned engine declarations. Native meshes/materials/animations stay referenced by cloned retail actors; no game assets or engine header code are committed to the repository. The private user test PAK includes cloned supplied cooked assets. Better Ancient Hunt adaptation is unchanged and remains credited to Onetoeisenough. This preview requires no BlueprintLoader or UE4SS deployment.
+
+## Loading correction provenance
+
+Native Function archetype/dependency requirements were recovered by comparing supplied original packages and reading pinned UE4.22.3/UAssetAPI1.1.0 loading/writer code. FunctionLoadContract and minidump summary script are authored here; no engine code, SDK code or raw game binary is redistributed. Public SDK was naming-only research.

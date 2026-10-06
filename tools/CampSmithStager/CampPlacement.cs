@@ -75,6 +75,7 @@ static class CampPlacement
     }
     internal static void Validate(UAsset asset)
     {
+        FunctionLoadContract.ValidateOwned(asset);
         if (asset.Exports.OfType<NormalExport>().Single(e => e.ObjectName.ToString() == "Default__BP_LobbyChest_C")
             .Data.OfType<IntPropertyData>().Single(p => p.Name.ToString() == "EmeraldsReward").Value != 100)
             throw new InvalidDataException("Accepted Camp reward must be preserved.");

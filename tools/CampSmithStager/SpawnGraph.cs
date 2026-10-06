@@ -22,11 +22,12 @@ sealed class SpawnGraph
         if (asset.Exports.Any(e => e.ObjectName.ToString() == name)) throw new InvalidDataException("Placement already added.");
         Function = (FunctionExport)asset.Exports.OfType<FunctionExport>().First(f => f.Children.Length == 0).Clone();
         Function.ObjectName = new FName(asset, name); Function.OuterIndex = Index(Owner);
-        Function.SuperIndex = Function.SuperStruct = Function.TemplateIndex = new FPackageIndex(0);
+        Function.SuperIndex = Function.SuperStruct = new FPackageIndex(0);
         Function.SerialOffset = Function.SerialSize = 0; Clear(Function);
         Function.Children = Array.Empty<FPackageIndex>();
         Function.FunctionFlags = EFunctionFlags.FUNC_Public | EFunctionFlags.FUNC_BlueprintCallable | EFunctionFlags.FUNC_HasDefaults;
         asset.Exports.Add(Function); Function.CreateBeforeCreateDependencies.Add(Index(Owner));
+        FunctionLoadContract.Add(asset, Function);
         Owner.Children = Owner.Children.Append(Index(Function)).ToArray(); Owner.FuncMap.Add(Function.ObjectName, Index(Function));
         Owner.SerializationBeforeSerializationDependencies.Add(Index(Function));
     }
