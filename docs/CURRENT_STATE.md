@@ -195,3 +195,9 @@ Required next input: run the capture command from a fresh extracted v5 folder wi
 ## V5 fulfilled; collector loop stopped
 
 Successful v5 capture and concrete actor/root/content wiring supersede earlier pending capture requests. No additional collector run requested. The native choice list event/selection return path is identified and retained. Pricing replacement and normal-inventory mutation/save behavior remain the blocking implementation work; declaration success does not make those executable. See CAMP_SMITH_IMPLEMENTATION.md for code, seven integration tests, limitations and next work.
+
+## Native screen integration CI verification
+
+Implementation commit 0285e2b9c8199ad4bab0fc96bd74c86c4a7e98c3 is published to main. Evidence workflow 37485292520, native reader workflow 37485292521 and policy workflow 37485292512 all succeeded. Windows evidence builds CampSmithStager normally; private retail source integration tests are the seven locally passing tests, not part of public CI. No new collector or playable PAK is delivered. The uploaded v5 capture is accepted and no further command/capture request is pending.
+
+Additional public searches for existing Camp Tower-merchant mods and MerchantPricingComponent source did not produce an inspectable primary implementation in the returned results. Results included unrelated projects and general game pages; this search does not prove absence of an existing mod or pricing API. No unverified source was reused or recommended.

@@ -344,3 +344,9 @@ Required next input: run the capture command from a fresh extracted v5 folder wi
 ## V5 integration and collector stop
 
 The user supplied the successful v5 capture: 53 types/26 enums, requested dependency closure complete. No further capture requested. Camp actor CDOs now point to owned merchant roots whose GetSoftContentWidget overrides open the matching cloned content; all other native decision/input graphs are retained. Seven asset integration tests pass, including 18 negative graph/record/dispatch checks. This is configuration/graph integration, not runtime payment or save validation. No new gameplay PAK is released. Pricing customization and normal-inventory upgrade behavior need an exposed implementation route or a validated native runtime/toolchain before paid services and world placement can be completed. See CAMP_SMITH_IMPLEMENTATION.md.
+
+## Native screen integration CI verification
+
+Implementation commit 0285e2b9c8199ad4bab0fc96bd74c86c4a7e98c3 is published to main. Evidence workflow 37485292520, native reader workflow 37485292521 and policy workflow 37485292512 all succeeded. Windows evidence builds CampSmithStager normally; private retail source integration tests are the seven locally passing tests, not part of public CI. No new collector or playable PAK is delivered. The uploaded v5 capture is accepted and no further command/capture request is pending.
+
+Additional public searches for existing Camp Tower-merchant mods and MerchantPricingComponent source did not produce an inspectable primary implementation in the returned results. Results included unrelated projects and general game pages; this search does not prove absence of an existing mod or pricing API. No unverified source was reused or recommended.

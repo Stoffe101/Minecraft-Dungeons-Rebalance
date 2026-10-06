@@ -322,3 +322,9 @@ Tests: seven real-source integration tests pass, including nine-pair semantic ro
 Decision: stop iterative declaration collection. The capture alone cannot provide native C++ behavior or a working runtime extension. A complete paid Camp-upgrade PAK needs a verified custom pricing/execution path and normal-inventory/save behavior; none is established for the current Store setup. Do not silently ship free Tower services, guessed mutations or another collector. The old loader remains withdrawn. This pass implements concrete screen integration without claiming runtime upgrade completion.
 
 Next work: seek an existing exposed customization path or a validated native mod runtime/toolchain that can implement the agreed prices and normal-inventory preservation; then wire execution and Camp placement and run real item/balance/reload/party tests. If neither route is available, report this limitation rather than continuing capture versions. HuntsEconomy-Test-v2 remains the usable gameplay PAK.
+
+## Native screen integration CI verification
+
+Implementation commit 0285e2b9c8199ad4bab0fc96bd74c86c4a7e98c3 is published to main. Evidence workflow 37485292520, native reader workflow 37485292521 and policy workflow 37485292512 all succeeded. Windows evidence builds CampSmithStager normally; private retail source integration tests are the seven locally passing tests, not part of public CI. No new collector or playable PAK is delivered. The uploaded v5 capture is accepted and no further command/capture request is pending.
+
+Additional public searches for existing Camp Tower-merchant mods and MerchantPricingComponent source did not produce an inspectable primary implementation in the returned results. Results included unrelated projects and general game pages; this search does not prove absence of an existing mod or pricing API. No unverified source was reused or recommended.
