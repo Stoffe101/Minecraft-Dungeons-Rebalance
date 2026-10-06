@@ -1,6 +1,6 @@
 {
   "schema": "rebalance-native-upgrade-contracts-v1",
-  "sourceArchiveSha256": "23f8c58f7c46b7df653281ee9942fb445fe40de71fee3a4a17ba965fffba8d99",
+  "sourceArchiveSha256": "c709ff9d3d388cab6bc5e981f7c6c956dffaaf6969aa5e56e0fdc4249e45f889",
   "sourceCaptureCompleted": true,
   "controlContractsPassed": true,
   "upgradeSemanticsVerified": false,
@@ -1092,9 +1092,1391 @@
         }
       ],
       "Kind": "Class"
+    },
+    {
+      "Name": "MerchantBaseWidget",
+      "Super": "UserWidget",
+      "Fields": [
+        {
+          "Name": "mMerchant",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.MerchantBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 560,
+          "Flags": 20266268116386304,
+          "Inner": null
+        },
+        {
+          "Name": "mTowerWidgetUI",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 568,
+          "Flags": 11267864954733061,
+          "Inner": null
+        },
+        {
+          "Name": "bCloseAfterTransaction",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 569,
+          "Flags": 11267864954667524,
+          "Inner": null
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "UpdateTransactions",
+          "Flags": 134744064,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "UpdateSlots",
+          "Flags": 134744064,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "UpdateSelections",
+          "Flags": 134744064,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "UpdateSelectionFocus",
+          "Flags": 134744064,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "ShouldShowEnchantmentPoints",
+          "Flags": 1409811457,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnUnboundMerchant",
+          "Flags": 134744064,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "merchant",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnTransactionExecuted",
+          "Flags": 134744064,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "transaction",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantTransactionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274946,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnRewardAnnouncement",
+          "Flags": 134744064,
+          "ParameterSize": 16,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "rewardAnnouncement",
+              "Type": "StrProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 6755399441056384,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnOpenClose",
+          "Flags": 67634177,
+          "ParameterSize": 1,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "Open",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnLoadingScreenTearDown",
+          "Flags": 525313,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "OnItemAnnouncement",
+          "Flags": 138938368,
+          "ParameterSize": 160,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "ItemAnnouncement",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.ItemAnnouncement",
+              "ArrayDim": 1,
+              "Size": 160,
+              "Offset": 0,
+              "Flags": 4503599761588610,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnDecisionToBeMade",
+          "Flags": 138938368,
+          "ParameterSize": 16,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "itemsToChoose",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503599761589122,
+              "Inner": {
+                "Name": "itemsToChoose",
+                "Type": "StructProperty",
+                "Target": "/Script/Dungeons.InventoryItemData",
+                "ArrayDim": 1,
+                "Size": 120,
+                "Offset": 0,
+                "Flags": 0,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "OnDecisionMade",
+          "Flags": 1141376001,
+          "ParameterSize": 120,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "choosenItem",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.InventoryItemData",
+              "ArrayDim": 1,
+              "Size": 120,
+              "Offset": 0,
+              "Flags": 4503599627370624,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnClaimError",
+          "Flags": 134744064,
+          "ParameterSize": 16,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "rewardKey",
+              "Type": "StrProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 6755399441056384,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnBoundMerchant",
+          "Flags": 134744064,
+          "ParameterSize": 9,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "merchant",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            },
+            {
+              "Name": "bOpenOnLoad",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 8,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "OnBindChanged",
+          "Flags": 134744064,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "IsTransactionClassAvailable",
+          "Flags": 1414005761,
+          "ParameterSize": 9,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "transactionClass",
+              "Type": "ClassProperty",
+              "Target": "/Script/Dungeons.MerchantTransactionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 7881369275335554,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 8,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "IsTowerWidget",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "IsSelectionClassRequired",
+          "Flags": 1414005761,
+          "ParameterSize": 9,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "selectionClass",
+              "Type": "ClassProperty",
+              "Target": "/Script/Dungeons.MerchantSelectionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 7881369275335554,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 8,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "IsSelectionClassFocused",
+          "Flags": 1414005761,
+          "ParameterSize": 9,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "selectionClass",
+              "Type": "ClassProperty",
+              "Target": "/Script/Dungeons.MerchantSelectionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 7881369275335554,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 8,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "InitialBindingUpdate",
+          "Flags": 201853952,
+          "ParameterSize": 0,
+          "ReturnOffset": 65535,
+          "Parameters": []
+        },
+        {
+          "Name": "HasAnyLockedSlot",
+          "Flags": 1409811457,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetTransactionByClass",
+          "Flags": 1414005761,
+          "ParameterSize": 16,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "transactionClass",
+              "Type": "ClassProperty",
+              "Target": "/Script/Dungeons.MerchantTransactionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 7881369275335554,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantTransactionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 8,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetSoftContentWidget",
+          "Flags": 201460736,
+          "ParameterSize": 48,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "merchant",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "SoftClassProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 40,
+              "Offset": 8,
+              "Flags": 7881299347899776,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetSlotsByClass",
+          "Flags": 1414005761,
+          "ParameterSize": 24,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "slotClass",
+              "Type": "ClassProperty",
+              "Target": "/Script/Dungeons.MerchantSlotBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 7881369275335554,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 8,
+              "Flags": 4503599627372416,
+              "Inner": {
+                "Name": "ReturnValue",
+                "Type": "ObjectProperty",
+                "Target": "/Script/Dungeons.MerchantSlotBase",
+                "ArrayDim": 1,
+                "Size": 8,
+                "Offset": 0,
+                "Flags": 2251869606904320,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetSlots",
+          "Flags": 1409811457,
+          "ParameterSize": 16,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503599627372416,
+              "Inner": {
+                "Name": "ReturnValue",
+                "Type": "ObjectProperty",
+                "Target": "/Script/Dungeons.MerchantSlotBase",
+                "ArrayDim": 1,
+                "Size": 8,
+                "Offset": 0,
+                "Flags": 2251869606904320,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetSelectionFocus",
+          "Flags": 1409811457,
+          "ParameterSize": 8,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.SelectionChain",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetSelectionByClass",
+          "Flags": 1414005761,
+          "ParameterSize": 16,
+          "ReturnOffset": 8,
+          "Parameters": [
+            {
+              "Name": "selectionClass",
+              "Type": "ClassProperty",
+              "Target": "/Script/Dungeons.MerchantSelectionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 7881369275335554,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantSelectionBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 8,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetRestockMethodsBulletPoints",
+          "Flags": 1409811457,
+          "ParameterSize": 16,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503599627372416,
+              "Inner": {
+                "Name": "ReturnValue",
+                "Type": "StructProperty",
+                "Target": "/Script/Dungeons.ItemBulletPoint",
+                "ArrayDim": 1,
+                "Size": 48,
+                "Offset": 0,
+                "Flags": 0,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetMerchantActorOwner",
+          "Flags": 1409811457,
+          "ParameterSize": 8,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantActor",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetLockedSlotsHint",
+          "Flags": 1409811457,
+          "ParameterSize": 24,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "TextProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 24,
+              "Offset": 0,
+              "Flags": 4503599761589634,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetDisplayName",
+          "Flags": 1409811457,
+          "ParameterSize": 24,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "TextProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 24,
+              "Offset": 0,
+              "Flags": 4503599761589634,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetDisplayDescription",
+          "Flags": 1409811457,
+          "ParameterSize": 24,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "TextProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 24,
+              "Offset": 0,
+              "Flags": 4503599761589634,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetDisplayBulletPoints",
+          "Flags": 1409811457,
+          "ParameterSize": 16,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503599627372416,
+              "Inner": {
+                "Name": "ReturnValue",
+                "Type": "StructProperty",
+                "Target": "/Script/Dungeons.ItemBulletPoint",
+                "ArrayDim": 1,
+                "Size": 48,
+                "Offset": 0,
+                "Flags": 0,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetCurrencyComponent",
+          "Flags": 1409811457,
+          "ParameterSize": 8,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantCurrencyComponent",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantActor",
+      "Super": "Actor",
+      "Fields": [
+        {
+          "Name": "transactionCompletedAnim",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Engine.AnimSequenceBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 816,
+          "Flags": 11267864954733077,
+          "Inner": null
+        },
+        {
+          "Name": "interactEndAnim",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Engine.AnimSequenceBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 824,
+          "Flags": 11267864954733077,
+          "Inner": null
+        },
+        {
+          "Name": "interactBeginAnim",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Engine.AnimSequenceBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 832,
+          "Flags": 11267864954733077,
+          "Inner": null
+        },
+        {
+          "Name": "mMerchantDefComponent",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.MerchantDefComponent",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 840,
+          "Flags": 11267864955257373,
+          "Inner": null
+        },
+        {
+          "Name": "mInteractableComponent",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.InteractableComponent",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 848,
+          "Flags": 11267864955257373,
+          "Inner": null
+        },
+        {
+          "Name": "mMerchantWidgetClass",
+          "Type": "SoftClassProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 40,
+          "Offset": 856,
+          "Flags": 12393695068356609,
+          "Inner": null
+        },
+        {
+          "Name": "bOneTransactionMerchant",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 896,
+          "Flags": 11267864954733057,
+          "Inner": null
+        },
+        {
+          "Name": "bOneTransactionPerPlayerMerchant",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 897,
+          "Flags": 11267864954733057,
+          "Inner": null
+        },
+        {
+          "Name": "mRootSceneComponent",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Engine.SceneComponent",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 904,
+          "Flags": 20266268116910600,
+          "Inner": null
+        },
+        {
+          "Name": "mAnimationSlot",
+          "Type": "NameProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 912,
+          "Flags": 20266268116451841,
+          "Inner": null
+        },
+        {
+          "Name": "mMeshComponent",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Engine.SkeletalMeshComponent",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 920,
+          "Flags": 20266268116910600,
+          "Inner": null
+        },
+        {
+          "Name": "merchantType",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EMerchantType",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 928,
+          "Flags": 20266268116386305,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "SimulateInteraction",
+          "Flags": 67240961,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "interactor",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Engine.Character",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "SetCapture3DView",
+          "Flags": 201852928,
+          "ParameterSize": 1,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "capture",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "PlayerHasTransacted",
+          "Flags": 67240961,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "interactor",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.PlayerCharacter",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "HandleInteraction",
+          "Flags": 525312,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "interactor",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Engine.Character",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantPricing",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "Price",
+          "Type": "IntProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 0,
+          "Flags": 6755469234274836,
+          "Inner": null
+        },
+        {
+          "Name": "RebateApplied",
+          "Type": "FloatProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 4,
+          "Flags": 6755469234274836,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "MerchantSelectionBase",
+      "Super": "MerchantSubobjectBase",
+      "Fields": [
+        {
+          "Name": "OnSelectionChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 144,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "OnMerchantSelectionSelectableChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 160,
+          "Flags": 4503599896330752,
+          "Inner": null
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "TryConfirmSelection",
+          "Flags": 67240961,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "TryCancelSelection",
+          "Flags": 67240961,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "IsFocused",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "HasSelectedAny",
+          "Flags": 1409418240,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "CanSelectAny",
+          "Flags": 1409418240,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "CanConfirmSelection",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "CanCancelSelection",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "SelectInventorySlot",
+      "Super": "MerchantSelectionBase",
+      "Fields": [
+        {
+          "Name": "SelectionCache",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 184,
+          "Flags": 9015995347771904,
+          "Inner": {
+            "Name": "SelectionCache",
+            "Type": "ObjectProperty",
+            "Target": "/Script/Dungeons.InventoryItemSlot",
+            "ArrayDim": 1,
+            "Size": 8,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "mSelectedInventorySlot",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.InventoryItemSlot",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 208,
+          "Flags": 11267864954667520,
+          "Inner": null
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "SelectInventorySlot",
+          "Flags": 67240961,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "slot",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.InventoryItemSlot",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "PollHasSelectablesChanged",
+          "Flags": 67240960,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetUISlotTypeIcon",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "EnumProperty",
+              "Target": "/Script/Dungeons.ESlotType",
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": {
+                "Name": "UnderlyingType",
+                "Type": "ByteProperty",
+                "Target": null,
+                "ArrayDim": 1,
+                "Size": 1,
+                "Offset": 0,
+                "Flags": 2251869606904320,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetSelectableInventorySlots",
+          "Flags": 1409418241,
+          "ParameterSize": 16,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503599761590146,
+              "Inner": {
+                "Name": "ReturnValue",
+                "Type": "ObjectProperty",
+                "Target": "/Script/Dungeons.InventoryItemSlot",
+                "ArrayDim": 1,
+                "Size": 8,
+                "Offset": 0,
+                "Flags": 2251869606904320,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetInventorySlot",
+          "Flags": 1409418241,
+          "ParameterSize": 8,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.InventoryItemSlot",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "SelectMerchantSlot",
+      "Super": "MerchantSelectionBase",
+      "Fields": [
+        {
+          "Name": "mSelectedSlot",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.MerchantSlotBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 176,
+          "Flags": 11267864954667520,
+          "Inner": null
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "SelectMerchantSlot",
+          "Flags": 67240961,
+          "ParameterSize": 8,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "merchantSlot",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantSlotBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234274944,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetSelectableMerchantSlots",
+          "Flags": 1409418241,
+          "ParameterSize": 16,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ArrayProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503599627372416,
+              "Inner": {
+                "Name": "ReturnValue",
+                "Type": "ObjectProperty",
+                "Target": "/Script/Dungeons.MerchantSlotBase",
+                "ArrayDim": 1,
+                "Size": 8,
+                "Offset": 0,
+                "Flags": 2251869606904320,
+                "Inner": null
+              }
+            }
+          ]
+        },
+        {
+          "Name": "GetMerchantSlot",
+          "Flags": 1409418241,
+          "ParameterSize": 8,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Dungeons.MerchantSlotBase",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantCurrencyComponent",
+      "Super": "MerchantSubobjectBase",
+      "Fields": [],
+      "Functions": [
+        {
+          "Name": "GetCurrencyItemId",
+          "Flags": 1409418240,
+          "ParameterSize": 20,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399441057152,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetCurrencyBalance",
+          "Flags": 1409418240,
+          "ParameterSize": 4,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "IntProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 4,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
     }
   ],
-  "sourceCapture": "native-contracts-20261006-142012.zip",
+  "sourceCapture": "native-contracts-20261006-145714.zip",
   "upgradeDependencyDeclarationsComplete": true,
   "Enums": [
     {
@@ -1242,5 +2624,6 @@
         }
       ]
     }
-  ]
+  ],
+  "dependencyClosureComplete": true
 }

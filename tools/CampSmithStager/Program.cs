@@ -9,6 +9,7 @@ using UAssetAPI.UnrealTypes;
 // Do not change native transaction flags, prices, or player inventory here.
 if (args.Length == 2 && args[0] == "--self-test-presentation") { UniquePresentation.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-selection") { SelectedItemReaders.SelfTest(args[1]); return; }
+if (args.Length == 2 && args[0] == "--self-test-screens") { MerchantScreens.SelfTest(args[1]); return; }
 if (args.Length != 2) throw new ArgumentException("Usage: CampSmithStager <private-PatchSources-root> <fresh-private-output-root>");
 var source = Path.GetFullPath(args[0]);
 var output = Path.GetFullPath(args[1]);
@@ -58,8 +59,10 @@ var loaded = specs.Select(s => {
     var originalFunctions = a.Exports.OfType<FunctionExport>().Count();
     if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Add(a);
     if (s.Definition == null) SelectedItemReaders.Add(a);
+    if (s.Definition != null) MerchantScreens.BindActor(a, s.CloneName["BP_RebalanceCamp".Length..]);
     return (Spec: s, Input: path, InputHashes: inputHashes, Asset: a, Changed: changed, OriginalFunctions: originalFunctions);
 }).ToArray();
+var screens = MerchantScreens.Prepare(source);
 Directory.CreateDirectory(output);
 try {
     var report = new List<object>();
@@ -74,6 +77,7 @@ try {
         if (expected != reread.SerializeJson()) throw new InvalidDataException("Clone semantic round-trip mismatch: " + s.CloneName);
         if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Validate(reread);
         if (s.Definition == null) SelectedItemReaders.Validate(reread);
+        if (s.Definition != null) MerchantScreens.ValidateActor(reread, s.CloneName["BP_RebalanceCamp".Length..]);
         if (reread.GetNameMapIndexList().Any(n => specs.Any(original => n.Value.Contains(original.Original, StringComparison.Ordinal))))
             throw new InvalidDataException("Original self/cross references remain: " + s.CloneName);
         if (!reread.Exports.OfType<NormalExport>().Any(e => e.ObjectName.ToString() == "Default__" + s.CloneName + "_C"))
@@ -89,14 +93,36 @@ try {
             addedSelectionReadFunctions = s.Definition == null ? 2 : 0,
             functionCount = reread.Exports.OfType<FunctionExport>().Count() });
     }
+    foreach (var screen in screens) {
+        var name = MerchantScreens.Screen(screen.Service);
+        var relative = $"Dungeons/Content/{destinationFolder}/{name}.uasset";
+        var path = Path.Combine(output, relative);
+        var originals = new[] { screen.Source, Path.ChangeExtension(screen.Source, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash);
+        screen.Asset.Write(path);
+        var expected = screen.Asset.SerializeJson();
+        var reread = new UAsset(path, EngineVersion.VER_UE4_22);
+        if (expected != reread.SerializeJson()) throw new InvalidDataException("Camp screen semantic round-trip mismatch.");
+        MerchantScreens.Validate(reread, screen.Service, screen.PreservedGraphs);
+        foreach (var (file, hash) in originals)
+            if (Hash(Path.Combine(Path.GetDirectoryName(screen.Source)!, file)) != hash) throw new InvalidDataException("Merchant source changed.");
+        report.Add(new { sourcePackage = "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset", clonePackage = relative,
+            relocatedNames = screen.RelocatedNames, nativeDefinition = (string?)null, merchantType = (string?)null,
+            originalHashes = originals, outputHashes = new[] { path, Path.ChangeExtension(path, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash),
+            semanticRoundTrip = true, originalFunctionCount = reread.Exports.OfType<FunctionExport>().Count(),
+            addedPresentationFunctions = 0, addedSelectionReadFunctions = 0, functionCount = reread.Exports.OfType<FunctionExport>().Count(),
+            nativeDecisionGraphsPreserved = true, contentDispatch = MerchantScreens.ClassPath(MerchantScreens.Content(screen.Service)) });
+    }
     File.WriteAllText(Path.Combine(output, "CAMP_SMITH_STAGE_REPORT.json"), JsonConvert.SerializeObject(new {
         status = "private_asset_foundation_only", deployable = false, campPlacementImplemented = false,
         paidTransactionsImplemented = false, uniquePickerImplemented = false,
         uniquePresentationBindingsImplemented = true,
         selectedItemReadBindingsImplemented = true,
+        actorScreenBindingsImplemented = true,
+        campContentDispatchImplemented = true,
+        nativeDecisionFlowRetained = true,
         nativeTowerFlagsPreserved = true, packages = report
     }, Formatting.Indented));
-    Console.WriteLine("Staged and re-opened 3 isolated native NPCs and 3 content widgets; no live Camp services enabled.");
+    Console.WriteLine("Staged and re-opened 3 NPCs, 3 content widgets and 3 merchant screens; no live paid Camp services enabled.");
 } catch {
     Directory.Delete(output, true);
     throw;

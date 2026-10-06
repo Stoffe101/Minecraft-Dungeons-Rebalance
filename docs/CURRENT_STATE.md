@@ -1,8 +1,8 @@
 # Current state
 
-Updated 2026-10-06 after successful v4 retail capture and native record validation.
+Updated 2026-10-06 after successful v5 capture and native merchant screen integration.
 
-**Latest capture 142012 succeeded: 29 requested types and 16 referenced enums, no missing requested dependencies. Native record and sparse enum checks now gate Camp asset staging. Six real-source staging tests pass, including 15 rejection checks. Paid upgrades, Camp placement and the Unique picker remain unfinished; the playable PAK remains HuntsEconomy-Test-v2.**
+**Latest capture 145714 succeeded: 53 types and 26 enums, complete requested dependency closure. Three NPC actors now bind to owned Camp root screens, and those screens dispatch to their corresponding smith content while retaining the native item-choice flow. Nine package pairs reopen correctly; seven integration tests pass. These assets remain undeployed. Paid upgrades, repeatability, Camp placement and retail item/save behavior remain unresolved. No further collector is requested. The usable gameplay PAK remains HuntsEconomy-Test-v2.**
 
 **First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; gold chests are accepted by user confirmation, and one urn payout of +25 emeralds was observed. Hunt progression and broader reward coverage remain unverified.**
 
@@ -33,7 +33,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 | Feature | State |
 | --- | --- |
-| Three Tower NPCs and paid smith services in Camp | Six isolated native actor/widget packages staged; native Unique presentation functions added and validated; Camp placement/payment/picker unfinished |
+| Three Tower NPCs and paid smith services in Camp | Nine isolated actor/root/content packages wired; native choice/input graphs retained; Camp placement/payment/custom picker and retail behavior unfinished |
 | Chest gold ranges | Implemented; user marked gold chests complete on October 6 (individual amounts not supplied) |
 | Completion 50 gold | Unfinished; reward writer not identified in supplied Blueprint graphs |
 | More enemies / Ancient waves / longer side paths | Implemented adaptation, retail untested |
@@ -191,3 +191,7 @@ At implementation commit de006824189a335033958f084ac1d98737ece46f, native reader
 Artifact 11421416403 outer digest d79a12cc53980ce0170cf88e4adba8061bf9be29d9aa67d71dc8ebc51942c611 matched before extraction. NativeCollector-v5.zip: 127,660 bytes, nine entries, SHA-256 4e76ac087cff0ce2fee3175e64bc8ee5a93425aa9f2c21eea1be3127236a6ef5; DLL SHA-256 8bab5ecd7b6f1df493fdccce2badf786920d78e9ef8b8cb4c9817d6c1b92fb02. Both ZIP integrity checks pass. Bundle made available for the newly exposed merchant dependency capture; no game assets, loader or upgrades included.
 
 Required next input: run the capture command from a fresh extracted v5 folder with Dungeons at Camp and return its output ZIP. The accepted v4 result is retained; this targets merchant/selection roots and their transitive native parent/struct dependencies. This is the concrete declaration blocker before native paid service integration. No new gameplay PAK or full-project completion is claimed.
+
+## V5 fulfilled; collector loop stopped
+
+Successful v5 capture and concrete actor/root/content wiring supersede earlier pending capture requests. No additional collector run requested. The native choice list event/selection return path is identified and retained. Pricing replacement and normal-inventory mutation/save behavior remain the blocking implementation work; declaration success does not make those executable. See CAMP_SMITH_IMPLEMENTATION.md for code, seven integration tests, limitations and next work.

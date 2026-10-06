@@ -80,3 +80,7 @@ Prepared collector v4 with 11 additional exact parent/struct targets and bounded
 ## October 6 v4 capture accepted
 
 All 29 requested native types and 16 enum declarations captured successfully. Camp staging now rejects changed native record shapes and sparse enum values; six real-source integration tests include 15 rejection checks. Native pricing/selection dependencies revealed by this capture are being resolved through bounded parent/struct closure. No paid upgrade, picker, Camp placement or shared-gold runtime is enabled. See CAMP_SMITH_IMPLEMENTATION.md and NATIVE_DECLARATION_RESEARCH.md for exact findings, tests and next work. Retail acceptance still requires actual payment, selected outcome, item-state preservation, repeated upgrades and save/reload tests.
+
+## V5 integration and collector stop
+
+The user supplied the successful v5 capture: 53 types/26 enums, requested dependency closure complete. No further capture requested. Camp actor CDOs now point to owned merchant roots whose GetSoftContentWidget overrides open the matching cloned content; all other native decision/input graphs are retained. Seven asset integration tests pass, including 18 negative graph/record/dispatch checks. This is configuration/graph integration, not runtime payment or save validation. No new gameplay PAK is released. Pricing customization and normal-inventory upgrade behavior need an exposed implementation route or a validated native runtime/toolchain before paid services and world placement can be completed. See CAMP_SMITH_IMPLEMENTATION.md.

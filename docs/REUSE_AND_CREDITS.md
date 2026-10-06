@@ -149,3 +149,7 @@ Reviewed same-owner QoL 24d3d39c1c58e1f28ee5b806a48c1b291e3c18a6 and its complet
 No additional third-party source or retail assets are bundled in collector v5. The record ABI and enum values are from the user's successful native declaration capture; new validators and bounded closure code are project-owned. Existing Camp graph construction continues the documented QoL pattern under the previously recorded permission.
 
 Historical mcd-pe source at be646dcd82a689e24709b7abd4cff30fb60b7c9f was consulted for SerializableItemId's optional cached ID and InventoryItemData's optional subitem/store-count state and delegate. It supports investigating hidden native state, but its older source does not prove the current retail layout or save behavior. Epic UE4.22.3 Class.h at 99a530d4ccbe6bea1e8f49df20acfeb294006962 defines default WithCopy for non-POD structs. This explains why native struct operations matter; it does not certify current retail CppStructOps. No source text or guessed private fields were copied into the runtime.
+
+## V5 merchant screen integration
+
+MerchantScreens.cs is project-owned. It modifies private copies of the supplied UMG_Merchant package and refers to the game's existing UMG_MerchantItemDecision widget, preserving its original decision/input graph and game assets. These private retail outputs are excluded from git and no new gameplay package is redistributed in this pass. Exact self-name relocation avoids accidentally renaming the original decision widget. No new third-party source or loader was added.

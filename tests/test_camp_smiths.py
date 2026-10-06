@@ -13,7 +13,7 @@ class CampSmithTests(unittest.TestCase):
         return subprocess.run([ARGS.dotnet, ARGS.stager, str(source), str(output)],
                               capture_output=True, text=True, timeout=120)
 
-    def test_six_isolated_packages_and_unchanged_originals(self):
+    def test_nine_connected_packages_and_unchanged_originals(self):
         with tempfile.TemporaryDirectory() as folder:
             output = Path(folder) / 'stage'
             result = self.run_tool(ARGS.source, output)
@@ -26,9 +26,16 @@ class CampSmithTests(unittest.TestCase):
             self.assertTrue(report['nativeTowerFlagsPreserved'])
             self.assertTrue(report['uniquePresentationBindingsImplemented'])
             self.assertTrue(report['selectedItemReadBindingsImplemented'])
-            self.assertEqual(len(report['packages']), 6)
-            self.assertEqual(len(list(output.rglob('*.uasset'))), 6)
-            self.assertEqual(len(list(output.rglob('*.uexp'))), 6)
+            self.assertTrue(report['actorScreenBindingsImplemented'])
+            self.assertTrue(report['campContentDispatchImplemented'])
+            self.assertTrue(report['nativeDecisionFlowRetained'])
+            self.assertEqual(len(report['packages']), 9)
+            self.assertEqual(len(list(output.rglob('*.uasset'))), 9)
+            self.assertEqual(len(list(output.rglob('*.uexp'))), 9)
+            screens = [p for p in report['packages'] if p.get('nativeDecisionGraphsPreserved')]
+            self.assertEqual(len(screens), 3)
+            self.assertEqual({p['contentDispatch'].split('.')[-1] for p in screens},
+                             {'UMG_RebalanceCampUniquesmithContent_C', 'UMG_RebalanceCampPowersmithContent_C', 'UMG_RebalanceCampGildsmithContent_C'})
             definitions = set()
             added_functions = 0
             selection_functions = 0
@@ -72,6 +79,12 @@ class CampSmithTests(unittest.TestCase):
             source.mkdir()
             self.assertNotEqual(self.run_tool(source, output).returncode, 0)
             self.assertFalse(output.exists())
+
+    def test_screen_dispatch_and_decision_graph_guards(self):
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-screens', str(ARGS.source)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Three merchant screen rejection checks passed', result.stdout)
 
     def test_existing_output_is_preserved(self):
         with tempfile.TemporaryDirectory() as folder:
