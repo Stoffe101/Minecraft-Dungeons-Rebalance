@@ -82,3 +82,7 @@ The user reports an emerald urn wallet increase from 241 to 266 (+25 emeralds) a
 ## Camp smith implementation — October 6, 2026
 
 CampSmithStager creates and reopens three isolated native actor copies and three content widget copies without overriding Tower assets. Four real-source integration checks passed. Exact actor definitions, native merchant enum values, owning-player selection graphs and TransactionClassPrio button bindings were traced. Native price/mutation/selected-result implementations remain unresolved, so no Camp spawner, charge, item upgrade or Unique picker is enabled. See CAMP_SMITH_IMPLEMENTATION.md for code, findings, validation and next work; v2 is unchanged.
+
+## Camp smith CI validation — October 6, 2026
+
+At implementation commit e5ed4a8ee150f9ce3cfed500d34b5bd8130182d9, Windows workflow 37401665954 passed normal project compilation of CampSmithStager, the existing collector/fixture checks, economy compilation and Python syntax. Policy workflow 37401665905 passed. Four Camp smith integration tests were run locally against the private originals; CI does not have those retail inputs. These results validate tooling and asset staging, not gameplay or paid native transactions.
