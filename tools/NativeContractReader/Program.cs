@@ -30,6 +30,7 @@ try {
             report.NameCharactersOffset = reflection.NameCharactersOffset;
             report.NameChunkCapacity = reflection.NameChunkCapacity;
             report.Classes = reflection.Capture();
+            report.Enums = reflection.CaptureEnums();
             Contracts.Validate(report.Classes);
             report.ControlContractsPassed = true;
             report.Completed = true;
@@ -72,10 +73,13 @@ sealed class CaptureReport {
     public List<ClassDeclaration> Classes { get; set; } = [];
     public string[] MissingUpgradeDependencyTypes { get; set; } = [];
     public bool UpgradeDependencyDeclarationsComplete { get; set; }
+    public List<EnumDeclaration> Enums { get; set; } = [];
 }
 record PropertyDeclaration(string Name, string Type, string? Target, int ArrayDim, int Size, int Offset, ulong Flags, PropertyDeclaration? Inner = null);
 record FunctionDeclaration(string Name, uint Flags, int ParameterSize, int ReturnOffset, List<PropertyDeclaration> Parameters);
 record ClassDeclaration(string Name, string? Super, List<PropertyDeclaration> Fields, List<FunctionDeclaration> Functions, string Kind = "Class");
+record EnumValueDeclaration(string Name, int NameNumber, long Value);
+record EnumDeclaration(string Name, List<EnumValueDeclaration> Values);
 
 interface IMemory { byte[] Read(ulong address, int size); }
 interface IRegionMemory : IMemory { MemoryRegion Query(ulong address); }
@@ -243,6 +247,7 @@ sealed class Reflection {
     public static readonly string[] DependencyStructs = ["InventoryItemData", "SerializableItemId", "MerchantDisplayPrice", "EnchantmentData", "ArmorPropertyData", "ProblemStatus", "InventoryItemMetaData", "TowerFloorItemUpgrades"];
     readonly IMemory memory; readonly Names names;
     readonly Dictionary<string, ulong> classes;
+    readonly Dictionary<string, ulong> referencedEnums = new();
     public int FunctionHeaderOffset { get; private set; }
     public int FunctionNumParmsDelta { get; private set; }
     public int ChildrenOffset { get; private set; }
@@ -389,21 +394,34 @@ sealed class Reflection {
         var h = memory.Read(p, 0x90); string type = Type(p); string? target = null;
         if (!type.EndsWith("Property", StringComparison.Ordinal)) throw new InvalidDataException("Non-property nested type.");
         PropertyDeclaration? inner = null;
-        int targetOffset = PropertyTargetOffset + (type == "ClassProperty" ? 8 : 0);
-        if (type is "ObjectProperty" or "ClassProperty" or "StructProperty" or "ByteProperty" or "InterfaceProperty" or "WeakObjectProperty" or "SoftObjectProperty") {
+        int targetOffset = PropertyTargetOffset + (type is "ClassProperty" or "EnumProperty" ? 8 : 0);
+        if (type is "ObjectProperty" or "ClassProperty" or "StructProperty" or "ByteProperty" or "EnumProperty" or "InterfaceProperty" or "WeakObjectProperty" or "SoftObjectProperty") {
             ulong reference = Bytes.U64(h, targetOffset);
+            if (type == "EnumProperty" && !Bytes.Pointer(reference)) throw new InvalidDataException("Missing native enum target.");
             if (reference != 0) {
                 var referenced = memory.Read(reference, 40);
                 ulong owner = Bytes.U64(referenced, 32);
                 target = (owner == 0 ? "" : Name(owner) + ".") + Name(reference);
+                if (type is "EnumProperty" or "ByteProperty") {
+                    if (Type(reference) != "Enum") throw new InvalidDataException("Invalid native enum target.");
+                    if (target.StartsWith("/Script/Dungeons.", StringComparison.Ordinal)) {
+                        if (referencedEnums.TryGetValue(target, out var previous) && previous != reference)
+                            throw new InvalidDataException("Duplicate native enum declaration.");
+                        referencedEnums[target] = reference;
+                        if (referencedEnums.Count > 128) throw new InvalidDataException("Native enum declaration bound exceeded.");
+                    }
+                }
             }
         }
         int dim = Bytes.I32(h, 0x30), size = Bytes.I32(h, 0x34), offset = Bytes.I32(h, 0x44);
         if (dim is < 1 or > 65536 || size is < 1 or > 1048576 || offset is < 0 or > 16777216) throw new InvalidDataException("Invalid legacy property layout.");
-        if (type == "ArrayProperty") {
+        if (type is "ArrayProperty" or "EnumProperty") {
             ulong reference = Bytes.U64(h, PropertyTargetOffset);
             if (!Bytes.Pointer(reference)) throw new InvalidDataException("Invalid nested array property.");
             inner = Property(reference, path);
+            if (type == "EnumProperty" && inner.Type is not "ByteProperty" and not "IntProperty" and not "Int8Property"
+                and not "Int16Property" and not "Int64Property" and not "UInt16Property" and not "UInt32Property" and not "UInt64Property")
+                throw new InvalidDataException("Invalid native enum underlying numeric type.");
         }
         return new(Name(p), type, target, dim, size, offset, Bytes.U64(h, 0x38), inner);
     }
@@ -420,6 +438,23 @@ sealed class Reflection {
         return new ClassDeclaration(k.Key, super == 0 ? null : Name(super),
             children.Where(p => Type(p).EndsWith("Property", StringComparison.Ordinal)).Select(Property).ToList(),
             children.Where(p => Type(p) == "Function").Select(Function).ToList(), Type(k.Value));
+    }).ToList();
+    public List<EnumDeclaration> CaptureEnums() => referencedEnums.OrderBy(k => k.Key).Select(k => {
+        // Epic UE4.22.3 Class.h: UField (0x30), FString CppType (0x10),
+        // then TArray<TPair<FName,int64>> Names. Preserve numeric values;
+        // enum array indices are not enum values.
+        var header = memory.Read(k.Value + 0x40, 16);
+        ulong data = Bytes.U64(header, 0); int count = Bytes.I32(header, 8), capacity = Bytes.I32(header, 12);
+        if (!Bytes.Pointer(data) || count is < 1 or > 512 || capacity < count || capacity > 4096)
+            throw new InvalidDataException("Invalid bounded native enum names array.");
+        var entries = memory.Read(data, count * 16); var values = new List<EnumValueDeclaration>(); var seen = new HashSet<(string, int)>();
+        for (int i = 0; i < count; i++) {
+            var name = names.Get(Bytes.I32(entries, i * 16)); var number = Bytes.I32(entries, i * 16 + 4);
+            if (number < 0 || !seen.Add((name, number))) throw new InvalidDataException("Invalid/duplicate native enum name.");
+            values.Add(new(name, number, unchecked((long)Bytes.U64(entries, i * 16 + 8))));
+        }
+        if (!header.SequenceEqual(memory.Read(k.Value + 0x40, 16))) throw new InvalidDataException("Native enum names array changed during capture.");
+        return new EnumDeclaration(k.Key, values);
     }).ToList();
     List<ClassDeclaration> CaptureControls() => classes.Where(k => Contracts.Controls.Any(c => c.Owner == k.Key)).Select(k =>
         new ClassDeclaration(k.Key, null, [], Children(k.Value).Where(p => Type(p) == "Function" && Contracts.Controls.Any(c => c.Owner == k.Key && c.Method == Name(p))).Select(Function).ToList())).ToList();

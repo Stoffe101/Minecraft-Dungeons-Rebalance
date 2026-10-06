@@ -163,3 +163,6 @@ Implementation 5f5b0a33b9109e7f5ba0c495cd5296ced58c6818 passed evidence tooling 
 Added native physical-slot/item and full-record read functions to all three cloned smith screens, validated against captured InventoryItemSlot.Item and InventoryItem.Item declarations. Six private asset tests pass (11 deliberate graph rejection cases); no currency/item/save mutation is enabled. The newer QoL capture succeeded and confirms item-record field names/nested array types, but lacks transaction parent classes and field sizes/offsets.
 
 Prepared collector v4 with 11 additional exact parent/struct targets and bounded nested array declarations; 54 local checks pass. Full paid Camp services still require that added capture and native behavior validation. No repeat v3 or asset collection is required. Detailed findings, source pins and next work: [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md). Gameplay PAK remains v2.
+
+
+Collector v4 additionally requests referenced Dungeons enum symbols/values and underlying numeric types from source-grounded UE4.22 metadata layouts. Local collector checks now total 57; Windows/retail validation follows. No rarity/currency numeric values are guessed or enabled in gameplay.

@@ -94,10 +94,28 @@ static class Fixtures {
             foreach (var name in Reflection.DependencyClasses.Concat(Reflection.DependencyStructs))
                 if (!declarations.Any(d => d.Name == name)) throw new Exception("Dependency absent: " + name);
             var data = declarations.Single(d => d.Name == "InventoryItemData");
-            if (data.Kind != "ScriptStruct" || data.Fields.Single().Inner?.Target != "/Script/Dungeons.EnchantmentData")
+            if (data.Kind != "ScriptStruct" || data.Fields.Single(f => f.Name == "Enchantments").Inner?.Target != "/Script/Dungeons.EnchantmentData")
                 throw new Exception("Nested native struct type missing.");
             if (declarations.Single(d => d.Name == "GildItem").Super != "InventoryItemSlotTransactionBase")
                 throw new Exception("Native superclass not preserved.");
+        });
+        Check("native enum identity and sparse values", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); var reader = Reflection.Discover(a, [a.Region]);
+            var declarations = reader.Capture();
+            var rarity = declarations.Single(c => c.Name == "InventoryItemData").Fields.Single(f => f.Name == "Rarity");
+            if (rarity.Target != "/Script/Dungeons.EItemRarity" || rarity.Inner?.Type != "ByteProperty")
+                throw new Exception("Enum owner/underlying type missing.");
+            if (!reader.CaptureEnums().Single().Values.Select(v => v.Value).SequenceEqual(new long[] { 0, 3, 7 }))
+                throw new Exception("Enum values replaced by array indices.");
+        });
+        Reject("oversized native enum", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.I32(a.DependencyEnum + 0x48, 513);
+            var reader = Reflection.Discover(a, [a.Region]); reader.Capture(); reader.CaptureEnums();
+        });
+        Reject("duplicate native enum symbol", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies();
+            a.U64(a.DependencyEnumEntries + 16, Bytes.U64(a.Read(a.DependencyEnumEntries, 8), 0));
+            var reader = Reflection.Discover(a, [a.Region]); reader.Capture(); reader.CaptureEnums();
         });
         Reject("cyclic nested array property", () => {
             var a = new Arena(0x98); a.AddUpgradeDependencies(); a.U64(a.DependencyArray + 0x70, a.DependencyArray);
@@ -169,6 +187,7 @@ sealed class Arena : IRegionMemory {
     public readonly List<(ulong Address, int Size)> Functions = [];
     public ulong GuidResult, FirstInput, NoneEntry, StructClass;
     public ulong DependencyArray;
+    public ulong DependencyEnum, DependencyEnumEntries;
     public int Queries;
     public MemoryRegion Query(ulong address) {
         Queries++;
@@ -265,6 +284,19 @@ sealed class Arena : IRegionMemory {
         var inner = Prop("Enchantments_Inner", "StructProperty", DependencyArray, 16, 0, 0, declarations["EnchantmentData"]);
         U64(DependencyArray + (ulong)targetOffset, inner);
         U64(declarations["InventoryItemData"] + (ulong)childrenOffset, DependencyArray);
+        var enumClass = Obj("Enum", classClass, 0);
+        DependencyEnum = Obj("EItemRarity", enumClass, package);
+        var underlying = Prop("RarityUnderlying", "ByteProperty", declarations["InventoryItemData"], 1, 0, 0, 0);
+        var rarity = Prop("Rarity", "EnumProperty", declarations["InventoryItemData"], 1, 60, 0x205, underlying);
+        U64(rarity + (ulong)targetOffset + 8, DependencyEnum); U64(DependencyArray + 0x28, rarity);
+        DependencyEnumEntries = next; next += 512;
+        int entry = 0;
+        foreach (var (symbol, value) in new[] { ("Common", 0L), ("Rare", 3L), ("Unique", 7L) }) {
+            I32(DependencyEnumEntries + (ulong)entry * 16, NameId("EItemRarity::" + symbol));
+            U64(DependencyEnumEntries + (ulong)entry * 16 + 8, (ulong)value); entry++;
+        }
+        U64(DependencyEnum + 0x40, DependencyEnumEntries); I32(DependencyEnum + 0x48, 3); I32(DependencyEnum + 0x4c, 3);
+        I32(table + (ulong)nameCapacity * 8, namesCount);
         BitConverter.GetBytes(Math.Max(100, objects)).CopyTo(Module, 84);
     }
     ulong Prop(string name, string type, ulong owner, int size, int offset, ulong flags, ulong target) {
