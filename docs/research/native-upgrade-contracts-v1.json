@@ -1,0 +1,317 @@
+{
+  "schema": "rebalance-native-upgrade-contracts-v1",
+  "sourceArchiveSha256": "8a1f35ed7fa5592dcd23f6cc38fd2790a787ae1bb28315f97d7fc97b23443055",
+  "sourceCaptureCompleted": true,
+  "controlContractsPassed": true,
+  "upgradeSemanticsVerified": false,
+  "Classes": [
+    {
+      "Name": "InventoryItem",
+      "Super": "Object",
+      "Functions": [
+        {
+          "Name": "TryUpgradeItem",
+          "Flags": 67240961,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224
+            }
+          ]
+        },
+        {
+          "Name": "GildItem",
+          "Flags": 71435265,
+          "ParameterSize": 17,
+          "ReturnOffset": 16,
+          "Parameters": [
+            {
+              "Name": "EnchantmentData",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.EnchantmentData",
+              "ArrayDim": 1,
+              "Size": 16,
+              "Offset": 0,
+              "Flags": 4503668481065346
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 16,
+              "Flags": 6755469234276224
+            }
+          ]
+        },
+        {
+          "Name": "CanBeUpgraded",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "ItemFunctionLibrary",
+      "Super": "BlueprintFunctionLibrary",
+      "Functions": [
+        {
+          "Name": "GetNameForItemType",
+          "Flags": 339878913,
+          "ParameterSize": 48,
+          "ReturnOffset": 24,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "TextProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 24,
+              "Offset": 24,
+              "Flags": 4503599627371904
+            }
+          ]
+        },
+        {
+          "Name": "GetIsUniqueForItemType",
+          "Flags": 339878913,
+          "ParameterSize": 21,
+          "ReturnOffset": 20,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 20,
+              "Flags": 6755469234276224
+            }
+          ]
+        },
+        {
+          "Name": "GetIconTextureForItemType",
+          "Flags": 339878913,
+          "ParameterSize": 32,
+          "ReturnOffset": 24,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "ObjectProperty",
+              "Target": "/Script/Engine.Texture2D",
+              "ArrayDim": 1,
+              "Size": 8,
+              "Offset": 24,
+              "Flags": 6755469234276224
+            }
+          ]
+        },
+        {
+          "Name": "GetDescriptionForItemType",
+          "Flags": 339878913,
+          "ParameterSize": 48,
+          "ReturnOffset": 24,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "TextProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 24,
+              "Offset": 24,
+              "Flags": 4503599627371904
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "MerchantTransactionBase",
+      "Super": "MerchantSubobjectBase",
+      "Functions": [
+        {
+          "Name": "TryExecute",
+          "Flags": 67240961,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224
+            }
+          ]
+        },
+        {
+          "Name": "OnTransactionDecisionMade",
+          "Flags": 1413612545,
+          "ParameterSize": 120,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "chosenItem",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.InventoryItemData",
+              "ArrayDim": 1,
+              "Size": 120,
+              "Offset": 0,
+              "Flags": 4503599761588610
+            }
+          ]
+        },
+        {
+          "Name": "GetPrice",
+          "Flags": 1409418241,
+          "ParameterSize": 28,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.MerchantDisplayPrice",
+              "ArrayDim": 1,
+              "Size": 28,
+              "Offset": 0,
+              "Flags": 4503599627371904
+            }
+          ]
+        },
+        {
+          "Name": "CanExecute",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "WalletComponent",
+      "Super": "ActorComponent",
+      "Functions": [
+        {
+          "Name": "Deduct",
+          "Flags": 71435265,
+          "ParameterSize": 24,
+          "ReturnOffset": 65535,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858
+            },
+            {
+              "Name": "Amount",
+              "Type": "IntProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 4,
+              "Offset": 20,
+              "Flags": 6755469234274944
+            }
+          ]
+        },
+        {
+          "Name": "Balance",
+          "Flags": 1413612545,
+          "ParameterSize": 24,
+          "ReturnOffset": 20,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "IntProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 4,
+              "Offset": 20,
+              "Flags": 6755469234276224
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

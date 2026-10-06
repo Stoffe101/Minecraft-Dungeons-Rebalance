@@ -7,6 +7,7 @@ using UAssetAPI.UnrealTypes;
 
 // Private cooked-asset foundation, not a deployable merchant implementation.
 // Do not change native transaction flags, prices, or player inventory here.
+if (args.Length == 2 && args[0] == "--self-test-presentation") { UniquePresentation.SelfTest(args[1]); return; }
 if (args.Length != 2) throw new ArgumentException("Usage: CampSmithStager <private-PatchSources-root> <fresh-private-output-root>");
 var source = Path.GetFullPath(args[0]);
 var output = Path.GetFullPath(args[1]);
@@ -53,7 +54,9 @@ var loaded = specs.Select(s => {
         a.SetNameReference(i, new FString(after)); changed++;
     }
     if (changed == 0) throw new InvalidDataException("No clone names relocated: " + s.Original);
-    return (Spec: s, Input: path, InputHashes: inputHashes, Asset: a, Changed: changed);
+    var originalFunctions = a.Exports.OfType<FunctionExport>().Count();
+    if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Add(a);
+    return (Spec: s, Input: path, InputHashes: inputHashes, Asset: a, Changed: changed, OriginalFunctions: originalFunctions);
 }).ToArray();
 Directory.CreateDirectory(output);
 try {
@@ -67,6 +70,7 @@ try {
         var expected = item.Asset.SerializeJson();
         var reread = new UAsset(path, EngineVersion.VER_UE4_22);
         if (expected != reread.SerializeJson()) throw new InvalidDataException("Clone semantic round-trip mismatch: " + s.CloneName);
+        if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Validate(reread);
         if (reread.GetNameMapIndexList().Any(n => specs.Any(original => n.Value.Contains(original.Original, StringComparison.Ordinal))))
             throw new InvalidDataException("Original self/cross references remain: " + s.CloneName);
         if (!reread.Exports.OfType<NormalExport>().Any(e => e.ObjectName.ToString() == "Default__" + s.CloneName + "_C"))
@@ -77,11 +81,14 @@ try {
         report.Add(new { sourcePackage = $"Dungeons/Content/{s.Folder}/{s.Original}.uasset", clonePackage = relative,
             relocatedNames = item.Changed, nativeDefinition = s.Definition, merchantType = s.MerchantType,
             originalHashes = item.InputHashes, outputHashes = new[] { path, Path.ChangeExtension(path, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash),
-            semanticRoundTrip = true, functionCount = reread.Exports.OfType<FunctionExport>().Count() });
+            semanticRoundTrip = true, originalFunctionCount = item.OriginalFunctions,
+            addedPresentationFunctions = s.CloneName == "UMG_RebalanceCampUniquesmithContent" ? 3 : 0,
+            functionCount = reread.Exports.OfType<FunctionExport>().Count() });
     }
     File.WriteAllText(Path.Combine(output, "CAMP_SMITH_STAGE_REPORT.json"), JsonConvert.SerializeObject(new {
         status = "private_asset_foundation_only", deployable = false, campPlacementImplemented = false,
         paidTransactionsImplemented = false, uniquePickerImplemented = false,
+        uniquePresentationBindingsImplemented = true,
         nativeTowerFlagsPreserved = true, packages = report
     }, Formatting.Indented));
     Console.WriteLine("Staged and re-opened 3 isolated native NPCs and 3 content widgets; no live Camp services enabled.");

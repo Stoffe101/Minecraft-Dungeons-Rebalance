@@ -24,11 +24,15 @@ class CampSmithTests(unittest.TestCase):
             self.assertFalse(report['paidTransactionsImplemented'])
             self.assertFalse(report['uniquePickerImplemented'])
             self.assertTrue(report['nativeTowerFlagsPreserved'])
+            self.assertTrue(report['uniquePresentationBindingsImplemented'])
             self.assertEqual(len(report['packages']), 6)
             self.assertEqual(len(list(output.rglob('*.uasset'))), 6)
             self.assertEqual(len(list(output.rglob('*.uexp'))), 6)
             definitions = set()
+            added_functions = 0
             for package in report['packages']:
+                added_functions += package['addedPresentationFunctions']
+                self.assertEqual(package['functionCount'], package['originalFunctionCount'] + package['addedPresentationFunctions'])
                 self.assertTrue(package['semanticRoundTrip'])
                 self.assertGreater(package['relocatedNames'], 0)
                 self.assertIn('/Mods/MinecraftDungeonsRebalance/Camp/', package['clonePackage'])
@@ -41,6 +45,14 @@ class CampSmithTests(unittest.TestCase):
                 if package['nativeDefinition']:
                     definitions.add(package['nativeDefinition'])
             self.assertEqual(definitions, {'TowerArtisanMerchantDef', 'TowerBlacksmithMerchantDef', 'TowerGilderMerchantDef'})
+            self.assertEqual(added_functions, 3)
+
+    def test_presentation_rejects_invalid_native_graphs(self):
+        source = Path(ARGS.source) / 'Dungeons/Content/Content_Season1/UI/Merchant/UMG_TowerMerchantArtisanContent.uasset'
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-presentation', str(source)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Seven presentation graph rejection checks passed', result.stdout)
 
     def test_missing_sources_create_no_output(self):
         with tempfile.TemporaryDirectory() as folder:

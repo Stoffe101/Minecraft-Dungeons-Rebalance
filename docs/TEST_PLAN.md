@@ -316,3 +316,8 @@ Forty-nine local synthetic checks pass, including 24 inline/pointer/name/child/t
 At 6ab37c672d1cde522ce1997fcbddaa0e5aab10b0, native-reader Windows run 37471659764 passed normal compilation (zero warnings/errors), all 50 checks, PowerShell parsing, fresh/incomplete/report-preservation behavior and execution of the unpacked ZIP runner. Upgrade policy run 37471659806 and existing tooling run 37471659602 also passed. Retail v3 declaration discovery remains untested.
 
 NativeCollector-v3.zip: 118,244 bytes; SHA-256 9b21fc20fd416a76939662a9da381b99be6afba9f589be549b5b0b76fe3fb252. DLL SHA-256 a78ea33df90e54cc41a6daa935a0d39bb2b951312d7c5fb5a6fb4b7a476e6783. The downloaded Actions wrapper matched its advertised digest before extraction. Compiled bundle saved for private testing. Next: capture once with this version at Camp, then use accepted declarations (or precise failure stage) to continue native transaction work. No native paid upgrade or new gameplay PAK is claimed.
+
+
+## Native Unique presentation increment (October 6)
+
+Five Camp private-source tests pass, including seven rejected graph mutations: missing out-parameter function flag, wrong owner, missing argument, wrong input field, wrong native declaring owner, missing preload dependency, and duplicate patch. Six package pairs are written/reopened and source hashes retained; three presentation functions are added only to Uniquesmith content. These are asset checks, not in-game widget calls. Future retail acceptance must cover localized names/icons/descriptions, choice list completeness, selection cancellation, native transaction item identity, exact balance changes, failure/refusal, save/reload preservation and online host/join roles. No upgrade gameplay test has passed.

@@ -1,0 +1,145 @@
+{
+  "Schema": "rebalance-native-declarations-v1",
+  "EngineLayoutCandidate": "UE4.22 x64 legacy UProperty; independently validated control declarations required",
+  "Completed": true,
+  "ControlContractsPassed": true,
+  "GameplayFunctionsInvoked": false,
+  "GameMemoryWritten": false,
+  "UpgradeSemanticsVerified": false,
+  "DungeonsRuntimeCompatibilityPreviouslyVerified": false,
+  "FunctionHeaderOffset": 152,
+  "FunctionNumParmsDelta": 4,
+  "ChildrenOffset": 72,
+  "PropertyTargetOffset": 112,
+  "NameCharactersOffset": 12,
+  "NameChunkCapacity": 256,
+  "BytesRead": 51841974,
+  "ReadCalls": 1292194,
+  "RegionQueries": 1045,
+  "Discovery": {
+    "RawPointerCandidates": 211958,
+    "MappedDataCandidates": 153202,
+    "ValidatedNameTables": 1,
+    "InlineNameHeaderCandidates": 22916,
+    "PointerNameHeaderCandidates": 519,
+    "ObjectTableShapeCandidates": 1,
+    "RejectedObjectReasons": [
+      "Invalid/cyclic legacy UField chain.",
+      "Control return shape mismatch: GetCloudPlayerId",
+      "Name index outside table."
+    ]
+  },
+  "Error": null,
+  "MissingAllowlistedClasses": [],
+  "Classes": [
+    {
+      "Name": "GildItem",
+      "Super": "InventoryItemSlotTransactionBase",
+      "fieldCount": 0,
+      "functionCount": 0
+    },
+    {
+      "Name": "InventoryItem",
+      "Super": "Object",
+      "fieldCount": 9,
+      "functionCount": 35
+    },
+    {
+      "Name": "InventoryItemDataFunctionLibrary",
+      "Super": "BlueprintFunctionLibrary",
+      "fieldCount": 0,
+      "functionCount": 1
+    },
+    {
+      "Name": "InventoryItemSlot",
+      "Super": "Object",
+      "fieldCount": 4,
+      "functionCount": 14
+    },
+    {
+      "Name": "ItemFunctionLibrary",
+      "Super": "BlueprintFunctionLibrary",
+      "fieldCount": 0,
+      "functionCount": 25
+    },
+    {
+      "Name": "ItemStashComponent",
+      "Super": "ActorComponent",
+      "fieldCount": 15,
+      "functionCount": 46
+    },
+    {
+      "Name": "MerchantTransactionBase",
+      "Super": "MerchantSubobjectBase",
+      "fieldCount": 1,
+      "functionCount": 11
+    },
+    {
+      "Name": "MerchantTransactionUtil",
+      "Super": "BlueprintFunctionLibrary",
+      "fieldCount": 0,
+      "functionCount": 1
+    },
+    {
+      "Name": "PlayerCharacterSaveSlot",
+      "Super": "BaseCharacter",
+      "fieldCount": 8,
+      "functionCount": 14
+    },
+    {
+      "Name": "PlayerControllerBase",
+      "Super": "PlayerController",
+      "fieldCount": 9,
+      "functionCount": 27
+    },
+    {
+      "Name": "TowerArtisanMerchantDef",
+      "Super": "MerchantDef",
+      "fieldCount": 0,
+      "functionCount": 0
+    },
+    {
+      "Name": "TowerBlacksmithMerchantDef",
+      "Super": "MerchantDef",
+      "fieldCount": 0,
+      "functionCount": 0
+    },
+    {
+      "Name": "TowerFunctionLibrary",
+      "Super": "BlueprintFunctionLibrary",
+      "fieldCount": 0,
+      "functionCount": 32
+    },
+    {
+      "Name": "TowerGilderMerchantDef",
+      "Super": "MerchantDef",
+      "fieldCount": 0,
+      "functionCount": 0
+    },
+    {
+      "Name": "TowerMerchantUtil",
+      "Super": "BlueprintFunctionLibrary",
+      "fieldCount": 0,
+      "functionCount": 7
+    },
+    {
+      "Name": "UniqueCollectItem",
+      "Super": "InventoryItemSlotTransactionBase",
+      "fieldCount": 0,
+      "functionCount": 0
+    },
+    {
+      "Name": "UpgradeTowerItem",
+      "Super": "InventoryItemSlotTransactionBase",
+      "fieldCount": 0,
+      "functionCount": 0
+    },
+    {
+      "Name": "WalletComponent",
+      "Super": "ActorComponent",
+      "fieldCount": 3,
+      "functionCount": 3
+    }
+  ],
+  "sourceArchiveSha256": "8a1f35ed7fa5592dcd23f6cc38fd2790a787ae1bb28315f97d7fc97b23443055"
+}

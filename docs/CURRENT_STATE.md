@@ -1,6 +1,8 @@
 # Current state
 
-Updated 2026-10-06 after read-only native declaration tooling; full Camp upgrade integration remains unfinished.
+Updated 2026-10-06 after the first successful retail declaration capture and native Unique presentation implementation; full Camp upgrade integration remains unfinished.
+
+**Latest research: capture 133711 succeeded, all 18 requested classes present. Native name/icon/description functions are now generated and validated in the cloned Uniquesmith widget. These functions are not yet wired to a choice list or Camp dispatch. Paid services remain unfinished; the usable gameplay PAK is still HuntsEconomy-Test-v2.**
 
 **First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; gold chests are accepted by user confirmation, and one urn payout of +25 emeralds was observed. Hunt progression and broader reward coverage remain unverified.**
 
@@ -31,7 +33,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 | Feature | State |
 | --- | --- |
-| Three Tower NPCs and paid smith services in Camp | Six isolated native actor/widget packages staged and validated; Camp placement/payment/picker unfinished |
+| Three Tower NPCs and paid smith services in Camp | Six isolated native actor/widget packages staged; native Unique presentation functions added and validated; Camp placement/payment/picker unfinished |
 | Chest gold ranges | Implemented; user marked gold chests complete on October 6 (individual amounts not supplied) |
 | Completion 50 gold | Unfinished; reward writer not identified in supplied Blueprint graphs |
 | More enemies / Ancient waves / longer side paths | Implemented adaptation, retail untested |
@@ -132,3 +134,20 @@ Forty-nine local synthetic checks pass, including 24 inline/pointer/name/child/t
 At 6ab37c672d1cde522ce1997fcbddaa0e5aab10b0, native-reader Windows run 37471659764 passed normal compilation (zero warnings/errors), all 50 checks, PowerShell parsing, fresh/incomplete/report-preservation behavior and execution of the unpacked ZIP runner. Upgrade policy run 37471659806 and existing tooling run 37471659602 also passed. Retail v3 declaration discovery remains untested.
 
 NativeCollector-v3.zip: 118,244 bytes; SHA-256 9b21fc20fd416a76939662a9da381b99be6afba9f589be549b5b0b76fe3fb252. DLL SHA-256 a78ea33df90e54cc41a6daa935a0d39bb2b951312d7c5fb5a6fb4b7a476e6783. The downloaded Actions wrapper matched its advertised digest before extraction. Compiled bundle saved for private testing. Next: capture once with this version at Camp, then use accepted declarations (or precise failure stage) to continue native transaction work. No native paid upgrade or new gameplay PAK is claimed.
+
+
+## Successful retail declarations and native presentation — October 6
+
+Received native-contracts-20261006-133711.zip. Completed=true, all six controls passed, all 18 allowlisted classes present, no runner issues. Accepted layout: name capacity 256, characters +12, children +0x48, property target +0x70, function header +0x98, parameter-count delta 4. Read 51,841,974 bytes in 1,292,194 calls and 1,045 region queries. Capture invoked no gameplay function and wrote no game memory. All 50 Windows self-tests passed. Sanitized summary: research/native-capture-20261006-v3.json; selected declarations and input SHA-256: research/native-upgrade-contracts-v1.json. Historical failed-capture sections above describe earlier attempts. A repeat of the same v3 capture is not needed.
+
+Native ItemFunctionLibrary provides SerializableItemId-based name, description and Texture2D icon calls. MerchantTransactionBase exposes OnTransactionDecisionMade(InventoryItemData), CanExecute() and TryExecute(). WalletComponent.Balance returns int32; Deduct has no return value. GildItem, UniqueCollectItem and UpgradeTowerItem declare no direct functions and inherit InventoryItemSlotTransactionBase, which this capture did not collect. The selected-result declaration does not establish native outcome generation, transaction lifetime, payment override, mutation or persistent Camp behavior. InventoryItem.TryUpgradeItem must not be assumed to implement the agreed rarity/power policy from its name.
+
+CampSmithStager now embeds the selected captured contract manifest and adds RebalanceUniqueName, RebalanceUniqueDescription and RebalanceUniqueIcon to the cloned Uniquesmith content widget. Each accepts the native item ID and calls the exact captured static native owner. Added function fields, ownership/function maps, native property archetypes and preload dependencies are validated before writing and after reopening. Original graphs and six source package pairs are retained; the three functions do not execute paid upgrades. Full choice list, native family enumeration, confirmation, Camp spawning/dispatch, persistent payment and shared gold remain unfinished.
+
+Five private-source integration tests pass, including seven deliberate graph/signature/preload rejection checks. All six packages write/reopen with exact expected parsed equality; exactly three functions are added. Initial compilation caught an ArrayDim enum assignment; first round-trip caught nonserialized ElementSize/Next fields. Corrected both and reran successfully. SDK Roslyn compiled locally; one existing Newtonsoft net6/net8 reference-unification warning remains in this direct-compiler path. Report: research/camp-smith-presentation-stage.json. No Unreal/gameplay execution occurred.
+
+Reviewed related QoL native-favorites-20261006-133827-9942ba.zip: incomplete at the 2M call budget, empty declarations. It supplies no missing superclass/struct contracts. Reused the same-owner QoL graph/property/preload construction approach at the user's explicit request; no third-party unlicensed source or game-owned assets published.
+
+Next work: obtain the missing InventoryItemSlotTransactionBase/MerchantSubobjectBase/MerchantDef and InventoryItemData/SerializableItemId/MerchantDisplayPrice/EnchantmentData declarations, including nested array/enum types; trace native outcome enumeration and chosen-result handling; wire the presentation functions into an owned picker and Camp screen dispatch; establish persistent item/currency transaction behavior before gameplay acceptance. No new collector or NPC PAK is delivered in this increment.
+
+Existing upgrade policy tests (17) and native call indexing tests (5) pass after this increment. Windows normal build is pending at publication; no retail presentation/upgrade test is claimed.
