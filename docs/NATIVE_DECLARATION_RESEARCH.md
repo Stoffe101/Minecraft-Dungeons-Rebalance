@@ -37,7 +37,7 @@ Eighteen local checks passed through the official checksum-verified SDK 8.0.415 
 
 The dedicated Windows workflow builds the normal project, adds a self-process WinAPI marker read, checks PowerShell syntax, checks no-game incomplete reporting and confirms an existing report is preserved. Run 37468028504 passed at 2630d8732cbcc25828b18e87e7c16a5946525032, including execution of the unpacked runner and verification of its incomplete capture ZIP. The build had zero warnings/errors and all 19 Windows checks passed. The initial run 37467815494 passed those checks but failed the workflow epilogue due to a retained intentional negative-test exit code; that CI handling was corrected. CI has no Dungeons process and cannot validate native upgrade behavior.
 
-**No Dungeons capture has been performed.** `Completed=true` means declaration collection and independent control validation only. UpgradeSemanticsVerified remains false. Native services, Camp spawn/dispatch, paid persistent mutation, Common-to-Rare, gild reroll, Powersmith rules and the in-game Unique picker are still unfinished. The latest gameplay PAK remains v2, unchanged.
+**Two Dungeons captures have been received; neither produced accepted native declarations.** `Completed=true` means declaration collection and independent control validation only. UpgradeSemanticsVerified remains false. Native services, Camp spawn/dispatch, paid persistent mutation, Common-to-Rare, gild reroll, Powersmith rules and the in-game Unique picker are still unfinished. The latest gameplay PAK remains v2, unchanged.
 
 ## Next work and real dependency
 
@@ -78,3 +78,10 @@ Read the related QoL native-favorites-20261006-132111-71d697.zip privately: revi
 Implemented inline and pointer-backed name tables, 128/256 capacities, reserved name chunks, bounded ANSI/UTF-16 text, and independently verified child/target layouts. Native function header selection remains controlled by four getters, and all six profile contracts must match. Object capacity now permits up to 4 Mi reserved slots/64 chunks while actual traversal remains bounded by the unchanged 1M live-object limit. The old 500K call ceiling was insufficient for two header candidates plus that live walk; now 2M calls, with the original 128 MiB/60-second and 4,096-query limits retained. No process rights, game calls, writes or protection fallback added.
 
 Forty-nine local synthetic checks pass, including 24 inline/pointer/name/child/target combinations, distinct valid table ambiguity, 256-capacity tables with 33 reserved object chunks, and inconsistent-capacity rejection. The first compile caught a local variable/constructor-parameter name collision; renamed the parameter before testing. These fixtures validate declaration consistency and rejection behavior, not retail upgrade ABI or payment semantics. Windows validation and a new compiled capture bundle follow. Native Camp upgrade integration remains unfinished; v2 gameplay PAK unchanged.
+
+
+## Native collector v3 Windows validation — October 6
+
+At 6ab37c672d1cde522ce1997fcbddaa0e5aab10b0, native-reader Windows run 37471659764 passed normal compilation (zero warnings/errors), all 50 checks, PowerShell parsing, fresh/incomplete/report-preservation behavior and execution of the unpacked ZIP runner. Upgrade policy run 37471659806 and existing tooling run 37471659602 also passed. Retail v3 declaration discovery remains untested.
+
+NativeCollector-v3.zip: 118,244 bytes; SHA-256 9b21fc20fd416a76939662a9da381b99be6afba9f589be549b5b0b76fe3fb252. DLL SHA-256 a78ea33df90e54cc41a6daa935a0d39bb2b951312d7c5fb5a6fb4b7a476e6783. The downloaded Actions wrapper matched its advertised digest before extraction. Compiled bundle saved for private testing. Next: capture once with this version at Camp, then use accepted declarations (or precise failure stage) to continue native transaction work. No native paid upgrade or new gameplay PAK is claimed.
