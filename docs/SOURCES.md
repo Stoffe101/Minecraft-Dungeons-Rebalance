@@ -147,3 +147,11 @@ Used as the source of reusable internal tooling/research once a formal code audi
 - https://github.com/Saad5400/minecraft-dungeons-arabic/blob/c1a8c20ea714ab63ea33b04025bc84c08747f12a/tools/pak.js — primary-source published archive key; same key already verified by user catalog collection.
 - https://github.com/StainlessStasis/LetMeMove/releases/tag/1.1.0 — MIT UE4.22 test fixture.
 - https://github.com/Dokucraft/Dungeons-Mod-Kit/tree/c30e88ec5e99e401eadedddbe82af0265a056fe7 — MIT test packager.
+
+
+## October 6 native declaration research
+
+- Same-owner [QoL profile call contracts at bc996fe](https://github.com/Stoffe101/Minecraft-Dungeons-QoL/blob/bc996fe/tools/CookedInventoryFeatures/HeroProfileCallContracts.cs).
+- [UEDumper pinned source](https://github.com/Spuckwaffel/UEDumper/tree/5b2b5264a66aa9edb28619c5ff654b16d3b9e038): candidate legacy layouts, not Store ABI certification.
+- [MCD-PE pinned source](https://github.com/Minecraforever/MCD-PE/tree/be646dcd82a689e24709b7abd4cff30fb60b7c9f): historical declarations only; no source or protection tool reuse.
+- Microsoft [ReadProcessMemory](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-readprocessmemory) and [process security/access rights](https://learn.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights).

@@ -118,3 +118,8 @@ UpgradeCore and read-only Lua reflection inventory are project-authored. No nati
 ## Camp smith staging — October 6
 
 CampSmithStager is project-authored using pinned UAssetAPI 1.1.0. Reviewed the same-owner QoL CookedAssetRelocator name-map/write-reopen pattern as a reuse reference; no wholesale source or runtime asset from QoL was copied. Six user-supplied native game packages are cloned privately for NPC/screen reuse; no raw game assets are committed to git. Better Ancient Hunt code/assets are not used in this smith stage.
+
+
+## External declaration research — October 6
+
+NativeContractReader and its synthetic arena are project-authored. Same-owner QoL bc996fe's independently observed profile-call contracts inform validation; no whole function or asset was copied. UEDumper 5b2b5264a66aa9edb28619c5ff654b16d3b9e038 (MIT) was inspected as a layout reference only; no source/binary copied or bundled. MCD-PE be646dcd82a689e24709b7abd4cff30fb60b7c9f (root Apache-2.0) was inspected as historical evidence; no reconstructed game code, executables or protection tools used. The collector has no third-party package dependencies. Official Microsoft runtime is downloaded separately with the existing checksum pin. Full provenance: NATIVE_DECLARATION_RESEARCH.md.

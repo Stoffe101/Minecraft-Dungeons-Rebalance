@@ -43,3 +43,5 @@ A meaningful feature/research pass is not considered complete until:
 - [Drive game-copy audit and withdrawn runtime diagnostic](DRIVE_GAME_RESEARCH.md)
 
 Camp smith implementation and actual asset-tool validation: [CAMP_SMITH_IMPLEMENTATION.md](CAMP_SMITH_IMPLEMENTATION.md).
+
+Read-only native declaration tooling and remaining runtime dependency: [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md).

@@ -122,3 +122,8 @@ The related QoL retail test crashed on startup, and its supplied ZIP contains no
 ## October 6 — Camp smith priority and isolated assets
 
 Prioritize Camp NPCs and paid upgrades over further reward tuning, as requested by the user. Stage separate native NPC/widget copies in the Rebalance namespace rather than overwrite Tower originals. Retain original Tower transaction flags until repeatable paid Camp semantics are demonstrated. Do not transplant complete Tower floor tiles as Camp NPC props or treat a UMG price label as payment. The stage is not included in the gameplay PAK.
+
+
+## Native declaration capture decision — October 6
+
+Continue through a separate bounded query/read research tool, with no injection, game-function calls, writes or protection fallback. Do not enable paid smith services from cooked class imports or UI prices. Independent profile caller shapes must validate before accepting current native declarations. A completed declaration report is not upgrade-semantic verification. No balance targets or Ancient chance values are changed by this tooling pass.

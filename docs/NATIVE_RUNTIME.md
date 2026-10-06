@@ -39,3 +39,8 @@ Official references inspected: [dumpers](https://docs.ue4ss.com/feature-overview
 6. Measure income, Prospector, salvage, loot variant coverage and Gold Room generation in retail; tune against the agreed targets and complete the full test matrix.
 
 The current v2 PAK remains a partial Hunts/Economy test build. None of the outstanding services is marked implemented by this research pass.
+
+
+## Read-only native declaration work — October 6, 2026
+
+Implemented a separate bounded external query/read collector and capture runner to investigate the paid Camp upgrade blocker without the withdrawn loader. Eighteen local synthetic/bootstrap checks pass. The dedicated Windows workflow adds normal compilation, a self-process WinAPI read, PowerShell parsing, incomplete-report and existing-output checks. No Dungeons capture or native gameplay test has occurred; declaration success cannot certify payment or item mutation. Latest gameplay v2 is unchanged. See [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md) for sources, limitations, exact tests and next work. The remaining immediate dependency is a new capture from a running Windows Dungeons process, followed by native transaction implementation and real balance/item/reload tests.

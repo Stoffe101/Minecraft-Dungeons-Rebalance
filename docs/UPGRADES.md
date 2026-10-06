@@ -57,3 +57,8 @@ CampSmithStager now creates isolated copies of all three native NPC actors and t
 Seventeen upgrade policy tests pass with a synthetic adapter: explicit second-result selection, complete presentation rows, eligibility, family/ownership/item/catalog/balance revalidation, fixed prices, expiration, duplicate confirmation, and ambiguous/failure receipt handling. These tests prove source-model behavior only, not native mutation or payment.
 
 Next: establish a compatible native transaction route and current selected-result and currency contracts; trace native item-family/name/icon/stat presentation; implement a native bridge and native UMG picker; add Camp placement; then verify real saved items, currency and co-op. Existing v2 remains the latest gameplay test PAK and contains no upgrade service.
+
+
+## Read-only native declaration work — October 6, 2026
+
+Implemented a separate bounded external query/read collector and capture runner to investigate the paid Camp upgrade blocker without the withdrawn loader. Eighteen local synthetic/bootstrap checks pass. The dedicated Windows workflow adds normal compilation, a self-process WinAPI read, PowerShell parsing, incomplete-report and existing-output checks. No Dungeons capture or native gameplay test has occurred; declaration success cannot certify payment or item mutation. Latest gameplay v2 is unchanged. See [NATIVE_DECLARATION_RESEARCH.md](NATIVE_DECLARATION_RESEARCH.md) for sources, limitations, exact tests and next work. The remaining immediate dependency is a new capture from a running Windows Dungeons process, followed by native transaction implementation and real balance/item/reload tests.

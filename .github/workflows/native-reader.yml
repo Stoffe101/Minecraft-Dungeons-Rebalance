@@ -1,0 +1,66 @@
+name: Native declaration reader
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Build and validate read-only collector
+        shell: pwsh
+        run: |
+          dotnet build tools/NativeContractReader/NativeContractReader.csproj -c Release -o .tools/NativeContractReader
+          if ($LASTEXITCODE -ne 0) { throw 'Reader build failed' }
+          dotnet .tools/NativeContractReader/NativeContractReader.dll --self-test
+          if ($LASTEXITCODE -ne 0) { throw 'Reader self-tests failed' }
+          foreach ($file in @('scripts/Capture-NativeContracts.ps1', 'scripts/EvidenceCommon.ps1')) {
+            $tokens=$null; $errors=$null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file),[ref]$tokens,[ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) { throw ($errors -join '; ') }
+          }
+          dotnet .tools/NativeContractReader/NativeContractReader.dll --capture .tools/incomplete.json
+          if ($LASTEXITCODE -ne 1) { throw 'No-game capture must report incomplete' }
+          $report = Get-Content .tools/incomplete.json -Raw | ConvertFrom-Json
+          if ($report.Completed -or $report.ControlContractsPassed -or $report.UpgradeSemanticsVerified -or -not $report.Error) { throw 'Invalid incomplete capture report' }
+          $before = (Get-FileHash .tools/incomplete.json).Hash
+          dotnet .tools/NativeContractReader/NativeContractReader.dll --capture .tools/incomplete.json
+          if ($LASTEXITCODE -ne 2 -or (Get-FileHash .tools/incomplete.json).Hash -ne $before) { throw 'Existing report was not preserved' }
+      - name: Prepare capture bundle
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force .tools/native-bundle/scripts, .tools/native-bundle/config, .tools/native-bundle/.tools/NativeContractReader | Out-Null
+          Copy-Item .tools/NativeContractReader/* .tools/native-bundle/.tools/NativeContractReader
+          Copy-Item scripts/Capture-NativeContracts.ps1, scripts/EvidenceCommon.ps1 .tools/native-bundle/scripts
+          Copy-Item config/evidence-tool.json .tools/native-bundle/config
+          Copy-Item tools/NativeContractReader/README.md .tools/native-bundle/README.md
+          [System.IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path .tools/native-bundle), (Join-Path $PWD '.tools/Minecraft-Dungeons-Rebalance-NativeCollector.zip'))
+      - name: Test packaged runner and incomplete archive
+        shell: pwsh
+        run: |
+          Expand-Archive .tools/Minecraft-Dungeons-Rebalance-NativeCollector.zip '.tools/unpacked native bundle'
+          $bundle = (Resolve-Path '.tools/unpacked native bundle').Path
+          $out = Join-Path $bundle 'runner evidence'
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $bundle 'scripts/Capture-NativeContracts.ps1') -OutputDirectory $out -DotNetPath (Get-Command dotnet).Source
+          if ($LASTEXITCODE -ne 1) { throw 'No-game runner must report incomplete' }
+          if (-not (Test-Path "$out.zip")) { throw 'Runner archive missing' }
+          $report = Get-Content (Join-Path $out 'NativeContracts.json') -Raw | ConvertFrom-Json
+          if ($report.Completed -or -not $report.Error) { throw 'Invalid packaged reader report' }
+          $runner = Get-Content (Join-Path $out 'REPORT.json') -Raw | ConvertFrom-Json
+          if ($runner.issues.Count -lt 1 -or $runner.upgradeFeaturesEnabled) { throw 'Invalid runner failure report' }
+          $zip = [System.IO.Compression.ZipFile]::OpenRead("$out.zip")
+          try {
+            foreach ($name in @('NativeContracts.json', 'REPORT.json', 'Capture.log', 'SelfTest.log')) {
+              if ($zip.Entries.Name -notcontains $name) { throw "Runner archive missing $name" }
+            }
+          } finally { $zip.Dispose() }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Minecraft-Dungeons-Rebalance-NativeCollector
+          path: .tools/Minecraft-Dungeons-Rebalance-NativeCollector.zip
