@@ -127,3 +127,10 @@ Prioritize Camp NPCs and paid upgrades over further reward tuning, as requested 
 ## Native declaration capture decision — October 6
 
 Continue through a separate bounded query/read research tool, with no injection, game-function calls, writes or protection fallback. Do not enable paid smith services from cooked class imports or UI prices. Independent profile caller shapes must validate before accepting current native declarations. A completed declaration report is not upgrade-semantic verification. No balance targets or Ancient chance values are changed by this tooling pass.
+
+
+## October 6 successful native capture continuation
+
+Capture native-contracts-20261006-133711.zip validates all six control signatures and contains all 18 requested classes. Selected contracts are preserved in research/native-upgrade-contracts-v1.json. CampSmithStager now adds native item-ID name/description/icon presentation functions to the isolated Uniquesmith widget; these helpers have no visible choice list or native adapter yet. Details, tests and remaining superclass/struct/payment dependencies: [CAMP_SMITH_IMPLEMENTATION.md](CAMP_SMITH_IMPLEMENTATION.md).
+
+WalletComponent.Deduct returns void, and the three smith classes inherit their selection behavior from the uncaptured InventoryItemSlotTransactionBase. OnTransactionDecisionMade accepts a full InventoryItemData, but outcome validation/payment/save behavior is unverified. Do not infer an atomic paid upgrade from these declarations or use TryUpgradeItem's name as a rarity contract. Native services remain disabled until those behaviors are implemented and tested. Existing v2 is the last playable PAK.

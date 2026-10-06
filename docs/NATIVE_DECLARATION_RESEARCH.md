@@ -101,4 +101,4 @@ Reviewed related QoL native-favorites-20261006-133827-9942ba.zip: incomplete at 
 
 Next work: obtain the missing InventoryItemSlotTransactionBase/MerchantSubobjectBase/MerchantDef and InventoryItemData/SerializableItemId/MerchantDisplayPrice/EnchantmentData declarations, including nested array/enum types; trace native outcome enumeration and chosen-result handling; wire the presentation functions into an owned picker and Camp screen dispatch; establish persistent item/currency transaction behavior before gameplay acceptance. No new collector or NPC PAK is delivered in this increment.
 
-Existing upgrade policy tests (17) and native call indexing tests (5) pass after this increment. Windows normal build is pending at publication; no retail presentation/upgrade test is claimed.
+Existing upgrade policy tests (17) and native call indexing tests (5) pass after this increment. Windows normal compilation subsequently passed at implementation 5f5b0a3 (workflow 37474277976, zero warnings/errors); no retail presentation/upgrade test is claimed.
