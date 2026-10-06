@@ -155,3 +155,5 @@ Used as the source of reusable internal tooling/research once a formal code audi
 - [UEDumper pinned source](https://github.com/Spuckwaffel/UEDumper/tree/5b2b5264a66aa9edb28619c5ff654b16d3b9e038): candidate legacy layouts, not Store ABI certification.
 - [MCD-PE pinned source](https://github.com/Minecraforever/MCD-PE/tree/be646dcd82a689e24709b7abd4cff30fb60b7c9f): historical declarations only; no source or protection tool reuse.
 - Microsoft [ReadProcessMemory](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-readprocessmemory) and [process security/access rights](https://learn.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights).
+
+- Microsoft [VirtualQueryEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualqueryex) and [MEMORY_BASIC_INFORMATION](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-memory_basic_information): read-only memory-region filtering; no additional handle rights.

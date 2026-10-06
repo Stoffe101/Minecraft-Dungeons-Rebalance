@@ -1,0 +1,11 @@
+{
+  "inputSha256": "a79aa8b8cfcf1868d82e862839308caa9795df81189870c26f409989dd034f8e",
+  "completed": false,
+  "error": "Too many name-table candidates; stop rather than expand scanning.",
+  "bytesRead": 6345728,
+  "readCalls": 9,
+  "gameMemoryWritten": false,
+  "gameplayFunctionsInvoked": false,
+  "controlContractsPassed": false,
+  "classesCollected": 0
+}

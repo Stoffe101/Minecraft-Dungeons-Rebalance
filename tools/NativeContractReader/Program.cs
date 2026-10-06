@@ -22,7 +22,7 @@ try {
         try {
             var module = processes[0].MainModule ?? throw new InvalidOperationException("Main module is unavailable.");
             var regions = ModuleData.Read(memory, (ulong)module.BaseAddress.ToInt64());
-            var reflection = Reflection.Discover(memory, regions);
+            var reflection = Reflection.Discover(memory, regions, report.Discovery);
             report.FunctionHeaderOffset = reflection.FunctionHeaderOffset;
             report.FunctionNumParmsDelta = reflection.FunctionNumParmsDelta;
             report.Classes = reflection.Capture();
@@ -30,7 +30,7 @@ try {
             report.ControlContractsPassed = true;
             report.Completed = true;
             report.MissingAllowlistedClasses = Reflection.Allowlist.Except(report.Classes.Select(c => c.Name)).ToArray();
-        } finally { report.BytesRead = memory.BytesRead; report.ReadCalls = memory.ReadCalls; }
+        } finally { report.BytesRead = memory.BytesRead; report.ReadCalls = memory.ReadCalls; report.RegionQueries = memory.RegionQueries; }
     } finally { foreach (var process in processes) process.Dispose(); }
 } catch (Exception error) { report.Error = error.Message; }
 Directory.CreateDirectory(Path.GetDirectoryName(output)!);
@@ -54,6 +54,8 @@ sealed class CaptureReport {
     public int? FunctionNumParmsDelta { get; set; }
     public long BytesRead { get; set; }
     public int ReadCalls { get; set; }
+    public int RegionQueries { get; set; }
+    public DiscoveryDiagnostics Discovery { get; init; } = new();
     public string? Error { get; set; }
     public string[] MissingAllowlistedClasses { get; set; } = [];
     public List<ClassDeclaration> Classes { get; set; } = [];
@@ -63,6 +65,32 @@ record FunctionDeclaration(string Name, uint Flags, int ParameterSize, int Retur
 record ClassDeclaration(string Name, string? Super, List<PropertyDeclaration> Fields, List<FunctionDeclaration> Functions);
 
 interface IMemory { byte[] Read(ulong address, int size); }
+interface IRegionMemory : IMemory { MemoryRegion Query(ulong address); }
+record MemoryRegion(ulong Start, ulong Size, uint State, uint Protection) {
+    public bool Contains(ulong address, int size) => address >= Start && Size > 0 && address - Start <= Size && (ulong)size <= Size - (address - Start);
+    public bool ReadableData => State == 0x1000 && (Protection & 0x100) == 0 && (Protection & 0xff) is 0x02 or 0x04 or 0x08;
+}
+sealed class DiscoveryDiagnostics {
+    public int RawPointerCandidates { get; set; }
+    public int MappedDataCandidates { get; set; }
+    public int ValidatedNameTables { get; set; }
+    public int ObjectTableShapeCandidates { get; set; }
+    public List<string> RejectedObjectReasons { get; init; } = [];
+}
+static class CandidateFilter {
+    public static ulong[] Select(IMemory memory, HashSet<ulong> raw) {
+        var ordered = raw.Order().ToArray();
+        if (memory is not IRegionMemory regions) throw new InvalidDataException("Memory-region queries are required for candidate filtering.");
+        var selected = new List<ulong>(); MemoryRegion? region = null;
+        foreach (var p in ordered) {
+            if (region == null || !region.Contains(p, 1)) region = regions.Query(p);
+            if (!region.Contains(p, 1)) throw new InvalidDataException("Memory-region query did not contain its requested address.");
+            if (region.ReadableData && region.Contains(p, 1032)) selected.Add(p);
+            if (selected.Count > 200000) throw new InvalidDataException("Too many mapped non-executable data candidates; bounded discovery stopped.");
+        }
+        return selected.ToArray();
+    }
+}
 static class Bytes {
     public static int I32(byte[] b, int o) => BinaryPrimitives.ReadInt32LittleEndian(b.AsSpan(o, 4));
     public static ushort U16(byte[] b, int o) => BinaryPrimitives.ReadUInt16LittleEndian(b.AsSpan(o, 2));
@@ -74,12 +102,13 @@ static class Bytes {
             throw new InvalidDataException("Read address/size outside allowed range.");
     }
 }
-sealed class ProcessMemory : IMemory, IDisposable {
+sealed class ProcessMemory : IRegionMemory, IDisposable {
     public const uint Access = 0x0410; // PROCESS_QUERY_INFORMATION | PROCESS_VM_READ. No write/execute rights.
     readonly IntPtr handle;
     readonly Stopwatch clock = Stopwatch.StartNew();
     public long BytesRead { get; private set; }
     public int ReadCalls { get; private set; }
+    public int RegionQueries { get; private set; }
     public ProcessMemory(int pid) {
         handle = OpenProcess(Access, false, pid);
         if (handle == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error(), "Query/read access denied or unavailable; stop without elevation or a protection fallback.");
@@ -94,10 +123,26 @@ sealed class ProcessMemory : IMemory, IDisposable {
             throw new InvalidDataException("An exact metadata read failed; the process/layout may have changed.");
         return result;
     }
+    public MemoryRegion Query(ulong address) {
+        Bytes.Range(address, 1);
+        if (clock.Elapsed.TotalSeconds > 60 || RegionQueries >= 4096) throw new BudgetExceededException();
+        RegionQueries++;
+        if (VirtualQueryEx(handle, (IntPtr)(long)address, out var info, (nuint)Marshal.SizeOf<MemoryInfo>()) != (nuint)Marshal.SizeOf<MemoryInfo>())
+            throw new InvalidDataException("Memory-region query failed; no fallback was attempted.");
+        return new((ulong)info.BaseAddress, (ulong)info.RegionSize, info.State, info.Protect);
+    }
     public void Dispose() => CloseHandle(handle);
     [DllImport("kernel32.dll", SetLastError = true)] static extern IntPtr OpenProcess(uint access, bool inherit, int pid);
     [DllImport("kernel32.dll", SetLastError = true)] static extern bool ReadProcessMemory(IntPtr process, IntPtr address, [Out] byte[] buffer, nuint size, out nuint read);
     [DllImport("kernel32.dll")] static extern bool CloseHandle(IntPtr handle);
+    [StructLayout(LayoutKind.Sequential)] struct MemoryInfo {
+        public nuint BaseAddress, AllocationBase;
+        public uint AllocationProtect;
+        public ushort PartitionId, Padding;
+        public nuint RegionSize;
+        public uint State, Protect, Type, Padding2;
+    }
+    [DllImport("kernel32.dll", SetLastError = true)] static extern nuint VirtualQueryEx(IntPtr process, IntPtr address, out MemoryInfo info, nuint size);
 }
 sealed class BudgetExceededException : Exception { public BudgetExceededException() : base("The bounded read/time budget was exhausted. No offsets or declarations were guessed.") { } }
 
@@ -171,17 +216,22 @@ sealed class Reflection {
     public int FunctionHeaderOffset { get; private set; }
     public int FunctionNumParmsDelta { get; private set; }
     Reflection(IMemory memory, Names names, Dictionary<string, ulong> classes) { this.memory = memory; this.names = names; this.classes = classes; }
-    public static Reflection Discover(IMemory memory, List<byte[]> regions) {
+    public static Reflection Discover(IMemory memory, List<byte[]> regions, DiscoveryDiagnostics? diagnostics = null) {
+        diagnostics ??= new();
         var candidates = new HashSet<ulong>();
         foreach (var data in regions) for (int i = 0; i + 8 <= data.Length; i += 8) {
             ulong p = Bytes.U64(data, i);
             if (Bytes.Pointer(p)) candidates.Add(p);
+            if (candidates.Count > 1000000) throw new InvalidDataException("Raw candidate workspace limit exceeded.");
         }
-        if (candidates.Count > 200000) throw new InvalidDataException("Too many name-table candidates; stop rather than expand scanning.");
+        diagnostics.RawPointerCandidates = candidates.Count;
+        var filtered = CandidateFilter.Select(memory, candidates);
+        diagnostics.MappedDataCandidates = filtered.Length;
         var validated = new List<Names>();
-        foreach (var candidate in candidates) {
+        foreach (var candidate in filtered) {
             try { validated.Add(new Names(memory, candidate)); } catch (InvalidDataException) { }
         }
+        diagnostics.ValidatedNameTables = validated.Count;
         if (validated.Count != 1) throw new InvalidDataException("Expected one independently validated legacy name table, found " + validated.Count + ".");
         var nameTable = validated.Single();
         var matches = new List<Reflection>();
@@ -189,6 +239,7 @@ sealed class Reflection {
             ulong chunks = Bytes.U64(data, i);
             int max = Bytes.I32(data, i + 16), count = Bytes.I32(data, i + 20), maxChunks = Bytes.I32(data, i + 24), usedChunks = Bytes.I32(data, i + 28);
             if (!Bytes.Pointer(chunks) || count is < 100 or > 1000000 || max < count || max > 2000000 || usedChunks is < 1 or > 32 || maxChunks < usedChunks || maxChunks > 32 || usedChunks != (count + 65535) / 65536) continue;
+            diagnostics.ObjectTableShapeCandidates++;
             try {
                 var objects = ReadClasses(memory, nameTable, chunks, count, usedChunks);
                 if (!objects.ContainsKey("PlayerCharacterSaveSlot") || !objects.ContainsKey("PlayerControllerBase")) continue;
@@ -196,7 +247,9 @@ sealed class Reflection {
                 (candidate.FunctionHeaderOffset, candidate.FunctionNumParmsDelta) = candidate.InferFunctionHeader();
                 Contracts.Validate(candidate.Capture());
                 matches.Add(candidate);
-            } catch (InvalidDataException) { }
+            } catch (InvalidDataException error) {
+                if (diagnostics.RejectedObjectReasons.Count < 8 && !diagnostics.RejectedObjectReasons.Contains(error.Message)) diagnostics.RejectedObjectReasons.Add(error.Message);
+            }
         }
         if (matches.Count != 1) throw new InvalidDataException("Expected one validated object/layout candidate, found " + matches.Count + ".");
         return matches.Single();

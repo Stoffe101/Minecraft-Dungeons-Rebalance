@@ -58,11 +58,31 @@ static class Fixtures {
                 throw new Exception("Unsafe report defaults.");
         });
         Check("only query/read rights", () => { if (ProcessMemory.Access != 0x0410) throw new Exception("Unexpected process rights."); });
+        Check("large numeric noise filtered before table limit", () => {
+            var a = new Arena(0x98);
+            var noisy = new byte[210001 * 8];
+            for (int i = 0; i < 210001; i++) BitConverter.GetBytes(0x100000000UL + (ulong)i * 8).CopyTo(noisy, i * 8);
+            var diagnostics = new DiscoveryDiagnostics();
+            Contracts.Validate(Reflection.Discover(a, [a.Module, noisy], diagnostics).Capture());
+            if (diagnostics.RawPointerCandidates <= 200000 || diagnostics.MappedDataCandidates > 200000 || a.Queries > 10)
+                throw new Exception("Noisy candidates were not removed/cached efficiently.");
+        });
+        Check("guarded/executable/reserved regions rejected", () => {
+            foreach (uint p in new uint[] { 0x01, 0x10, 0x20, 0x40, 0x80, 0x104 })
+                if (new MemoryRegion(Arena.Base, 4096, 0x1000, p).ReadableData) throw new Exception("Unsafe region admitted.");
+            if (new MemoryRegion(Arena.Base, 4096, 0x2000, 0x04).ReadableData) throw new Exception("Uncommitted region admitted.");
+        });
+        Check("readable regions and boundary filtering", () => {
+            var a = new Arena(0x98); var r = a.Query(Arena.Base);
+            if (CandidateFilter.Select(a, [Arena.Base, Arena.Base + (ulong)a.Raw.Length - 8]).Length != 1) throw new Exception("Boundary candidate admitted.");
+            foreach (uint p in new uint[] { 0x02, 0x04, 0x08 }) if (!new MemoryRegion(Arena.Base, 4096, 0x1000, p).ReadableData) throw new Exception("Readable data rejected.");
+        });
         if (OperatingSystem.IsWindows()) Check("Windows read API on own process", () => {
             var pointer = Marshal.AllocHGlobal(8);
             try {
                 Marshal.WriteInt64(pointer, 0x1122334455667788);
                 using var memory = new ProcessMemory(Environment.ProcessId);
+                if (!memory.Query((ulong)pointer.ToInt64()).ReadableData) throw new Exception("Own marker region not readable data.");
                 if (Bytes.U64(memory.Read((ulong)pointer.ToInt64(), 8), 0) != 0x1122334455667788)
                     throw new Exception("Read API marker mismatch.");
             } finally { Marshal.FreeHGlobal(pointer); }
@@ -71,7 +91,7 @@ static class Fixtures {
     }
 }
 
-sealed class Arena : IMemory {
+sealed class Arena : IRegionMemory {
     public const ulong Base = 0x100000;
     public readonly byte[] Raw = new byte[4 * 1024 * 1024];
     public readonly byte[] Module = new byte[4096];
@@ -83,6 +103,13 @@ sealed class Arena : IMemory {
     readonly Dictionary<string, ulong> types = new();
     public readonly List<(ulong Address, int Size)> Functions = [];
     public ulong GuidResult, FirstInput, NoneEntry, StructClass;
+    public int Queries;
+    public MemoryRegion Query(ulong address) {
+        Queries++;
+        if (address >= Base && address < Base + (ulong)Raw.Length) return new(Base, (ulong)Raw.Length, 0x1000, 0x04);
+        if (address >= 0x100000000 && address < 0x110000000) return new(0x100000000, 0x10000000, 0x10000, 0);
+        return new(address & ~0xfffUL, 4096, 0x10000, 0);
+    }
     public Arena(int header, int delta = 6) {
         numParmsDelta = delta;
         U64(table, names);
