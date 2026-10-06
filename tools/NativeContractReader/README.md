@@ -1,18 +1,20 @@
-# Native upgrade dependency collector (v4)
+# Native merchant dependency collector (v5)
 
-This version builds on the successful v3 capture. It requests 11 additional exact native dependencies, rather than repeating only the original 18 classes: InventoryItemSlotTransactionBase, MerchantSubobjectBase, MerchantDef, InventoryItemData, SerializableItemId, MerchantDisplayPrice, EnchantmentData, ArmorPropertyData, ProblemStatus, InventoryItemMetaData and TowerFloorItemUpgrades. It also records bounded nested array element declarations. These are needed to wire selected outcomes and paid transactions; no upgrade or save operation is run.
+The accepted v4 retail capture contains all 29 requested types and 16 referenced enums. It exposes inherited merchant/selection classes and pricing structs outside that fixed request. This version follows native superclass and struct dependencies automatically, up to 128 emitted declarations. Nine additional roots are taken from native class imports in the supplied retail merchant packages: MerchantActor, MerchantBase, MerchantBaseWidget, MerchantCurrencyComponent, MerchantDefComponent, SelectInventorySlotItem, SelectMerchantSlot, UpgraderItemSlot and ItemSlot.
 
-Extract this v4 bundle into a fresh folder. Leave Dungeons at Camp and run the same command from that folder:
+This is a new dependency request, not a repeat of the successful v4 controls. Native declaration identities are indexed during the existing object-table scan (at most 4,096); only selected roots and their parent/struct closure are exported. External engine declaration bodies and unrelated native declarations are excluded. Referenced game enums retain their real numeric values. Object-instance values and native function bodies are not exported. The original global read budgets are unchanged.
+
+Extract into a fresh folder, leave Dungeons at Camp, and run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\Capture-NativeContracts.ps1
 ```
 
-Return the resulting native-contracts ZIP, including an incomplete report if one occurs. The original v3 capture remains accepted; this is a request for newly targeted dependencies, not a rerun to establish the same discovery result. `Completed` indicates accepted control declarations; `UpgradeDependencyDeclarationsComplete` and `MissingUpgradeDependencyTypes` separately show dependency coverage. Neither certifies upgrade behavior.
+Return the resulting native-contracts ZIP. `Completed` means accepted control declarations; `DependencyClosureComplete`, `MissingMerchantRoots` and the existing missing lists separately describe coverage. None certifies upgrade/payment/save behavior. This collector does not enable upgrades.
 
 # Read-only native declaration collector
 
-Research prototype for the current Dungeons upgrade implementation blocker. **This does not enable Camp NPCs, paid upgrades or a Unique picker. Dungeons Store compatibility is not yet established.**
+Research prototype for the current Dungeons upgrade implementation blocker. **This does not enable Camp NPCs, paid upgrades or a Unique picker. The declaration layout has passed retail controls; gameplay integration is not established.**
 
 ## Run the compiled capture bundle
 
@@ -30,13 +32,13 @@ The runner downloads a checksum-pinned Microsoft .NET 8 runtime into its own fol
 
 ## What is collected
 
-Only allowlisted native class, function and property declarations: names, types/targets, sizes, offsets and flags. No executable bytes, complete memory dumps, wallet balances, item values, save records, cloud IDs or process addresses are written to the report. The reader inspects PE headers and eligible non-executable module data privately to discover tables; those bytes are not exported.
+Only selected native class/struct, function, property and referenced enum declarations: names, types/targets, sizes, offsets and flags. No executable bytes, complete memory dumps, wallet balances, item values, save records, cloud IDs or process addresses are written to the report. The reader inspects PE headers and eligible non-executable module data privately to discover tables; those bytes are not exported.
 
 The Windows handle requests exactly `PROCESS_QUERY_INFORMATION | PROCESS_VM_READ` (`0x0410`). The imported native APIs are OpenProcess, ReadProcessMemory, VirtualQueryEx and CloseHandle. Limits are 60 seconds of read work, 128 MiB of attempted reads, 2,000,000 calls, 1 MiB per read, 16 MiB per eligible section, bounded name lengths, object counts and field chains. Inaccessible reads, unsupported layouts, missing or ambiguous controls stop collection with an incomplete report.
 
 The parser's UE4.22 legacy name/UObject/UField/UProperty layouts are **candidates**, not certified Store offsets. Names and object indices are checked first. A UFunction header is inferred uniquely from four independently observed profile getter shapes, then six profile call contracts must validate, including qualified Guid/character-save/character-slot return types and input direction. It does not use a guessed GNames/GObjects address or a fixed UFunction header offset.
 
-Limitations: both inline and pointer-backed 128/256-chunk legacy name tables are considered, with bounded ANSI/UTF-16 names; class members are direct declarations with superclass names, not flattened inherited methods. Array/map/enum nested type details and native function bodies are not decoded. Missing classes are reported. A declaration may reveal a usable API, but it cannot prove selected-result behavior, charging, persistent item identity, rollback or replication. `Completed=true` means declaration collection and control validation only; `UpgradeSemanticsVerified` always remains false.
+Limitations: both inline and pointer-backed 128/256-chunk legacy name tables are considered, with bounded ANSI/UTF-16 names; class members remain direct declarations; superclass and struct declarations are captured separately. Array elements and referenced enums are decoded; map inner types and native function bodies are not decoded. Missing classes are reported. A declaration may reveal a usable API, but it cannot prove selected-result behavior, charging, persistent item identity, rollback or replication. `Completed=true` means declaration collection and control validation only; `UpgradeSemanticsVerified` always remains false.
 
 ## Build and tests
 

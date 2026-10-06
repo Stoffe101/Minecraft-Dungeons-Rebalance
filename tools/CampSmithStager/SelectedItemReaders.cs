@@ -124,6 +124,7 @@ static class SelectedItemReaders
         if (!document.RootElement.GetProperty("sourceCaptureCompleted").GetBoolean()
             || !document.RootElement.GetProperty("controlContractsPassed").GetBoolean())
             throw new InvalidDataException("Selected-item capture incomplete.");
+        VerifyNativeRecord(document.RootElement);
         foreach (var spec in Specs) {
             var owner = document.RootElement.GetProperty("Classes").EnumerateArray().Single(c => c.GetProperty("Name").GetString() == spec.Owner);
             var field = owner.GetProperty("Fields").EnumerateArray().Single(f => f.GetProperty("Name").GetString() == "Item");
@@ -131,6 +132,44 @@ static class SelectedItemReaders
                 || field.GetProperty("Target").GetString() != "/Script/Dungeons." + spec.Result
                 || field.GetProperty("Size").GetInt32() != spec.Size || field.GetProperty("ArrayDim").GetInt32() != 1)
                 throw new InvalidDataException("Captured item field contract changed.");
+        }
+    }
+    // These checks describe the native record read by our graph. They are not a
+    // serializer, item constructor, or proof of native transaction persistence.
+    internal static void VerifyNativeRecord(JsonElement root)
+    {
+        void Field(string owner, string name, string type, string? target, int size, int offset, string? innerTarget = null) {
+            var declaration = root.GetProperty("Classes").EnumerateArray().Single(c => c.GetProperty("Name").GetString() == owner);
+            var field = declaration.GetProperty("Fields").EnumerateArray().Single(f => f.GetProperty("Name").GetString() == name);
+            if (field.GetProperty("Type").GetString() != type || field.GetProperty("Target").GetString() != target
+                || field.GetProperty("ArrayDim").GetInt32() != 1 || field.GetProperty("Size").GetInt32() != size
+                || field.GetProperty("Offset").GetInt32() != offset
+                || (innerTarget != null && (field.GetProperty("Inner").GetProperty("Type").GetString() != "StructProperty"
+                    || field.GetProperty("Inner").GetProperty("Target").GetString() != innerTarget)))
+                throw new InvalidDataException("Native item record contract changed: " + owner + "." + name);
+        }
+        Field("SerializableItemId", "SerializedId", "NameProperty", null, 8, 12);
+        Field("InventoryItemData", "ItemId", "StructProperty", "/Script/Dungeons.SerializableItemId", 20, 0);
+        Field("InventoryItemData", "ItemPower", "FloatProperty", null, 4, 20);
+        Field("InventoryItemData", "Enchantments", "ArrayProperty", null, 16, 24, "/Script/Dungeons.EnchantmentData");
+        Field("InventoryItemData", "ArmorProperties", "ArrayProperty", null, 16, 40, "/Script/Dungeons.ArmorPropertyData");
+        Field("InventoryItemData", "Rarity", "EnumProperty", "/Script/Dungeons.EItemRarity", 1, 56);
+        Field("InventoryItemData", "bIsUpgraded", "BoolProperty", null, 1, 57);
+        Field("InventoryItemData", "bIsGifted", "BoolProperty", null, 1, 58);
+        Field("InventoryItemData", "bIsModified", "BoolProperty", null, 1, 59);
+        Field("InventoryItemData", "timesModified", "IntProperty", null, 4, 60);
+        Field("InventoryItemData", "bHasNetherite", "BoolProperty", null, 1, 96);
+        Field("InventoryItemData", "NetheriteEnchantData", "StructProperty", "/Script/Dungeons.EnchantmentData", 16, 100);
+        Enum("EItemRarity", new[] { ("Common", 0L), ("Rare", 1L), ("Unique", 2L) });
+        Enum("EEnchantmentSource", new[] { ("Unset", 0L), ("Permanent", 1L), ("Generated", 2L), ("Netherite", 3L), ("Dust", 4L) });
+        Enum("EEnchantmentCategory", new[] { ("Unset", 0L), ("Melee", 1L), ("Ranged", 2L), ("Aoe", 4L), ("Armor", 8L), ("Permanent", 64L) });
+        void Enum(string name, (string Symbol, long Value)[] expected) {
+            var values = root.GetProperty("Enums").EnumerateArray().Single(e => e.GetProperty("Name").GetString() == "/Script/Dungeons." + name).GetProperty("Values");
+            foreach (var (symbol, value) in expected) {
+                var entry = values.EnumerateArray().Single(e => e.GetProperty("Name").GetString() == name + "::" + symbol);
+                if (entry.GetProperty("Value").GetInt64() != value || entry.GetProperty("NameNumber").GetInt32() != 0)
+                    throw new InvalidDataException("Native enum value changed: " + name + "::" + symbol);
+            }
         }
     }
     public static void SelfTest(string source)
@@ -147,6 +186,23 @@ static class SelectedItemReaders
         Reject(a => { var c = (EX_Context)((EX_Return)Function(a).ScriptBytecode[0]).ReturnExpression;
             var p = ((EX_InstanceVariable)c.ContextExpression).Variable.Old.ToImport(a); p.ObjectName = new FName(a, "Meta"); });
         Console.WriteLine("Four selected-item graph rejection checks passed; no gameplay calls or asset writes.");
+        void RejectContract(Action<System.Text.Json.Nodes.JsonNode> mutation) {
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("NativeUpgradeContracts.json")!;
+            var node = System.Text.Json.Nodes.JsonNode.Parse(stream)!; mutation(node);
+            using var document = JsonDocument.Parse(node.ToJsonString());
+            try { VerifyNativeRecord(document.RootElement); }
+            catch (InvalidDataException) { return; }
+            catch (InvalidOperationException) { return; }
+            throw new Exception("Changed native record contract accepted.");
+        }
+        System.Text.Json.Nodes.JsonNode Field(System.Text.Json.Nodes.JsonNode n, string owner, string name)
+            => n["Classes"]!.AsArray().Single(c => (string?)c!["Name"] == owner)!["Fields"]!.AsArray().Single(f => (string?)f!["Name"] == name)!;
+        RejectContract(n => Field(n, "SerializableItemId", "SerializedId")["Offset"] = 0);
+        RejectContract(n => Field(n, "InventoryItemData", "Enchantments")["Inner"]!["Target"] = "/Script/Dungeons.ArmorPropertyData");
+        RejectContract(n => n["Enums"]!.AsArray().Single(e => (string?)e!["Name"] == "/Script/Dungeons.EEnchantmentCategory")!["Values"]!
+            .AsArray().Single(v => (string?)v!["Name"] == "EEnchantmentCategory::Armor")!["Value"] = 4);
+        RejectContract(n => Field(n, "InventoryItemData", "NetheriteEnchantData")["Size"] = 12);
+        Console.WriteLine("Four native record contract rejection checks passed.");
     }
     static void Clear(Export e) { e.SerializationBeforeSerializationDependencies.Clear(); e.SerializationBeforeCreateDependencies.Clear();
         e.CreateBeforeSerializationDependencies.Clear(); e.CreateBeforeCreateDependencies.Clear(); }

@@ -1,0 +1,274 @@
+{
+  "Completed": true,
+  "ControlContractsPassed": true,
+  "UpgradeDependencyDeclarationsComplete": true,
+  "MissingAllowlistedClasses": [],
+  "MissingUpgradeDependencyTypes": [],
+  "GameplayFunctionsInvoked": false,
+  "GameMemoryWritten": false,
+  "UpgradeSemanticsVerified": false,
+  "FunctionHeaderOffset": 152,
+  "FunctionNumParmsDelta": 4,
+  "ChildrenOffset": 72,
+  "PropertyTargetOffset": 112,
+  "NameCharactersOffset": 12,
+  "NameChunkCapacity": 256,
+  "BytesRead": 52016905,
+  "ReadCalls": 1352914,
+  "RegionQueries": 1046,
+  "Error": null,
+  "schema": "rebalance-native-capture-review-v4",
+  "sourceArchive": "native-contracts-20261006-142012.zip",
+  "sourceArchiveSha256": "23f8c58f7c46b7df653281ee9942fb445fe40de71fee3a4a17ba965fffba8d99",
+  "classes": [
+    {
+      "name": "ArmorPropertyData",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "EnchantmentData",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "GildItem",
+      "kind": "Class",
+      "super": "InventoryItemSlotTransactionBase",
+      "functions": 0
+    },
+    {
+      "name": "InventoryItem",
+      "kind": "Class",
+      "super": "Object",
+      "functions": 35
+    },
+    {
+      "name": "InventoryItemData",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "InventoryItemDataFunctionLibrary",
+      "kind": "Class",
+      "super": "BlueprintFunctionLibrary",
+      "functions": 1
+    },
+    {
+      "name": "InventoryItemMetaData",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "InventoryItemSlot",
+      "kind": "Class",
+      "super": "Object",
+      "functions": 14
+    },
+    {
+      "name": "InventoryItemSlotTransactionBase",
+      "kind": "Class",
+      "super": "MerchantSlotTransactionBase",
+      "functions": 0
+    },
+    {
+      "name": "ItemFunctionLibrary",
+      "kind": "Class",
+      "super": "BlueprintFunctionLibrary",
+      "functions": 25
+    },
+    {
+      "name": "ItemStashComponent",
+      "kind": "Class",
+      "super": "ActorComponent",
+      "functions": 46
+    },
+    {
+      "name": "MerchantDef",
+      "kind": "Class",
+      "super": "Object",
+      "functions": 1
+    },
+    {
+      "name": "MerchantDisplayPrice",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "MerchantSubobjectBase",
+      "kind": "Class",
+      "super": "Object",
+      "functions": 0
+    },
+    {
+      "name": "MerchantTransactionBase",
+      "kind": "Class",
+      "super": "MerchantSubobjectBase",
+      "functions": 11
+    },
+    {
+      "name": "MerchantTransactionUtil",
+      "kind": "Class",
+      "super": "BlueprintFunctionLibrary",
+      "functions": 1
+    },
+    {
+      "name": "PlayerCharacterSaveSlot",
+      "kind": "Class",
+      "super": "BaseCharacter",
+      "functions": 14
+    },
+    {
+      "name": "PlayerControllerBase",
+      "kind": "Class",
+      "super": "PlayerController",
+      "functions": 27
+    },
+    {
+      "name": "ProblemStatus",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "SerializableItemId",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "TowerArtisanMerchantDef",
+      "kind": "Class",
+      "super": "MerchantDef",
+      "functions": 0
+    },
+    {
+      "name": "TowerBlacksmithMerchantDef",
+      "kind": "Class",
+      "super": "MerchantDef",
+      "functions": 0
+    },
+    {
+      "name": "TowerFloorItemUpgrades",
+      "kind": "ScriptStruct",
+      "super": null,
+      "functions": 0
+    },
+    {
+      "name": "TowerFunctionLibrary",
+      "kind": "Class",
+      "super": "BlueprintFunctionLibrary",
+      "functions": 32
+    },
+    {
+      "name": "TowerGilderMerchantDef",
+      "kind": "Class",
+      "super": "MerchantDef",
+      "functions": 0
+    },
+    {
+      "name": "TowerMerchantUtil",
+      "kind": "Class",
+      "super": "BlueprintFunctionLibrary",
+      "functions": 7
+    },
+    {
+      "name": "UniqueCollectItem",
+      "kind": "Class",
+      "super": "InventoryItemSlotTransactionBase",
+      "functions": 0
+    },
+    {
+      "name": "UpgradeTowerItem",
+      "kind": "Class",
+      "super": "InventoryItemSlotTransactionBase",
+      "functions": 0
+    },
+    {
+      "name": "WalletComponent",
+      "kind": "Class",
+      "super": "ActorComponent",
+      "functions": 3
+    }
+  ],
+  "enums": [
+    {
+      "name": "/Script/Dungeons.EArmorPropertyID",
+      "values": 41
+    },
+    {
+      "name": "/Script/Dungeons.ECurrencyObtainReason",
+      "values": 4
+    },
+    {
+      "name": "/Script/Dungeons.EEnchantmentCategory",
+      "values": 7
+    },
+    {
+      "name": "/Script/Dungeons.EEnchantmentSource",
+      "values": 6
+    },
+    {
+      "name": "/Script/Dungeons.EEnchantmentTypeID",
+      "values": 164
+    },
+    {
+      "name": "/Script/Dungeons.EEquipmentSlot",
+      "values": 8
+    },
+    {
+      "name": "/Script/Dungeons.EItemPowerComparison",
+      "values": 5
+    },
+    {
+      "name": "/Script/Dungeons.EItemRarity",
+      "values": 4
+    },
+    {
+      "name": "/Script/Dungeons.ELegendaryStatus",
+      "values": 4
+    },
+    {
+      "name": "/Script/Dungeons.ELevelNames",
+      "values": 162
+    },
+    {
+      "name": "/Script/Dungeons.EMerchantTransactionStatusReason",
+      "values": 71
+    },
+    {
+      "name": "/Script/Dungeons.ESlotType",
+      "values": 22
+    },
+    {
+      "name": "/Script/Dungeons.ETowerLoadoutScaleReason",
+      "values": 4
+    },
+    {
+      "name": "/Script/Dungeons.ETowerUIMerchantType",
+      "values": 3
+    },
+    {
+      "name": "/Script/Dungeons.ItemTag",
+      "values": 21
+    },
+    {
+      "name": "/Script/Dungeons.ItemTagLevel",
+      "values": 5
+    }
+  ],
+  "newDependencies": [
+    "MerchantSlotTransactionBase",
+    "MerchantPricing",
+    "MerchantBase",
+    "ItemSlot"
+  ],
+  "paidUpgradeImplemented": false,
+  "campPlacementImplemented": false,
+  "uniquePickerImplemented": false
+}

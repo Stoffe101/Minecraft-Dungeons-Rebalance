@@ -38,6 +38,9 @@ try {
             report.MissingUpgradeDependencyTypes = Reflection.DependencyClasses.Concat(Reflection.DependencyStructs)
                 .Except(report.Classes.Select(c => c.Name)).ToArray();
             report.UpgradeDependencyDeclarationsComplete = report.MissingUpgradeDependencyTypes.Length == 0;
+            report.MissingMerchantRoots = Reflection.MerchantRoots.Except(report.Classes.Select(c => c.Name)).ToArray();
+            report.DependencyClosureComplete = report.MissingMerchantRoots.Length == 0
+                && report.MissingAllowlistedClasses.Length == 0 && report.UpgradeDependencyDeclarationsComplete;
         } finally { report.BytesRead = memory.BytesRead; report.ReadCalls = memory.ReadCalls; report.RegionQueries = memory.RegionQueries; }
     } finally { foreach (var process in processes) process.Dispose(); }
 } catch (Exception error) { report.Error = error.Message; }
@@ -74,6 +77,8 @@ sealed class CaptureReport {
     public string[] MissingUpgradeDependencyTypes { get; set; } = [];
     public bool UpgradeDependencyDeclarationsComplete { get; set; }
     public List<EnumDeclaration> Enums { get; set; } = [];
+    public string[] MissingMerchantRoots { get; set; } = [];
+    public bool DependencyClosureComplete { get; set; }
 }
 record PropertyDeclaration(string Name, string Type, string? Target, int ArrayDim, int Size, int Offset, ulong Flags, PropertyDeclaration? Inner = null);
 record FunctionDeclaration(string Name, uint Flags, int ParameterSize, int ReturnOffset, List<PropertyDeclaration> Parameters);
@@ -245,6 +250,10 @@ sealed class Reflection {
     // and item records. This is not an unrestricted SDK/object dump.
     public static readonly string[] DependencyClasses = ["InventoryItemSlotTransactionBase", "MerchantSubobjectBase", "MerchantDef"];
     public static readonly string[] DependencyStructs = ["InventoryItemData", "SerializableItemId", "MerchantDisplayPrice", "EnchantmentData", "ArmorPropertyData", "ProblemStatus", "InventoryItemMetaData", "TowerFloorItemUpgrades"];
+    // Observed /Script/Dungeons class imports in the supplied retail merchant
+    // packages. Inheritance and struct dependencies are followed automatically.
+    public static readonly string[] MerchantRoots = ["MerchantActor", "MerchantBase", "MerchantBaseWidget", "MerchantCurrencyComponent", "MerchantDefComponent", "SelectInventorySlotItem", "SelectMerchantSlot", "UpgraderItemSlot", "ItemSlot"];
+    const int MaxNativeDeclarations = 128;
     readonly IMemory memory; readonly Names names;
     readonly Dictionary<string, ulong> classes;
     readonly Dictionary<string, ulong> referencedEnums = new();
@@ -352,10 +361,13 @@ sealed class Reflection {
                     if (!typeCache.TryGetValue(type, out var typeName)) typeCache[type] = typeName = names.Get(Bytes.I32(memory.Read(type, 40), 24));
                     if (typeName is not "Class" and not "ScriptStruct") continue;
                     string name = names.Get(Bytes.I32(h, 24));
-                    if (!(typeName == "Class" ? Allowlist.Contains(name) || DependencyClasses.Contains(name) : DependencyStructs.Contains(name))) continue;
                     ulong outer = Bytes.U64(h, 32);
                     if (!Bytes.Pointer(outer) || names.Get(Bytes.I32(memory.Read(outer, 40), 24)) != "/Script/Dungeons") continue;
-                    if (!result.TryAdd(name, obj)) throw new InvalidDataException("Duplicate allowlisted native class.");
+                    // Only declaration identities are indexed here; unrelated
+                    // declarations and all object-instance values are excluded
+                    // from Capture(). This avoids a second object-table scan.
+                    if (!result.TryAdd(name, obj)) throw new InvalidDataException("Duplicate native declaration identity.");
+                    if (result.Count > 4096) throw new InvalidDataException("Native declaration index bound exceeded.");
                 }
             }
         }
@@ -433,12 +445,54 @@ sealed class Reflection {
             throw new InvalidDataException("Function parameter/header bounds disagree.");
         return new(Name(p), Bytes.U32(h, o), size, ret, parameters);
     }
-    public List<ClassDeclaration> Capture() => classes.OrderBy(k => k.Key).Select(k => {
-        var children = Children(k.Value).ToArray(); ulong super = Bytes.U64(memory.Read(k.Value + (ulong)ChildrenOffset - 8, 8), 0);
-        return new ClassDeclaration(k.Key, super == 0 ? null : Name(super),
-            children.Where(p => Type(p).EndsWith("Property", StringComparison.Ordinal)).Select(Property).ToList(),
-            children.Where(p => Type(p) == "Function").Select(Function).ToList(), Type(k.Value));
-    }).ToList();
+    public List<ClassDeclaration> Capture() {
+        var pending = new Queue<ulong>(); var selected = new Dictionary<ulong, ClassDeclaration>();
+        var inheritance = new Dictionary<ulong, ulong>();
+        foreach (var root in Allowlist.Concat(DependencyClasses).Concat(DependencyStructs).Concat(MerchantRoots).Distinct())
+            if (classes.TryGetValue(root, out var address) && Type(address) == (DependencyStructs.Contains(root) ? "ScriptStruct" : "Class")) pending.Enqueue(address);
+        while (pending.TryDequeue(out var address)) {
+            if (selected.ContainsKey(address)) continue;
+            if (selected.Count >= MaxNativeDeclarations) throw new InvalidDataException("Native dependency closure bound exceeded.");
+            string kind = Type(address), name = Name(address);
+            if (kind is not "Class" and not "ScriptStruct" || !classes.TryGetValue(name, out var registered) || registered != address)
+                throw new InvalidDataException("Unregistered native dependency declaration.");
+            var children = Children(address).ToArray();
+            ulong super = Bytes.U64(memory.Read(address + (ulong)ChildrenOffset - 8, 8), 0);
+            var declaration = new ClassDeclaration(name, super == 0 ? null : Name(super),
+                children.Where(p => Type(p).EndsWith("Property", StringComparison.Ordinal)).Select(Property).ToList(),
+                children.Where(p => Type(p) == "Function").Select(Function).ToList(), kind);
+            selected.Add(address, declaration);
+            if (super != 0) {
+                if (Type(super) != kind) throw new InvalidDataException("Native superclass kind mismatch.");
+                inheritance[address] = super;
+                var path = new HashSet<ulong>(); ulong ancestor = address;
+                while (inheritance.TryGetValue(ancestor, out var parent)) {
+                    if (!path.Add(ancestor)) throw new InvalidDataException("Cyclic native inheritance.");
+                    ancestor = parent;
+                }
+                Enqueue(super);
+            }
+            foreach (var property in declaration.Fields.Concat(declaration.Functions.SelectMany(f => f.Parameters))) FollowStructs(property);
+        }
+        return selected.Values.OrderBy(d => d.Name).ToList();
+
+        void Enqueue(ulong dependency) {
+            if (!Bytes.Pointer(dependency)) throw new InvalidDataException("Invalid native dependency pointer.");
+            var owner = Bytes.U64(memory.Read(dependency + 32, 8), 0);
+            if (owner != 0 && Name(owner) == "/Script/Dungeons") pending.Enqueue(dependency);
+            // External engine types retain their qualified references, but are
+            // deliberately outside this game's bounded dependency closure.
+        }
+        void FollowStructs(PropertyDeclaration property) {
+            if (property.Type == "StructProperty" && property.Target?.StartsWith("/Script/Dungeons.", StringComparison.Ordinal) == true) {
+                var name = property.Target["/Script/Dungeons.".Length..];
+                if (!classes.TryGetValue(name, out var dependency) || Type(dependency) != "ScriptStruct")
+                    throw new InvalidDataException("Missing native struct dependency: " + name);
+                pending.Enqueue(dependency);
+            }
+            if (property.Inner != null) FollowStructs(property.Inner);
+        }
+    }
     public List<EnumDeclaration> CaptureEnums() => referencedEnums.OrderBy(k => k.Key).Select(k => {
         // Epic UE4.22.3 Class.h: UField (0x30), FString CppType (0x10),
         // then TArray<TPair<FName,int64>> Names. Preserve numeric values;

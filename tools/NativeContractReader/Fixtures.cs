@@ -138,6 +138,29 @@ static class Fixtures {
             if (Reflection.Discover(a, [a.Region]).Capture().Any(d => d.Name == "InventoryItemData"))
                 throw new Exception("Wrong-kind dependency admitted.");
         });
+        Check("transitive parent and nested pricing structs", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.AddDependencyClosure();
+            var declarations = Reflection.Discover(a, [a.Region]).Capture();
+            foreach (var name in new[] { "MerchantSlotTransactionBase", "MerchantPricing", "PricingRule" })
+                if (declarations.Count(d => d.Name == name) != 1) throw new Exception("Transitive dependency absent/duplicated: " + name);
+            if (declarations.Any(d => d.Name == "UnrelatedNativeType")) throw new Exception("Unrelated declaration exported.");
+        });
+        Reject("cyclic native inheritance", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.AddDependencyClosure(cycle: true);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
+        Reject("native parent wrong kind", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.AddDependencyClosure(wrongParent: true);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
+        Reject("native struct dependency wrong kind", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.AddDependencyClosure(wrongStruct: true);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
+        Reject("dependency closure exceeds declaration budget", () => {
+            var a = new Arena(0x98); a.AddUpgradeDependencies(); a.AddDependencyClosure(depth: 130);
+            Reflection.Discover(a, [a.Region]).Capture();
+        });
         Check("only query/read rights", () => { if (ProcessMemory.Access != 0x0410) throw new Exception("Unexpected process rights."); });
         Check("large numeric noise filtered before table limit", () => {
             var a = new Arena(0x98);
@@ -179,7 +202,7 @@ sealed class Arena : IRegionMemory {
     public const ulong ModuleAddress = Base + 0x80000;
     public ModuleRegion Region { get { Module.CopyTo(Raw, (int)(ModuleAddress - Base)); return new(ModuleAddress, Module); } }
     readonly ulong table = Base + 0x1000, names = Base + 0x2000, chunks = Base + 0x30000, items = Base + 0x31000;
-    ulong next = Base + 0x40000, nameNext = Base + 0x60000;
+    ulong next = Base + 0x40000, nameNext = Base + 0x100000;
     int objects, namesCount;
     readonly int numParmsDelta, childrenOffset, targetOffset, charactersOffset, nameCapacity;
     readonly Dictionary<string, int> ids = new();
@@ -296,6 +319,28 @@ sealed class Arena : IRegionMemory {
             U64(DependencyEnumEntries + (ulong)entry * 16 + 8, (ulong)value); entry++;
         }
         U64(DependencyEnum + 0x40, DependencyEnumEntries); I32(DependencyEnum + 0x48, 3); I32(DependencyEnum + 0x4c, 3);
+        I32(table + (ulong)nameCapacity * 8, namesCount);
+        BitConverter.GetBytes(Math.Max(100, objects)).CopyTo(Module, 84);
+    }
+    public void AddDependencyClosure(bool cycle = false, bool wrongParent = false, bool wrongStruct = false, int depth = 1) {
+        ulong Find(string name) => Enumerable.Range(0, objects).Select(i => Bytes.U64(Read(items + (ulong)i * 24, 8), 0))
+            .Single(p => Bytes.I32(Read(p + 24, 4), 0) == ids[name]);
+        var classClass = Bytes.U64(Read(StructClass + 16, 8), 0);
+        var transaction = Find("InventoryItemSlotTransactionBase");
+        var package = Bytes.U64(Read(transaction + 32, 8), 0);
+        var parent = Obj("MerchantSlotTransactionBase", wrongParent ? StructClass : classClass, package);
+        U64(transaction + (ulong)childrenOffset - 8, parent);
+        if (cycle) U64(parent + (ulong)childrenOffset - 8, transaction);
+        var pricing = Obj("MerchantPricing", wrongStruct ? classClass : StructClass, package);
+        var display = Find("MerchantDisplayPrice");
+        U64(display + (ulong)childrenOffset, Prop("Pricing", "StructProperty", display, 8, 0, 0, pricing));
+        ulong previous = pricing;
+        for (int i = 0; i < depth; i++) {
+            var nested = Obj(i == 0 ? "PricingRule" : "PricingRule" + i, StructClass, package);
+            U64(previous + (ulong)childrenOffset, Prop("Rule", "StructProperty", previous, 8, 0, 0, nested));
+            previous = nested;
+        }
+        Obj("UnrelatedNativeType", classClass, package);
         I32(table + (ulong)nameCapacity * 8, namesCount);
         BitConverter.GetBytes(Math.Max(100, objects)).CopyTo(Module, 84);
     }

@@ -64,6 +64,7 @@ class CampSmithTests(unittest.TestCase):
                                 capture_output=True, text=True, timeout=120)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn('Four selected-item graph rejection checks passed', result.stdout)
+        self.assertIn('Four native record contract rejection checks passed', result.stdout)
 
     def test_missing_sources_create_no_output(self):
         with tempfile.TemporaryDirectory() as folder:

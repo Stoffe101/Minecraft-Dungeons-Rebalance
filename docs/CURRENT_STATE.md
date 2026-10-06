@@ -1,8 +1,8 @@
 # Current state
 
-Updated 2026-10-06 after the first successful retail declaration capture and native Unique presentation implementation; full Camp upgrade integration remains unfinished.
+Updated 2026-10-06 after successful v4 retail capture and native record validation.
 
-**Latest research: capture 133711 succeeded, all 18 requested classes present. Native name/icon/description functions are generated in the cloned Uniquesmith widget, and selected-item/full-record readers are generated in all three smith screens. These functions are not yet wired to a choice list or Camp dispatch. Paid services remain unfinished; the usable gameplay PAK is still HuntsEconomy-Test-v2.**
+**Latest capture 142012 succeeded: 29 requested types and 16 referenced enums, no missing requested dependencies. Native record and sparse enum checks now gate Camp asset staging. Six real-source staging tests pass, including 15 rejection checks. Paid upgrades, Camp placement and the Unique picker remain unfinished; the playable PAK remains HuntsEconomy-Test-v2.**
 
 **First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; gold chests are accepted by user confirmation, and one urn payout of +25 emeralds was observed. Hunt progression and broader reward coverage remain unverified.**
 
@@ -175,3 +175,11 @@ Source ebecf590f3fd055db8697e4dc7444441d7e16c9a: native reader workflow 37476889
 Downloaded artifact 11419715783 and matched its outer SHA-256 6d3df97af71a5b8464bd3887cd737dafdd9e3f7b04f79924f501c13434e7dc05 before extraction. NativeCollector-v4.zip is 124,625 bytes, nine entries, SHA-256 696d52d3eeff3ad42bff8a3a984a2fc2ed48204051c16a2069f20b5e226a5a4d; DLL SHA-256 7c3b00513caec5c8c49f341be5bc57f03eb15775812674e6865404448c77155a. Both ZIP integrity checks passed, and bundle README includes the new dependency and enum scope. Compiled research bundle made available for private testing; no game assets or loader included. This is not a gameplay PAK.
 
 Required next input: one v4 dependency capture with Dungeons at Camp, using the same PowerShell command from a fresh extracted v4 folder. The original successful v3 capture is retained/accepted. Newly targeted inherited transaction APIs, full record field dimensions and enum identities/values are the remaining declaration input; native payment/mutation/save behavior then still requires implementation and gameplay acceptance. No paid upgrade or shared-gold completion is claimed.
+
+## Successful v4 capture and transitive merchant research
+
+Accepted native-contracts-20261006-142012.zip (SHA-256 23f8c58f7c46b7df653281ee9942fb445fe40de71fee3a4a17ba965fffba8d99): controls pass, all 29 requested types and 16 enums present, no gameplay calls or game writes. This supersedes the pending v4 input statements above; those remain historical. Reviewed full item fields, wallet calls, merchant parents and Tower UI enums. Native selected-record helpers now verify the real SerializableItemId.SerializedId offset (12), both array element types, native item flags/gilded record fields and actual sparse enum values. Four additional corruption checks pass. The selected embedded contract manifest now derives from this accepted capture.
+
+Newly exposed dependencies are MerchantSlotTransactionBase, MerchantPricing, MerchantBase and ItemSlot. Collector source now follows native parents and nested structs automatically (128 declarations maximum), with nine additional roots taken from observed merchant package imports. It excludes unrelated declarations, external engine declaration bodies and object-instance values; the original global read/time limits remain. Five new closure tests pass; total local collector checks: 62. A new Windows bundle will be released only after CI verification.
+
+Next: resolve native merchant factory/selection/pricing APIs using the bounded closure, then implement native outcome enumeration and paid execution, wire the picker and Camp dispatch, and test balances, item preservation, repeat upgrades and reloads in retail. Declaration collection alone cannot establish native behavior. No new gameplay PAK or smith completion is claimed.

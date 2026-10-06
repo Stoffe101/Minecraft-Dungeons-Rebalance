@@ -1,13 +1,263 @@
 {
   "schema": "rebalance-native-upgrade-contracts-v1",
-  "sourceArchiveSha256": "8a1f35ed7fa5592dcd23f6cc38fd2790a787ae1bb28315f97d7fc97b23443055",
+  "sourceArchiveSha256": "23f8c58f7c46b7df653281ee9942fb445fe40de71fee3a4a17ba965fffba8d99",
   "sourceCaptureCompleted": true,
   "controlContractsPassed": true,
   "upgradeSemanticsVerified": false,
   "Classes": [
     {
+      "Name": "ArmorPropertyData",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "ID",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EArmorPropertyID",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 0,
+          "Flags": 6755469234274820,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "Rarity",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EItemRarity",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 1,
+          "Flags": 6755469234274836,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "EnchantmentData",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "TypeID",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EEnchantmentTypeID",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 0,
+          "Flags": 6755469234274821,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "Level",
+          "Type": "IntProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 4,
+          "Flags": 6755469234274821,
+          "Inner": null
+        },
+        {
+          "Name": "Category",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EEnchantmentCategory",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 8,
+          "Flags": 6755469234274821,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "Source",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EEnchantmentSource",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 9,
+          "Flags": 6755469234274821,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "InvestedPoints",
+          "Type": "IntProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 12,
+          "Flags": 6755469234274821,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
       "Name": "InventoryItem",
       "Super": "Object",
+      "Fields": [
+        {
+          "Name": "Item",
+          "Type": "StructProperty",
+          "Target": "/Script/Dungeons.InventoryItemData",
+          "ArrayDim": 1,
+          "Size": 120,
+          "Offset": 40,
+          "Flags": 4503599627370516,
+          "Inner": null
+        },
+        {
+          "Name": "Meta",
+          "Type": "StructProperty",
+          "Target": "/Script/Dungeons.InventoryItemMetaData",
+          "ArrayDim": 1,
+          "Size": 2,
+          "Offset": 160,
+          "Flags": 4503668346847252,
+          "Inner": null
+        },
+        {
+          "Name": "OnItemChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 168,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "OnItemEnchantmentChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 184,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "OnMetaChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 200,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "OnItemEnchanted",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 216,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "DisplayCharacteristics",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 256,
+          "Flags": 18014398509482496,
+          "Inner": {
+            "Name": "DisplayCharacteristics",
+            "Type": "StructProperty",
+            "Target": "/Script/Dungeons.ItemCharacteristic",
+            "ArrayDim": 1,
+            "Size": 48,
+            "Offset": 0,
+            "Flags": 0,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "DisplayBulletPoints",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 272,
+          "Flags": 18014398509482496,
+          "Inner": {
+            "Name": "DisplayBulletPoints",
+            "Type": "StructProperty",
+            "Target": "/Script/Dungeons.ItemBulletPoint",
+            "ArrayDim": 1,
+            "Size": 48,
+            "Offset": 0,
+            "Flags": 0,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "DisplayPowerEffects",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 288,
+          "Flags": 18014398509482496,
+          "Inner": {
+            "Name": "DisplayPowerEffects",
+            "Type": "TextProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 24,
+            "Offset": 0,
+            "Flags": 0,
+            "Inner": null
+          }
+        }
+      ],
       "Functions": [
         {
           "Name": "TryUpgradeItem",
@@ -22,7 +272,8 @@
               "ArrayDim": 1,
               "Size": 1,
               "Offset": 0,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         },
@@ -39,7 +290,8 @@
               "ArrayDim": 1,
               "Size": 16,
               "Offset": 0,
-              "Flags": 4503668481065346
+              "Flags": 4503668481065346,
+              "Inner": null
             },
             {
               "Name": "ReturnValue",
@@ -48,7 +300,8 @@
               "ArrayDim": 1,
               "Size": 1,
               "Offset": 16,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         },
@@ -65,26 +318,255 @@
               "ArrayDim": 1,
               "Size": 1,
               "Offset": 0,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         }
       ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "InventoryItemData",
+      "Super": null,
       "Fields": [
         {
-          "Name": "Item",
+          "Name": "ItemId",
           "Type": "StructProperty",
-          "Target": "/Script/Dungeons.InventoryItemData",
+          "Target": "/Script/Dungeons.SerializableItemId",
           "ArrayDim": 1,
-          "Size": 120,
+          "Size": 20,
+          "Offset": 0,
+          "Flags": 11267795161448453,
+          "Inner": null
+        },
+        {
+          "Name": "ItemPower",
+          "Type": "FloatProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 20,
+          "Flags": 6755469234274821,
+          "Inner": null
+        },
+        {
+          "Name": "Enchantments",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 24,
+          "Flags": 4503599627371029,
+          "Inner": {
+            "Name": "Enchantments",
+            "Type": "StructProperty",
+            "Target": "/Script/Dungeons.EnchantmentData",
+            "ArrayDim": 1,
+            "Size": 16,
+            "Offset": 0,
+            "Flags": 68719476736,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "ArmorProperties",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
           "Offset": 40,
-          "Flags": 4503599627370516
+          "Flags": 4503599627371029,
+          "Inner": {
+            "Name": "ArmorProperties",
+            "Type": "StructProperty",
+            "Target": "/Script/Dungeons.ArmorPropertyData",
+            "ArrayDim": 1,
+            "Size": 2,
+            "Offset": 0,
+            "Flags": 68719476736,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "Rarity",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.EItemRarity",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 56,
+          "Flags": 6755469234274821,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "bIsUpgraded",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 57,
+          "Flags": 6755469234274837,
+          "Inner": null
+        },
+        {
+          "Name": "bIsGifted",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 58,
+          "Flags": 6755469234274837,
+          "Inner": null
+        },
+        {
+          "Name": "bIsModified",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 59,
+          "Flags": 6755469234274837,
+          "Inner": null
+        },
+        {
+          "Name": "timesModified",
+          "Type": "IntProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 60,
+          "Flags": 6755469234274837,
+          "Inner": null
+        },
+        {
+          "Name": "bHasNetherite",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 96,
+          "Flags": 20266268116386304,
+          "Inner": null
+        },
+        {
+          "Name": "NetheriteEnchantData",
+          "Type": "StructProperty",
+          "Target": "/Script/Dungeons.EnchantmentData",
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 100,
+          "Flags": 18014467228958720,
+          "Inner": null
         }
-      ]
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "InventoryItemMetaData",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "MarkedNew",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 0,
+          "Flags": 6755469234274837,
+          "Inner": null
+        },
+        {
+          "Name": "Cloned",
+          "Type": "BoolProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 1,
+          "Flags": 6755469234274837,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "InventoryItemSlot",
+      "Super": "Object",
+      "Fields": [
+        {
+          "Name": "SlotType",
+          "Type": "EnumProperty",
+          "Target": "/Script/Dungeons.ESlotType",
+          "ArrayDim": 1,
+          "Size": 1,
+          "Offset": 44,
+          "Flags": 6755469234274836,
+          "Inner": {
+            "Name": "UnderlyingType",
+            "Type": "ByteProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 1,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "Item",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.InventoryItem",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 48,
+          "Flags": 6755469234274836,
+          "Inner": null
+        },
+        {
+          "Name": "OldItem",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.InventoryItem",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 56,
+          "Flags": 6755469234274816,
+          "Inner": null
+        },
+        {
+          "Name": "OnSlotLockedChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 72,
+          "Flags": 4503599896330752,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "Class"
+    },
+    {
+      "Name": "InventoryItemSlotTransactionBase",
+      "Super": "MerchantSlotTransactionBase",
+      "Fields": [],
+      "Functions": [],
+      "Kind": "Class"
     },
     {
       "Name": "ItemFunctionLibrary",
       "Super": "BlueprintFunctionLibrary",
+      "Fields": [],
       "Functions": [
         {
           "Name": "GetNameForItemType",
@@ -99,7 +581,8 @@
               "ArrayDim": 1,
               "Size": 20,
               "Offset": 0,
-              "Flags": 6755399575273858
+              "Flags": 6755399575273858,
+              "Inner": null
             },
             {
               "Name": "ReturnValue",
@@ -108,7 +591,8 @@
               "ArrayDim": 1,
               "Size": 24,
               "Offset": 24,
-              "Flags": 4503599627371904
+              "Flags": 4503599627371904,
+              "Inner": null
             }
           ]
         },
@@ -125,7 +609,8 @@
               "ArrayDim": 1,
               "Size": 20,
               "Offset": 0,
-              "Flags": 6755399575273858
+              "Flags": 6755399575273858,
+              "Inner": null
             },
             {
               "Name": "ReturnValue",
@@ -134,7 +619,8 @@
               "ArrayDim": 1,
               "Size": 1,
               "Offset": 20,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         },
@@ -151,7 +637,8 @@
               "ArrayDim": 1,
               "Size": 20,
               "Offset": 0,
-              "Flags": 6755399575273858
+              "Flags": 6755399575273858,
+              "Inner": null
             },
             {
               "Name": "ReturnValue",
@@ -160,7 +647,8 @@
               "ArrayDim": 1,
               "Size": 8,
               "Offset": 24,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         },
@@ -177,7 +665,8 @@
               "ArrayDim": 1,
               "Size": 20,
               "Offset": 0,
-              "Flags": 6755399575273858
+              "Flags": 6755399575273858,
+              "Inner": null
             },
             {
               "Name": "ReturnValue",
@@ -186,15 +675,151 @@
               "ArrayDim": 1,
               "Size": 24,
               "Offset": 24,
-              "Flags": 4503599627371904
+              "Flags": 4503599627371904,
+              "Inner": null
             }
           ]
         }
-      ]
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantDef",
+      "Super": "Object",
+      "Fields": [
+        {
+          "Name": "MerchantClass",
+          "Type": "ClassProperty",
+          "Target": "/Script/Dungeons.MerchantBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 40,
+          "Flags": 12393764861510144,
+          "Inner": null
+        },
+        {
+          "Name": "UnlockProgressKey",
+          "Type": "StrProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 48,
+          "Flags": 11267795161448960,
+          "Inner": null
+        },
+        {
+          "Name": "GenerationLevelProgressKeys",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 64,
+          "Flags": 9015995347763712,
+          "Inner": {
+            "Name": "GenerationLevelProgressKeys",
+            "Type": "StrProperty",
+            "Target": null,
+            "ArrayDim": 1,
+            "Size": 16,
+            "Offset": 0,
+            "Flags": 2251799813685760,
+            "Inner": null
+          }
+        },
+        {
+          "Name": "DisplayName",
+          "Type": "TextProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 24,
+          "Offset": 80,
+          "Flags": 9015995347763200,
+          "Inner": null
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "GetDisplayName",
+          "Flags": 1409418241,
+          "ParameterSize": 24,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "TextProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 24,
+              "Offset": 0,
+              "Flags": 4503599761589634,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantDisplayPrice",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "Pricing",
+          "Type": "StructProperty",
+          "Target": "/Script/Dungeons.MerchantPricing",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 0,
+          "Flags": 4503668346847252,
+          "Inner": null
+        },
+        {
+          "Name": "CurrencyItemId",
+          "Type": "StructProperty",
+          "Target": "/Script/Dungeons.SerializableItemId",
+          "ArrayDim": 1,
+          "Size": 20,
+          "Offset": 8,
+          "Flags": 6755399441055764,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "MerchantSubobjectBase",
+      "Super": "Object",
+      "Fields": [
+        {
+          "Name": "mMerchant",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.MerchantBase",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 40,
+          "Flags": 11267864954667520,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "Class"
     },
     {
       "Name": "MerchantTransactionBase",
       "Super": "MerchantSubobjectBase",
+      "Fields": [
+        {
+          "Name": "OnMerchantTransactionChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 72,
+          "Flags": 4503599896330752,
+          "Inner": null
+        }
+      ],
       "Functions": [
         {
           "Name": "TryExecute",
@@ -209,7 +834,8 @@
               "ArrayDim": 1,
               "Size": 1,
               "Offset": 0,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         },
@@ -226,7 +852,8 @@
               "ArrayDim": 1,
               "Size": 120,
               "Offset": 0,
-              "Flags": 4503599761588610
+              "Flags": 4503599761588610,
+              "Inner": null
             }
           ]
         },
@@ -243,7 +870,8 @@
               "ArrayDim": 1,
               "Size": 28,
               "Offset": 0,
-              "Flags": 4503599627371904
+              "Flags": 4503599627371904,
+              "Inner": null
             }
           ]
         },
@@ -260,15 +888,151 @@
               "ArrayDim": 1,
               "Size": 1,
               "Offset": 0,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
         }
-      ]
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "ProblemStatus",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "problem",
+          "Type": "TextProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 24,
+          "Offset": 0,
+          "Flags": 4503599627370501,
+          "Inner": null
+        },
+        {
+          "Name": "remedy",
+          "Type": "TextProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 24,
+          "Offset": 24,
+          "Flags": 4503599627370501,
+          "Inner": null
+        },
+        {
+          "Name": "progress",
+          "Type": "TextProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 24,
+          "Offset": 48,
+          "Flags": 4503599627370501,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "SerializableItemId",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "SerializedId",
+          "Type": "NameProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 12,
+          "Flags": 20266268116451841,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
+    },
+    {
+      "Name": "TowerFloorItemUpgrades",
+      "Super": null,
+      "Fields": [
+        {
+          "Name": "mFloorNumber",
+          "Type": "IntProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 4,
+          "Offset": 0,
+          "Flags": 6755469234274820,
+          "Inner": null
+        },
+        {
+          "Name": "mRewards",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 8,
+          "Flags": 4503599627371012,
+          "Inner": {
+            "Name": "mRewards",
+            "Type": "ObjectProperty",
+            "Target": "/Script/Dungeons.InventoryItem",
+            "ArrayDim": 1,
+            "Size": 8,
+            "Offset": 0,
+            "Flags": 2251869606904320,
+            "Inner": null
+          }
+        }
+      ],
+      "Functions": [],
+      "Kind": "ScriptStruct"
     },
     {
       "Name": "WalletComponent",
       "Super": "ActorComponent",
+      "Fields": [
+        {
+          "Name": "OnCountReplicated",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 248,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "OnDisplayCountChanged",
+          "Type": "MulticastDelegateProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 264,
+          "Flags": 4503599896330752,
+          "Inner": null
+        },
+        {
+          "Name": "mCurrencySlots",
+          "Type": "ArrayProperty",
+          "Target": null,
+          "ArrayDim": 1,
+          "Size": 16,
+          "Offset": 304,
+          "Flags": 9016545103643145,
+          "Inner": {
+            "Name": "mCurrencySlots",
+            "Type": "ObjectProperty",
+            "Target": "/Script/Dungeons.ItemSlot",
+            "ArrayDim": 1,
+            "Size": 8,
+            "Offset": 0,
+            "Flags": 2251869607428616,
+            "Inner": null
+          }
+        }
+      ],
       "Functions": [
         {
           "Name": "Deduct",
@@ -283,7 +1047,8 @@
               "ArrayDim": 1,
               "Size": 20,
               "Offset": 0,
-              "Flags": 6755399575273858
+              "Flags": 6755399575273858,
+              "Inner": null
             },
             {
               "Name": "Amount",
@@ -292,7 +1057,8 @@
               "ArrayDim": 1,
               "Size": 4,
               "Offset": 20,
-              "Flags": 6755469234274944
+              "Flags": 6755469234274944,
+              "Inner": null
             }
           ]
         },
@@ -309,7 +1075,8 @@
               "ArrayDim": 1,
               "Size": 20,
               "Offset": 0,
-              "Flags": 6755399575273858
+              "Flags": 6755399575273858,
+              "Inner": null
             },
             {
               "Name": "ReturnValue",
@@ -318,25 +1085,160 @@
               "ArrayDim": 1,
               "Size": 4,
               "Offset": 20,
-              "Flags": 6755469234276224
+              "Flags": 6755469234276224,
+              "Inner": null
             }
           ]
+        }
+      ],
+      "Kind": "Class"
+    }
+  ],
+  "sourceCapture": "native-contracts-20261006-142012.zip",
+  "upgradeDependencyDeclarationsComplete": true,
+  "Enums": [
+    {
+      "Name": "/Script/Dungeons.ECurrencyObtainReason",
+      "Values": [
+        {
+          "Name": "ECurrencyObtainReason::Default",
+          "NameNumber": 0,
+          "Value": 0
+        },
+        {
+          "Name": "ECurrencyObtainReason::Salvaged",
+          "NameNumber": 0,
+          "Value": 1
+        },
+        {
+          "Name": "ECurrencyObtainReason::Pickup",
+          "NameNumber": 0,
+          "Value": 2
+        },
+        {
+          "Name": "ECurrencyObtainReason::ECurrencyObtainReason_MAX",
+          "NameNumber": 0,
+          "Value": 3
         }
       ]
     },
     {
-      "Name": "InventoryItemSlot",
-      "Super": "Object",
-      "Functions": [],
-      "Fields": [
+      "Name": "/Script/Dungeons.EEnchantmentCategory",
+      "Values": [
         {
-          "Name": "Item",
-          "Type": "ObjectProperty",
-          "Target": "/Script/Dungeons.InventoryItem",
-          "ArrayDim": 1,
-          "Size": 8,
-          "Offset": 48,
-          "Flags": 6755469234274836
+          "Name": "EEnchantmentCategory::Unset",
+          "NameNumber": 0,
+          "Value": 0
+        },
+        {
+          "Name": "EEnchantmentCategory::Melee",
+          "NameNumber": 0,
+          "Value": 1
+        },
+        {
+          "Name": "EEnchantmentCategory::Ranged",
+          "NameNumber": 0,
+          "Value": 2
+        },
+        {
+          "Name": "EEnchantmentCategory::Aoe",
+          "NameNumber": 0,
+          "Value": 4
+        },
+        {
+          "Name": "EEnchantmentCategory::Armor",
+          "NameNumber": 0,
+          "Value": 8
+        },
+        {
+          "Name": "EEnchantmentCategory::Permanent",
+          "NameNumber": 0,
+          "Value": 64
+        },
+        {
+          "Name": "EEnchantmentCategory::EEnchantmentCategory_MAX",
+          "NameNumber": 0,
+          "Value": 65
+        }
+      ]
+    },
+    {
+      "Name": "/Script/Dungeons.EEnchantmentSource",
+      "Values": [
+        {
+          "Name": "EEnchantmentSource::Unset",
+          "NameNumber": 0,
+          "Value": 0
+        },
+        {
+          "Name": "EEnchantmentSource::Permanent",
+          "NameNumber": 0,
+          "Value": 1
+        },
+        {
+          "Name": "EEnchantmentSource::Generated",
+          "NameNumber": 0,
+          "Value": 2
+        },
+        {
+          "Name": "EEnchantmentSource::Netherite",
+          "NameNumber": 0,
+          "Value": 3
+        },
+        {
+          "Name": "EEnchantmentSource::Dust",
+          "NameNumber": 0,
+          "Value": 4
+        },
+        {
+          "Name": "EEnchantmentSource::EEnchantmentSource_MAX",
+          "NameNumber": 0,
+          "Value": 5
+        }
+      ]
+    },
+    {
+      "Name": "/Script/Dungeons.EItemRarity",
+      "Values": [
+        {
+          "Name": "EItemRarity::Common",
+          "NameNumber": 0,
+          "Value": 0
+        },
+        {
+          "Name": "EItemRarity::Rare",
+          "NameNumber": 0,
+          "Value": 1
+        },
+        {
+          "Name": "EItemRarity::Unique",
+          "NameNumber": 0,
+          "Value": 2
+        },
+        {
+          "Name": "EItemRarity::EItemRarity_MAX",
+          "NameNumber": 0,
+          "Value": 3
+        }
+      ]
+    },
+    {
+      "Name": "/Script/Dungeons.ETowerUIMerchantType",
+      "Values": [
+        {
+          "Name": "TowerComplete",
+          "NameNumber": 0,
+          "Value": 0
+        },
+        {
+          "Name": "TowerFloorComplete",
+          "NameNumber": 0,
+          "Value": 1
+        },
+        {
+          "Name": "ETowerUIMerchantType_MAX",
+          "NameNumber": 0,
+          "Value": 2
         }
       ]
     }
