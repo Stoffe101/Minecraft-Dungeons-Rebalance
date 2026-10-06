@@ -159,3 +159,9 @@ Used as the source of reusable internal tooling/research once a formal code audi
 - Microsoft [VirtualQueryEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualqueryex) and [MEMORY_BASIC_INFORMATION](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-memory_basic_information): read-only memory-region filtering; no additional handle rights.
 
 - Epic-authored UE4.22.3 [NameTypes.h](https://github.com/folgerwang/UnrealEngine/blob/99a530d4ccbe6bea1e8f49df20acfeb294006962/Engine/Source/Runtime/Core/Public/UObject/NameTypes.h) and [UObjectArray.h](https://github.com/folgerwang/UnrealEngine/blob/99a530d4ccbe6bea1e8f49df20acfeb294006962/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectArray.h): 256-slot name table and reserved-capacity behavior; layouts still require current independent native-control validation.
+
+## Camp spawn ABI — October 6 continuation
+
+Primary engine declaration reference: folgerwang/UnrealEngine UE4.22.3 snapshot pinned at 99a530d4ccbe6bea1e8f49df20acfeb294006962. Read Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h (GetAllActorsOfClass, BeginDeferredActorSpawnFromClass five parameters, FinishSpawningActor two); GameFramework/Actor.h (HasAuthority, SetReplicates(bool), K2_DestroyActor); Engine/EngineTypes.h (ESpawnActorCollisionHandlingMethod ordinal2). This is an engine ABI cross-check, not source for private Dungeons transaction semantics.
+
+Retail corroboration: existing metadata 015_BP_LootUrnBase has Actor.HasAuthority/K2_GetActorLocation; 012_BP_ChestOpenComponent has deferred spawn/finish and Add_VectorVector; 000_BP_PlayerController has MakeTransform. Existing native-calls index supplies InteractableComponent.DisableInteraction with zero arguments; successful v5 capture supplies MerchantActor.mInteractableComponent native object property. New authored offsets have no external placement-validation source.

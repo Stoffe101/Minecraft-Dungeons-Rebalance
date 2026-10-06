@@ -1,8 +1,10 @@
 # Current state
 
-Updated 2026-10-06 after successful v5 capture and native merchant screen integration.
+Updated 2026-10-06 after building CampPlacement-Test-v3.
 
-**Latest capture 145714 succeeded: 53 types and 26 enums, complete requested dependency closure. Three NPC actors now bind to owned Camp root screens, and those screens dispatch to their corresponding smith content while retaining the native item-choice flow. Nine package pairs reopen correctly; seven integration tests pass. These assets remain undeployed. Paid upgrades, repeatability, Camp placement and retail item/save behavior remain unresolved. No further collector is requested. The usable gameplay PAK remains HuntsEconomy-Test-v2.**
+**A new experimental Camp NPC placement PAK is available for game testing. It contains three native smith actor copies, owned merchant root/content screens, and a host-only spawn hook in Camp's existing lobby-chest Blueprint. Interactions and actor replication are deliberately disabled in this preview. Ten cooked package pairs reopen with exact parsed equality; nine real-source integration tests pass, including eight placement rejection checks. The 37-entry PAK passes integrity and exact unpack-byte verification. The accepted 100-emerald Camp chest reward is preserved. Paid/repeatable/persistent upgrades, explicit Unique picker and shared gold remain unfinished. No further collector is requested. See CAMP_PLACEMENT_TEST.md.**
+
+The successful v5 capture remains accepted: 53 types and 26 enums, complete requested dependency closure. Capture/tooling success does not establish native paid transactions or save behavior.
 
 **First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; gold chests are accepted by user confirmation, and one urn payout of +25 emeralds was observed. Hunt progression and broader reward coverage remain unverified.**
 
@@ -33,7 +35,7 @@ See BUILD_AND_TEST.md for installation, actual scope and runtime checklist.
 
 | Feature | State |
 | --- | --- |
-| Three Tower NPCs and paid smith services in Camp | Nine isolated actor/root/content packages wired; native choice/input graphs retained; Camp placement/payment/custom picker and retail behavior unfinished |
+| Three Tower NPCs and paid smith services in Camp | Ten package pairs in placement preview; host-only non-interactive NPC spawning implemented; paid services/picker/persistence and retail placement unverified |
 | Chest gold ranges | Implemented; user marked gold chests complete on October 6 (individual amounts not supplied) |
 | Completion 50 gold | Unfinished; reward writer not identified in supplied Blueprint graphs |
 | More enemies / Ancient waves / longer side paths | Implemented adaptation, retail untested |

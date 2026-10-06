@@ -73,6 +73,36 @@ class CampSmithTests(unittest.TestCase):
         self.assertIn('Four selected-item graph rejection checks passed', result.stdout)
         self.assertIn('Four native record contract rejection checks passed', result.stdout)
 
+    def test_host_only_noninteractive_placement_preview(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / 'preview'
+            result = subprocess.run([ARGS.dotnet, ARGS.stager, '--placement-preview', str(ARGS.source), str(output)],
+                                    capture_output=True, text=True, timeout=120)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            report = json.loads((output / 'CAMP_SMITH_STAGE_REPORT.json').read_text())
+            self.assertTrue(report['deployable'])
+            self.assertTrue(report['npcPreviewOnly'])
+            self.assertTrue(report['interactionsDisabledBySpawn'])
+            self.assertFalse(report['paidTransactionsImplemented'])
+            self.assertFalse(report['gameplayVerified'])
+            self.assertEqual(len(report['packages']), 10)
+            self.assertEqual(len(list(output.rglob('*.uasset'))), 10)
+            chest = next(p for p in report['packages'] if p.get('placementHook'))
+            self.assertTrue(chest['hostOnly'])
+            self.assertFalse(chest['replicated'])
+            for package in report['packages']:
+                self.assertTrue(package['semanticRoundTrip'])
+                for key, root, path_key in [('originalHashes', Path(ARGS.source), 'sourcePackage'),
+                                           ('outputHashes', output, 'clonePackage')]:
+                    for name, expected in package[key].items():
+                        self.assertEqual(hashlib.sha256((root / package[path_key]).with_name(name).read_bytes()).hexdigest(), expected)
+
+    def test_placement_rejects_unsafe_guards(self):
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-placement', str(ARGS.source)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Eight Camp placement rejection checks passed', result.stdout)
+
     def test_missing_sources_create_no_output(self):
         with tempfile.TemporaryDirectory() as folder:
             source, output = Path(folder) / 'empty', Path(folder) / 'stage'

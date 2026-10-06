@@ -1,5 +1,7 @@
 # Native asset research — 2026-10-05
 
+**Current milestone (October 6): CampPlacement-Test-v3 packages a host-only, non-interactive Camp spawn preview, retaining v2 economy/Hunt changes. Ten package pairs and nine integration tests pass; all 37 PAK entries integrity-test and unpack-compare exactly. Paid upgrades/picker/persistence/shared gold remain unfinished and no retail placement result exists. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier sections below record earlier passes.**
+
 ## Evidence actually available
 
 Inspected the user's October 4 Store archive catalog (131,164 entries), the prior inventory-only raw-source upload, and the QoL repository at `ce7002779f0b47db8986a2a230628399027f5586`. The archive catalog establishes paths, not package contents, callable native signatures, reward constants, or replication behavior. The 31-package inventory metadata export does not include Tower smith transactions or chest reward graphs. No retail game archives/executable are available in this workspace.

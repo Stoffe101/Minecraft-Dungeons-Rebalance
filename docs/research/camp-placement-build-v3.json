@@ -1,0 +1,222 @@
+{
+  "build": "CampPlacement-Test-v3",
+  "gameplayVerified": false,
+  "completeDesignImplemented": false,
+  "npcInteractionsEnabled": false,
+  "npcReplicated": false,
+  "paidTransactionsImplemented": false,
+  "pakSha256": "6f13bc4f04f2f5d4a4782803158e41943c29d647b98968cae2066a9495fd409a",
+  "pakBytes": 6075200,
+  "baselinePakSha256": "349181e2efaa8dfa6861133dab7286b03920dd469196de8b65cd5189f7c77b00",
+  "entries": [
+    {
+      "path": "Dungeons/Content/Content_DLC4/Decor/Prefab/Functional/GoldChests/BP_GoldChest_Rare.uasset",
+      "bytes": 7690,
+      "sha256": "0357655adc00674a926b50657bb7173d05d0bfb43e1cebb182343af0d8ed2943"
+    },
+    {
+      "path": "Dungeons/Content/Content_DLC4/Decor/Prefab/Functional/GoldChests/BP_GoldChest_Rare.uexp",
+      "bytes": 4405,
+      "sha256": "12f3412c06d9cb3aac91d4e71bf383ca5b7ef2afbf9466bd8136b0c71ed7f386"
+    },
+    {
+      "path": "Dungeons/Content/Content_DLC4/Decor/Prefab/Functional/GoldChests/BP_GoldChest_Small.uasset",
+      "bytes": 7688,
+      "sha256": "e2b6f7c32f20766b0a9a201583780e0875f5a3c586320116efb4df131345882e"
+    },
+    {
+      "path": "Dungeons/Content/Content_DLC4/Decor/Prefab/Functional/GoldChests/BP_GoldChest_Small.uexp",
+      "bytes": 4405,
+      "sha256": "c383ee4684d402e6b747ccabe85c03c7e0c6961550e06ec2e09908736e5579ce"
+    },
+    {
+      "path": "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset",
+      "bytes": 16656,
+      "sha256": "46f5e52d007f71935f8ed7bcf08715d79fb4fcec8e16de413cb57d7b7c67bbc0"
+    },
+    {
+      "path": "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uexp",
+      "bytes": 4750,
+      "sha256": "43adb1a2a610396c62acfb7965ffdb2ed273f4a61b6f46a882549e4aa5a19c0a"
+    },
+    {
+      "path": "Dungeons/Content/Decor/Prefabs/_Urns/LootUrnsBlueprints/BP_LootUrnBase.uasset",
+      "bytes": 13483,
+      "sha256": "05707061a6dd9983197f8cd4354f9e367fbacb31a51157009e30c785eed5a0be"
+    },
+    {
+      "path": "Dungeons/Content/Decor/Prefabs/_Urns/LootUrnsBlueprints/BP_LootUrnBase.uexp",
+      "bytes": 7984,
+      "sha256": "f505098d903cc0f7325520e4935722e4b5dd583991c6de3e82dd5a258fe2bad4"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampGildsmith.uasset",
+      "bytes": 6290,
+      "sha256": "7f7f280113a779d6609bea63ddcfc682298fd3b4a2b62c6dee5ee1153e60dd6f"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampGildsmith.uexp",
+      "bytes": 3014,
+      "sha256": "360425ffbce4876ffed0a650cf5621cffc067dfa77464ada9363bff89afe097e"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampPowersmith.uasset",
+      "bytes": 7397,
+      "sha256": "24c900a6054a56e8cd8c87190498db15cfb84f48097447d4969b7eba4c156d9f"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampPowersmith.uexp",
+      "bytes": 3356,
+      "sha256": "0f2e8da6c8a9d2696d12e6a705740d1098def0b20c1d49ba0422d8f8cbfc8654"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampUniquesmith.uasset",
+      "bytes": 6303,
+      "sha256": "8fbabbb487a3d9de2b99cc4952a88609c69a0397b4024eeb22fcd82d74facdef"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampUniquesmith.uexp",
+      "bytes": 3014,
+      "sha256": "39ea88b596ce9946945a5d19e0e106580eda879d7d15638b2409b6cc10b2e4b2"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmith.uasset",
+      "bytes": 142046,
+      "sha256": "817f21bfc601cc0ee4a0ba8946723bd92b55b6e628aa25d98d4c39a51572a0d4"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmith.uexp",
+      "bytes": 128475,
+      "sha256": "70e7fc167bd728012650527f2d34a2976034a9cf7419c872d08719e89c79e4e1"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmithContent.uasset",
+      "bytes": 640596,
+      "sha256": "da7cc6fae58a7a5d1f74a2d7a1212efef933f588e11f413646e063590db42617"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmithContent.uexp",
+      "bytes": 782600,
+      "sha256": "e80375657f92909117951def9567461a036611d47d241a0bb40a9caa48333f3d"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmith.uasset",
+      "bytes": 142050,
+      "sha256": "43931e4379cc94ac476cfdfaec552fb4e24a4fabc0590b50dcbd393422ca4d84"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmith.uexp",
+      "bytes": 128477,
+      "sha256": "31527927d6a4d460cf58e1eb588f7155b1a18ea1f20dfc17177f04a8b6db92e6"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmithContent.uasset",
+      "bytes": 693320,
+      "sha256": "108bf5465f856e788eb3d6d1ca25915c05bd6bca98ab89b541a27418a47f05c7"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmithContent.uexp",
+      "bytes": 840892,
+      "sha256": "6fdc92c6a89daba30e360ab5c58e5bbd8e38b230ed441ccbb114c13b4f5f36f4"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmith.uasset",
+      "bytes": 142054,
+      "sha256": "53a4adb4f5f61b1c4cf92f26aded8b9bc467bea188ffa3cfabaaaff342b609c6"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmith.uexp",
+      "bytes": 128479,
+      "sha256": "e02d620a00dcf49bddd6a4a22f68aca8c355a3318fc0a579955e5c8b56efffb4"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmithContent.uasset",
+      "bytes": 642415,
+      "sha256": "10e74d7854aeb85fbc63f079d7f1f85756a768578936abde6b91f98bd4a29d45"
+    },
+    {
+      "path": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmithContent.uexp",
+      "bytes": 783039,
+      "sha256": "c1e7ba6e05b714725e3b9964ada033caa4e8be797f6d36978dd63fd08df157e9"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/ancientdungeons.json",
+      "bytes": 56474,
+      "sha256": "17697e746138e23c76de4f0e115053b89f2cd9899bf494f2ab6f123997fc851b"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_basaltdeltas.json",
+      "bytes": 11322,
+      "sha256": "4a7bfe8a8f417735737e0a6b231bdeaeb2f38409164eeeb6d985a465ad33af71"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_creeperwoods.json",
+      "bytes": 151039,
+      "sha256": "97cacf69f528533a8d90306cb98d65d047368a347795d396222f6dcbbd9667d9"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_crimsonforest.json",
+      "bytes": 27960,
+      "sha256": "10731671ec3987d0e8e39a1225bd7f8a73e875708e4657dd213450a1f9da721d"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_deserttemple.json",
+      "bytes": 83874,
+      "sha256": "8347960849d9d69b01066891f94e975ad1e8eba3bbfb42cb3b02ba26248244cd"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_netherfortress.json",
+      "bytes": 57475,
+      "sha256": "1eb761d4685e5b5a10153d30b25a3821485da3982db43b67cbdf77a8be78b3d3"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_netherwastes.json",
+      "bytes": 126476,
+      "sha256": "c233fa6f36acf56175ea4a515245dd1e2a26c6a930cd5a9e10af6f0462de9eb3"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_soulsandvalley.json",
+      "bytes": 46243,
+      "sha256": "f5d469012687d8d7b9eba3d4832779a4e00135fedf44766b887adf8b2e086b83"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_spidercave.json",
+      "bytes": 41663,
+      "sha256": "6ea790efcf1e97e7d5ae4bf16548e45b9a6c3923adb9689c316f5257b5a02deb"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_warpedforest.json",
+      "bytes": 51734,
+      "sha256": "9ea57a0bbdf44b91b4d6e4d2f8bafb5a4985ce4a599d535fec66957074c02bb8"
+    },
+    {
+      "path": "Dungeons/Content/data/lovika/levels/hm_woodlandmansion.json",
+      "bytes": 123039,
+      "sha256": "88b917b5498112c6cef292a68dc21a893802268018f867f2dbadf11878f415d1"
+    }
+  ],
+  "replacedBaselineEntries": [
+    "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset",
+    "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uexp"
+  ],
+  "retainedBaselineEntries": 17,
+  "placementStageReportSha256": "e1b2dd3990f58ac91783d7899af6540c6ca6496d07b52f9e63da13c2f5ba8c5a",
+  "features": [
+    "normal gold chests 10-15",
+    "rare gold chests 20-30",
+    "base Loot Urn emerald drops 6-14",
+    "Camp emerald chest reward 100",
+    "adapted bounded Hunt mobs/sidepaths/arenas",
+    "26 Ancient encounter extra waves",
+    "experimental host-only Camp smith placement; interactions disabled"
+  ],
+  "excluded": [
+    "paid/repeatable/persistent smith upgrades",
+    "custom Unique picker",
+    "client NPC replication",
+    "shared gold",
+    "higher Ancient encounter selection chance",
+    "completion gold",
+    "global mob income rebalance"
+  ]
+}

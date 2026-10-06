@@ -153,3 +153,7 @@ Historical mcd-pe source at be646dcd82a689e24709b7abd4cff30fb60b7c9f was consult
 ## V5 merchant screen integration
 
 MerchantScreens.cs is project-owned. It modifies private copies of the supplied UMG_Merchant package and refers to the game's existing UMG_MerchantItemDecision widget, preserving its original decision/input graph and game assets. These private retail outputs are excluded from git and no new gameplay package is redistributed in this pass. Exact self-name relocation avoids accidentally renaming the original decision widget. No new third-party source or loader was added.
+
+## Camp placement preview — October 6
+
+SpawnGraph.cs adapts the same-owner Minecraft-Dungeons-QoL graph-building pattern under the user's explicit reuse authorization. CampPlacement's operation ordering/guards are authored here from observed retail calls and pinned engine declarations. Native meshes/materials/animations stay referenced by cloned retail actors; no game assets or engine header code are committed to the repository. The private user test PAK includes cloned supplied cooked assets. Better Ancient Hunt adaptation is unchanged and remains credited to Onetoeisenough. This preview requires no BlueprintLoader or UE4SS deployment.

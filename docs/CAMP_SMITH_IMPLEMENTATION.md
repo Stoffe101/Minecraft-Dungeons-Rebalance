@@ -1,5 +1,7 @@
 # Camp smith implementation
 
+**Current milestone (October 6): CampPlacement-Test-v3 packages a host-only, non-interactive Camp spawn preview, retaining v2 economy/Hunt changes. Ten package pairs and nine integration tests pass; all 37 PAK entries integrity-test and unpack-compare exactly. Paid upgrades/picker/persistence/shared gold remain unfinished and no retail placement result exists. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier sections below record earlier passes.**
+
 Updated October 6, 2026. Camp smiths are the user's highest implementation priority.
 
 ## Implemented asset foundation

@@ -1,5 +1,7 @@
 # Native integration gate
 
+**Current milestone (October 6): CampPlacement-Test-v3 packages a host-only, non-interactive Camp spawn preview, retaining v2 economy/Hunt changes. Ten package pairs and nine integration tests pass; all 37 PAK entries integrity-test and unpack-compare exactly. Paid upgrades/picker/persistence/shared gold remain unfinished and no retail placement result exists. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier sections below record earlier passes.**
+
 ## What this pass established
 
 `scripts/index_native_calls.py` indexes all 39 received cooked-package metadata reports: 247 observed native calls. The generated [table](research/native-calls.md) and [JSON](research/native-calls.json) retain import candidates, enclosing export/statement locations, receiver expressions, serialized arguments, return-property references and source metadata SHA-256 values. It rejects collector errors, broken reference chains and conflicting duplicate packages. It retains ambiguous function-name imports rather than choosing a class by guesswork.

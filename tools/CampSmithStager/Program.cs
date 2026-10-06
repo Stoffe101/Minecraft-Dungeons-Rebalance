@@ -5,11 +5,14 @@ using UAssetAPI.ExportTypes;
 using UAssetAPI.PropertyTypes.Objects;
 using UAssetAPI.UnrealTypes;
 
-// Private cooked-asset foundation, not a deployable merchant implementation.
+// Private cooked-asset foundation with an optional non-interactive placement preview.
 // Do not change native transaction flags, prices, or player inventory here.
 if (args.Length == 2 && args[0] == "--self-test-presentation") { UniquePresentation.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-selection") { SelectedItemReaders.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-screens") { MerchantScreens.SelfTest(args[1]); return; }
+if (args.Length == 2 && args[0] == "--self-test-placement") { CampPlacement.SelfTest(args[1]); return; }
+var placementPreview = args.Length == 3 && args[0] == "--placement-preview";
+if (placementPreview) args = args.Skip(1).ToArray();
 if (args.Length != 2) throw new ArgumentException("Usage: CampSmithStager <private-PatchSources-root> <fresh-private-output-root>");
 var source = Path.GetFullPath(args[0]);
 var output = Path.GetFullPath(args[1]);
@@ -63,6 +66,7 @@ var loaded = specs.Select(s => {
     return (Spec: s, Input: path, InputHashes: inputHashes, Asset: a, Changed: changed, OriginalFunctions: originalFunctions);
 }).ToArray();
 var screens = MerchantScreens.Prepare(source);
+var placement = placementPreview ? CampPlacement.Prepare(source) : null;
 Directory.CreateDirectory(output);
 try {
     var report = new List<object>();
@@ -112,8 +116,25 @@ try {
             addedPresentationFunctions = 0, addedSelectionReadFunctions = 0, functionCount = reread.Exports.OfType<FunctionExport>().Count(),
             nativeDecisionGraphsPreserved = true, contentDispatch = MerchantScreens.ClassPath(MerchantScreens.Content(screen.Service)) });
     }
+    if (placement != null) {
+        const string relative = "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset";
+        var path = Path.Combine(output, relative); Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        var original = Path.Combine(source, relative);
+        var hashes = new[] { original, Path.ChangeExtension(original, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash);
+        placement.Write(path); var expected = placement.SerializeJson();
+        var reread = new UAsset(path, EngineVersion.VER_UE4_22);
+        if (expected != reread.SerializeJson()) throw new InvalidDataException("Placement round-trip mismatch.");
+        CampPlacement.Validate(reread);
+        foreach (var (file, hash) in hashes)
+            if (Hash(Path.Combine(Path.GetDirectoryName(original)!, file)) != hash) throw new InvalidDataException("Camp chest source changed.");
+        report.Add(new { sourcePackage = relative, clonePackage = relative, nativeDefinition = (string?)null,
+            originalHashes = hashes, outputHashes = new[] { path, Path.ChangeExtension(path, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash),
+            semanticRoundTrip = true, placementHook = "ReceiveBeginPlay", hostOnly = true, replicated = false, interactionsDisabled = true });
+    }
     File.WriteAllText(Path.Combine(output, "CAMP_SMITH_STAGE_REPORT.json"), JsonConvert.SerializeObject(new {
-        status = "private_asset_foundation_only", deployable = false, campPlacementImplemented = false,
+        status = placementPreview ? "camp_placement_preview_only" : "private_asset_foundation_only", deployable = placementPreview,
+        gameplayVerified = false, campPlacementImplemented = placementPreview, npcPreviewOnly = placementPreview,
+        interactionsDisabledBySpawn = placementPreview,
         paidTransactionsImplemented = false, uniquePickerImplemented = false,
         uniquePresentationBindingsImplemented = true,
         selectedItemReadBindingsImplemented = true,
@@ -122,7 +143,7 @@ try {
         nativeDecisionFlowRetained = true,
         nativeTowerFlagsPreserved = true, packages = report
     }, Formatting.Indented));
-    Console.WriteLine("Staged and re-opened 3 NPCs, 3 content widgets and 3 merchant screens; no live paid Camp services enabled.");
+    Console.WriteLine($"Staged and re-opened {(placementPreview ? 10 : 9)} package pairs; no live paid Camp services enabled.");
 } catch {
     Directory.Delete(output, true);
     throw;
