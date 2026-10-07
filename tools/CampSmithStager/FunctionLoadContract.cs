@@ -1,6 +1,7 @@
 using UAssetAPI;
 using UAssetAPI.ExportTypes;
 using UAssetAPI.UnrealTypes;
+using UAssetAPI.FieldTypes;
 
 // Event-driven package loading must create a function only after its native
 // class/archetype are serialized. Match the supplied original Function exports.
@@ -31,7 +32,25 @@ static class FunctionLoadContract
     internal static void ValidateOwned(UAsset asset)
     {
         foreach (var function in asset.Exports.OfType<FunctionExport>().Where(f => f.ObjectName.ToString().StartsWith("Rebalance", StringComparison.Ordinal)))
+        {
             Validate(asset, function);
+            bool locals = false, outputs = false; int returns = 0;
+            foreach (var child in function.Children) {
+                if (!child.IsExport() || child.ToExport(asset) is not PropertyExport field)
+                    throw new InvalidDataException("Generated Function field must be an owned property.");
+                var p = field.Property;
+                if (p is UBoolProperty b && (b.ElementSize != 1 || !b.NativeBool))
+                    throw new InvalidDataException("Generated Boolean must serialize a one-byte native size.");
+                if (p.PropertyFlags.HasFlag(EPropertyFlags.CPF_Parm)) {
+                    if (locals) throw new InvalidDataException("Generated parameter follows a local.");
+                    outputs |= p.PropertyFlags.HasFlag(EPropertyFlags.CPF_OutParm);
+                    if (p.PropertyFlags.HasFlag(EPropertyFlags.CPF_ReturnParm)) returns++;
+                } else locals = true;
+            }
+            if (returns > 1 || outputs && !function.FunctionFlags.HasFlag(EFunctionFlags.FUNC_HasOutParms)
+                || locals && !function.FunctionFlags.HasFlag(EFunctionFlags.FUNC_HasDefaults))
+                throw new InvalidDataException("Generated Function signature/local initialization contract invalid.");
+        }
     }
     internal static void SelfTest(string source)
     {

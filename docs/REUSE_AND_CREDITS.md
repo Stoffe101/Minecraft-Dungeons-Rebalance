@@ -161,3 +161,7 @@ SpawnGraph.cs adapts the same-owner Minecraft-Dungeons-QoL graph-building patter
 ## Loading correction provenance
 
 Native Function archetype/dependency requirements were recovered by comparing supplied original packages and reading pinned UE4.22.3/UAssetAPI1.1.0 loading/writer code. FunctionLoadContract and minidump summary script are authored here; no engine code, SDK code or raw game binary is redistributed. Public SDK was naming-only research.
+
+## October 7 v6 reuse
+
+Under the user's explicit same-owner QoL reuse instruction, reviewed Minecraft-Dungeons-QoL ce7002779f0b47db8986a2a230628399027f5586: tools/CookedInventoryFeatures/Graph.cs's one-byte native Boolean factory and FunctionLayoutContracts.cs's parameter/local ordering and function flag validation. Rebalance's SpawnGraph extensions and FunctionLoadContract adapt that approach. PaidUpgradeGateway and PaidUpgradeButtons are authored here against the existing user capture and pinned engine declarations. No QoL cooked assets, SDK implementation, engine source or additional third-party loader is bundled. Native smith visuals/UI are private copies/references from the user's supplied retail assets. Better Ancient Hunt credit and the accepted v2 adaptation remain unchanged.

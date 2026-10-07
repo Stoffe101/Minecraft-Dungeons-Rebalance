@@ -239,12 +239,14 @@ static class CampPlacement
         Console.WriteLine("Ten Camp placement rejection checks passed.");
     }
     static FunctionExport Spawn(UAsset asset) => asset.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == "RebalanceSpawnCampSmiths");
-    static IEnumerable<KismetExpression> Flatten(IEnumerable<KismetExpression> expressions)
+    internal static IEnumerable<KismetExpression> Flatten(IEnumerable<KismetExpression> expressions)
     {
         foreach (var e in expressions) {
             yield return e;
             var children = e switch {
                 EX_CallMath c => c.Parameters, EX_FinalFunction f => f.Parameters,
+                EX_Return r => new[] { r.ReturnExpression }, EX_LetBool l => new[] { l.VariableExpression, l.AssignmentExpression },
+                EX_StructMemberContext s => new[] { s.StructExpression }, EX_DynamicCast c => new[] { c.Target },
                 EX_JumpIfNot j => new[] { j.BooleanExpression }, EX_Let l => new[] { l.Variable, l.Expression },
                 EX_LetObj l => new[] { l.VariableExpression, l.AssignmentExpression }, EX_Context c => new[] { c.ObjectExpression, c.ContextExpression },
                 _ => Array.Empty<KismetExpression>()

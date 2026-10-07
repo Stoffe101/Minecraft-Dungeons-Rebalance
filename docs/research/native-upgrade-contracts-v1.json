@@ -322,6 +322,24 @@
               "Inner": null
             }
           ]
+        },
+        {
+          "Name": "IsCloned",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
         }
       ],
       "Kind": "Class"
@@ -679,6 +697,72 @@
               "Inner": null
             }
           ]
+        },
+        {
+          "Name": "NotEqual_ItemTypeID",
+          "Flags": 339878913,
+          "ParameterSize": 41,
+          "ReturnOffset": 40,
+          "Parameters": [
+            {
+              "Name": "A",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858,
+              "Inner": null
+            },
+            {
+              "Name": "B",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 20,
+              "Flags": 6755399575273858,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 40,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "IsItemIdValid",
+          "Flags": 339878913,
+          "ParameterSize": 21,
+          "ReturnOffset": 20,
+          "Parameters": [
+            {
+              "Name": "Type",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.SerializableItemId",
+              "ArrayDim": 1,
+              "Size": 20,
+              "Offset": 0,
+              "Flags": 6755399575273858,
+              "Inner": null
+            },
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 20,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
         }
       ],
       "Kind": "Class"
@@ -877,6 +961,24 @@
         },
         {
           "Name": "CanExecute",
+          "Flags": 1409418241,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "HasPrice",
           "Flags": 1409418241,
           "ParameterSize": 1,
           "ReturnOffset": 0,
@@ -2468,6 +2570,78 @@
               "Size": 4,
               "Offset": 0,
               "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        }
+      ],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantBase",
+      "Super": "Info",
+      "Fields": [
+        {
+          "Name": "mMerchantCurrencyComponent",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.MerchantCurrencyComponent",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 1568,
+          "Flags": 11267864954675712,
+          "Inner": null
+        },
+        {
+          "Name": "mPlayerCharacterOwner",
+          "Type": "ObjectProperty",
+          "Target": "/Script/Dungeons.PlayerCharacter",
+          "ArrayDim": 1,
+          "Size": 8,
+          "Offset": 1576,
+          "Flags": 11267864954675712,
+          "Inner": null
+        }
+      ],
+      "Functions": [],
+      "Kind": "Class"
+    },
+    {
+      "Name": "MerchantItemSlotBase",
+      "Super": "MerchantSlotBase",
+      "Fields": [],
+      "Functions": [
+        {
+          "Name": "HasItem",
+          "Flags": 1409418240,
+          "ParameterSize": 1,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "BoolProperty",
+              "Target": null,
+              "ArrayDim": 1,
+              "Size": 1,
+              "Offset": 0,
+              "Flags": 6755469234276224,
+              "Inner": null
+            }
+          ]
+        },
+        {
+          "Name": "GetItem",
+          "Flags": 1409418241,
+          "ParameterSize": 120,
+          "ReturnOffset": 0,
+          "Parameters": [
+            {
+              "Name": "ReturnValue",
+              "Type": "StructProperty",
+              "Target": "/Script/Dungeons.InventoryItemData",
+              "ArrayDim": 1,
+              "Size": 120,
+              "Offset": 0,
+              "Flags": 4503599761589634,
               "Inner": null
             }
           ]

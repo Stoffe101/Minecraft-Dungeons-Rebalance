@@ -40,23 +40,36 @@ sealed class SpawnGraph
     internal FPackageIndex Package(string name) => Import("Package", name, new FPackageIndex(0));
     internal FPackageIndex Class(string package, string name) => Import("Class", name, Package(package));
     internal FPackageIndex Fn(FPackageIndex owner, string name) => Import("Function", name, owner);
-    internal PropertyExport Property(string name, string type, UProperty value)
+    internal PropertyExport Property(string name, string type, UProperty value, bool instance = false)
     {
         var field = (PropertyExport)Asset.Exports.OfType<PropertyExport>().First(p => p.Property is UObjectProperty).Clone();
-        field.ObjectName = new FName(Asset, name); field.OuterIndex = Index(Function);
+        field.ObjectName = new FName(Asset, name); field.OuterIndex = Index(instance ? Owner : Function);
         field.ClassIndex = Class("/Script/CoreUObject", type); field.SuperIndex = new FPackageIndex(0);
         field.SerialSize = field.SerialOffset = 0; Clear(field);
         field.TemplateIndex = Import(type, "Default__" + type, Package("/Script/CoreUObject"));
         value.ArrayDim = field.Property.ArrayDim; value.PropertyFlags = EPropertyFlags.CPF_None;
         value.RepNotifyFunc = new FName(Asset, "None"); field.Property = value;
         field.SerializationBeforeCreateDependencies.Add(field.ClassIndex); field.SerializationBeforeCreateDependencies.Add(field.TemplateIndex);
-        field.CreateBeforeCreateDependencies.Add(Index(Function));
+        field.CreateBeforeCreateDependencies.Add(field.OuterIndex);
         if (value is UStructProperty s) field.SerializationBeforeSerializationDependencies.Add(s.Struct);
         if (value is UObjectProperty o) field.CreateBeforeSerializationDependencies.Add(o.PropertyClass);
-        Asset.Exports.Add(field); Function.Children = Function.Children.Append(Index(field)).ToArray();
-        Function.SerializationBeforeSerializationDependencies.Add(Index(field)); return field;
+        Asset.Exports.Add(field);
+        if (instance) {
+            Owner.Children = Owner.Children.Append(Index(field)).ToArray();
+            Owner.SerializationBeforeSerializationDependencies.Add(Index(field));
+            Function.CreateBeforeSerializationDependencies.Add(Index(field));
+        } else {
+            Function.Children = Function.Children.Append(Index(field)).ToArray();
+            Function.SerializationBeforeSerializationDependencies.Add(Index(field));
+        }
+        return field;
     }
-    internal PropertyExport Object(string name, FPackageIndex type) => Property(name, "ObjectProperty", new UObjectProperty { PropertyClass = type });
+    internal PropertyExport Object(string name, FPackageIndex type, bool instance = false) => Property(name, "ObjectProperty", new UObjectProperty { PropertyClass = type }, instance);
+    internal PropertyExport Boolean(string name, bool instance = false) => Property(name, "BoolProperty", new UBoolProperty { ElementSize = 1, NativeBool = true }, instance);
+    internal PropertyExport Integer(string name) => Property(name, "IntProperty", new UIntProperty());
+    internal PropertyExport String(string name, bool instance = false) => Property(name, "StrProperty", new UStrProperty(), instance);
+    internal PropertyExport NativeStruct(string name, string type, bool instance = false) => Property(name, "StructProperty", new UStructProperty {
+        Struct = Import("ScriptStruct", type, Package("/Script/Dungeons")) }, instance);
     internal PropertyExport Struct(string name, string type) => Property(name, "StructProperty", new UStructProperty { Struct = Import("ScriptStruct", type, Package("/Script/CoreUObject")) });
     internal PropertyExport ActorArray(FPackageIndex actor, string name = "ExistingSmiths")
     {
@@ -67,7 +80,25 @@ sealed class SpawnGraph
         ((UArrayProperty)field.Property).Inner = Index(inner); field.SerializationBeforeSerializationDependencies.Add(Index(inner));
         return field;
     }
-    internal KismetExpression L(PropertyExport field) => new EX_LocalVariable { Variable = new KismetPropertyPointer(Index(field)) };
+    internal KismetExpression L(PropertyExport field) {
+        Function.CreateBeforeSerializationDependencies.Add(Index(field));
+        return field.OuterIndex.Index == Index(Owner).Index
+            ? new EX_InstanceVariable { Variable = new KismetPropertyPointer(Index(field)) }
+            : new EX_LocalVariable { Variable = new KismetPropertyPointer(Index(field)) };
+    }
+    internal KismetExpression Member(string package, string owner, string name, KismetExpression receiver, string propertyType = "ObjectProperty") => Context(receiver,
+        new EX_InstanceVariable { Variable = new KismetPropertyPointer(Import(propertyType, name, Class(package, owner))) });
+    internal KismetExpression StructMember(string owner, string name, string propertyType, KismetExpression record) => new EX_StructMemberContext {
+        StructMemberExpression = new KismetPropertyPointer(Import(propertyType, name, Import("ScriptStruct", owner, Package("/Script/Dungeons")))), StructExpression = record };
+    internal KismetExpression Native(string package, string owner, string name, KismetExpression receiver, params KismetExpression[] args) => Context(receiver,
+        new EX_FinalFunction { StackNode = Fn(Class(package, owner), name), Parameters = args });
+    internal KismetExpression Static(string package, string owner, string name, params KismetExpression[] args) => new EX_CallMath {
+        StackNode = Fn(Class(package, owner), name), Parameters = args };
+    internal KismetExpression Own(string name, params KismetExpression[] args) {
+        var target = Index(Asset.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == name));
+        Function.CreateBeforeSerializationDependencies.Add(target);
+        return new EX_LocalFinalFunction { StackNode = target, Parameters = args };
+    }
     internal KismetExpression Math(string owner, string name, params KismetExpression[] args) => new EX_CallMath { StackNode = Fn(Class("/Script/Engine", owner), name), Parameters = args };
     internal KismetExpression Context(KismetExpression receiver, KismetExpression expr, PropertyExport? result = null) => new EX_Context {
         ObjectExpression = receiver, ContextExpression = expr, Offset = (uint)Size(expr), RValuePointer = new KismetPropertyPointer(result == null ? new FPackageIndex(0) : Index(result))
@@ -75,7 +106,7 @@ sealed class SpawnGraph
     internal void Set(PropertyExport field, KismetExpression value)
     {
         if (value is EX_Context c) c.RValuePointer = new KismetPropertyPointer(Index(field));
-        Code.Add(field.Property is UObjectProperty ? new EX_LetObj { VariableExpression = L(field), AssignmentExpression = value }
+        Code.Add(field.Property is UBoolProperty ? new EX_LetBool { VariableExpression = L(field), AssignmentExpression = value } : field.Property is UObjectProperty ? new EX_LetObj { VariableExpression = L(field), AssignmentExpression = value }
             : new EX_Let { Value = new KismetPropertyPointer(Index(field)), Variable = L(field), Expression = value });
     }
     internal void Branch(KismetExpression condition, string target)

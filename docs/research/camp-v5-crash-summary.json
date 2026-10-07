@@ -1,0 +1,24 @@
+{
+  "schema": "rebalance-crash-summary-v1",
+  "dumpSha256": "b97626ca0c74894f5f42c1a9ffccf98e2330b0910f161be799e8181b42fd7f1e",
+  "contextSha256": "86a7c0f114a2fb2b07c83855ec54b5cad6d066b83e7748ea3ad29a0cd525f90d",
+  "engineVersion": "4.22.3-0+++UE4+Release-4.22",
+  "secondsSinceStart": 36,
+  "exceptionCode": "0x00004000",
+  "memoryAccess": "unknown",
+  "targetAddress": null,
+  "faultModules": [
+    {
+      "name": "KERNELBASE.dll",
+      "rva": "0xc41ca"
+    }
+  ],
+  "privateModulePathsOmitted": true,
+  "symbolsAvailable": false,
+  "crashType": "Assert",
+  "assertion": "Unsupported UBoolProperty ReturnValue size 0",
+  "sourceLine": 89,
+  "diagnosis": "Generated native BoolProperty ReturnValue serialized ElementSize 0",
+  "correction": "ElementSize 1 with NativeBool true; actual crashed v5 asset now rejected",
+  "runtimeCorrectionVerified": false
+}

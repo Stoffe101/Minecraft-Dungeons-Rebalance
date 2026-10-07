@@ -1,8 +1,8 @@
 # Current state
 
-Updated 2026-10-07 after the user's successful v4 NPC test.
+Updated 2026-10-07 after the v5 crash diagnosis and v6 upgrade implementation.
 
-**v4 loading and all three Camp NPC spawns are user-confirmed. The current v5 PAK adds Gift Wrapper-relative placement, wider spacing, independent overhead names and an experimental read-only merchant UI. Thirteen private-source integration tests pass; all37 PAK entries pass integrity and exact unpack comparison. v5 has not been tested in Dungeons. It does not perform paid upgrades: native Tower action bindings are emptied/disabled. A native wallet preflight checks amount1, but is not connected to actions or charging. Requested test costs are 1 emerald per upgrade and 1 gold for gilding; production costs are unchanged. Exact clearing position, names, dialogue and selection need retail acceptance. v3 remains withdrawn. Full design, paid/persistent upgrades, custom Unique picker and shared gold remain unfinished. No further collector requested. See CAMP_PLACEMENT_TEST.md and research/camp-central-ui-build-v5.json.**
+**Current (October 7): v5 crashed with `Unsupported UBoolProperty ReturnValue size 0` and is withdrawn. v6 fixes that serialized Boolean and implements interactable native smith buttons, guarded native upgrade transactions and temporary 1 emerald / 1 gold fees. It retains Gift Wrapper-relative placement, names and the accepted v2 reward/Hunt subset. Fifteen private integration tests and all 37 PAK entries pass structural checks. Gameplay, native Camp eligibility and save/reload are unverified; full prices, the custom Unique picker and shared gold remain unfinished. v4 NPC loading/spawning was user-confirmed. See [CAMP_UPGRADE_TEST_V6.md](CAMP_UPGRADE_TEST_V6.md) for implementation, tests, limitations and next work.**
 
 **First Hunts/Economy test PAK built and structurally verified. Full design is unfinished. The user confirmed the Camp chest reward is 100 emeralds instead of 50; gold chests are accepted by user confirmation, and one urn payout of +25 emeralds was observed. Hunt progression and broader reward coverage remain unverified.**
 

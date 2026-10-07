@@ -58,6 +58,29 @@ class CampSmithTests(unittest.TestCase):
             self.assertEqual(added_functions, 3)
             self.assertEqual(selection_functions, 6)
 
+    def test_paid_upgrade_prototype_roundtrip_and_guard_rejections(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / 'paid'
+            result = subprocess.run([ARGS.dotnet, ARGS.stager, '--upgrade-test', str(ARGS.source), str(output)],
+                                    capture_output=True, text=True, timeout=120)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            report = json.loads((output / 'CAMP_SMITH_STAGE_REPORT.json').read_text())
+            self.assertEqual(report['status'], 'camp_native_upgrade_test')
+            self.assertTrue(report['paidTransactionsImplemented'])
+            self.assertTrue(report['affordabilityConnectedToActions'])
+            self.assertFalse(report['completePaidDesignImplemented'])
+            self.assertFalse(report['gameplayVerified'])
+            self.assertFalse(report['nativeInventoryPersistenceVerified'])
+            self.assertFalse(report['nativeTowerFlagsPreserved'])
+            self.assertEqual(sum(p.get('controlledUpgradeButtonCount', 0) for p in report['packages']), 8)
+            self.assertTrue(all(p['semanticRoundTrip'] for p in report['packages']))
+            self.assertEqual(len(report['packages']), 10)
+        for flag, expected in [('--self-test-paid-gateway', 'Seven native upgrade/payment rejection checks passed'),
+                               ('--self-test-paid-buttons', 'Three controlled upgrade button rejection checks passed')]:
+            result = subprocess.run([ARGS.dotnet, ARGS.stager, flag, str(ARGS.source)], capture_output=True, text=True, timeout=120)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn(expected, result.stdout)
+
     def test_read_only_interaction_preview(self):
         with tempfile.TemporaryDirectory() as folder:
             output = Path(folder) / 'ui'
@@ -81,7 +104,7 @@ class CampSmithTests(unittest.TestCase):
         result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-affordability', str(ARGS.source)],
                                 capture_output=True, text=True, timeout=120)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn('Four native affordability rejection checks passed', result.stdout)
+        self.assertIn('Five native affordability rejection checks passed', result.stdout)
 
     def test_presentation_rejects_invalid_native_graphs(self):
         source = Path(ARGS.source) / 'Dungeons/Content/Content_Season1/UI/Merchant/UMG_TowerMerchantArtisanContent.uasset'
@@ -137,6 +160,15 @@ class CampSmithTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Generated Function native class/archetype must be imported', result.stderr)
 
+    def test_crashed_v5_boolean_is_rejected(self):
+        if not ARGS.crashed_v5_stage:
+            self.skipTest('Private crashed v5 stage not supplied')
+        path = Path(ARGS.crashed_v5_stage) / 'Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmith.uasset'
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--check-load-contracts', str(path)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Generated Boolean must serialize a one-byte native size', result.stderr)
+
     def test_function_creation_preloads_are_required(self):
         result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-load-contracts', str(ARGS.source)],
                                 capture_output=True, text=True, timeout=120)
@@ -182,6 +214,7 @@ if __name__ == '__main__':
     parser.add_argument('--dotnet', required=True)
     parser.add_argument('--stager', required=True)
     parser.add_argument('--source', required=True)
+    parser.add_argument('--crashed-v5-stage', type=Path)
     parser.add_argument('--crashed-stage')
     ARGS, extra = parser.parse_known_args()
     unittest.main(argv=[__file__, *extra])

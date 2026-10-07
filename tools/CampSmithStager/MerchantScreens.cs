@@ -8,7 +8,7 @@ using UAssetAPI.PropertyTypes.Objects;
 using UAssetAPI.UnrealTypes;
 
 // Reuse the retail merchant root's existing decision and owning-player graph.
-// Only its content dispatch is changed. No transaction/payment graph is added.
+// Preview modes preserve graphs; upgrade-test adds guarded native transactions.
 static class MerchantScreens
 {
     internal const string Folder = "Mods/MinecraftDungeonsRebalance/Camp";
@@ -35,7 +35,7 @@ static class MerchantScreens
         if (binding.Value.AssetPath.AssetName.ToString() != ClassPath(Screen(service)))
             throw new InvalidDataException("Wrong Camp merchant screen binding.");
     }
-    internal static (string Source, string Service, UAsset Asset, Dictionary<string, string> PreservedGraphs, int RelocatedNames)[] Prepare(string source)
+    internal static (string Source, string Service, UAsset Asset, Dictionary<string, string> PreservedGraphs, int RelocatedNames)[] Prepare(string source, bool upgradeTest = false)
     {
         VerifyContracts();
         var path = Path.Combine(source, "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset");
@@ -67,7 +67,8 @@ static class MerchantScreens
             // Resolve hashes AFTER identity relocation. All functions other than
             // dispatch must retain their entire parsed graph on write/reopen.
             TestUpgradeAffordability.Add(asset);
-            var preserved = asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch && f.ObjectName.ToString() != TestUpgradeAffordability.Name)
+            if (upgradeTest) PaidUpgradeGateway.Add(asset, service);
+            var preserved = asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch && !f.ObjectName.ToString().StartsWith("Rebalance") && !(upgradeTest && f.ObjectName.ToString() == "OnTransactionExecuted"))
                 .ToDictionary(f => f.ObjectName.ToString(), f => Graph(asset, f));
             if (!original.Contains("OnDecisionToBeMade") || !original.Contains("InstDecisionContent"))
                 throw new InvalidDataException("Native decision event graph missing.");
@@ -79,14 +80,16 @@ static class MerchantScreens
     {
         TestUpgradeAffordability.Validate(asset);
         var dispatch = asset.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == "GetSoftContentWidget");
-        if (asset.Exports.OfType<FunctionExport>().Count() != preserved.Count + 2)
+        bool upgradeTest = PaidUpgradeGateway.Present(asset);
+        if (upgradeTest) PaidUpgradeGateway.Validate(asset, service);
+        if (asset.Exports.OfType<FunctionExport>().Count() != preserved.Count + (upgradeTest ? 11 : 2))
             throw new InvalidDataException("Native merchant function removed or added.");
         if (!dispatch.FunctionFlags.HasFlag(EFunctionFlags.FUNC_Event) || !dispatch.FunctionFlags.HasFlag(EFunctionFlags.FUNC_BlueprintEvent)
             || dispatch.ScriptBytecode.Length != 2 || dispatch.ScriptBytecode[0] is not EX_Return ret
             || ret.ReturnExpression is not EX_SoftObjectConst constant || constant.Value is not EX_StringConst text
             || text.Value != ClassPath(Content(service)) || dispatch.ScriptBytecode[1] is not EX_EndOfScript)
             throw new InvalidDataException("Invalid Camp content dispatch.");
-        foreach (var f in asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch && f.ObjectName.ToString() != TestUpgradeAffordability.Name))
+        foreach (var f in asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch && !f.ObjectName.ToString().StartsWith("Rebalance") && !(upgradeTest && f.ObjectName.ToString() == "OnTransactionExecuted")))
             if (!preserved.TryGetValue(f.ObjectName.ToString(), out var graph) || graph != Graph(asset, f))
                 throw new InvalidDataException("Native merchant decision/input graph changed.");
         if (asset.Imports.Any(i => i.ObjectName.ToString() == "/Game/UI/Merchant/UMG_Merchant"))

@@ -1,8 +1,8 @@
 # Camp upgrades and choosing a Unique
 
-**Latest runtime result: v3 crashes and is withdrawn. v4 restores generated Function archetypes/creation prerequisites and passes eleven private-source checks plus 37-entry PAK verification; this correction is retail-unverified. Prices and paid upgrades remain unfinished. Use v2 as the known reward baseline. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier milestone notes below are historical.**
+**Current (October 7): v5 crashed with `Unsupported UBoolProperty ReturnValue size 0` and is withdrawn. v6 fixes that serialized Boolean and implements interactable native smith buttons, guarded native upgrade transactions and temporary 1 emerald / 1 gold fees. It retains Gift Wrapper-relative placement, names and the accepted v2 reward/Hunt subset. Fifteen private integration tests and all 37 PAK entries pass structural checks. Gameplay, native Camp eligibility and save/reload are unverified; full prices, the custom Unique picker and shared gold remain unfinished. v4 NPC loading/spawning was user-confirmed. See [CAMP_UPGRADE_TEST_V6.md](CAMP_UPGRADE_TEST_V6.md) for implementation, tests, limitations and next work.**
 
-**Current milestone: CampPlacement-Test-v3 is available as a host-only, non-interactive NPC placement preview. Owned actor/root/content bindings are packaged, but paid/persistent/repeatable upgrades and the custom Unique picker remain unfinished. See [CAMP_PLACEMENT_TEST.md](CAMP_PLACEMENT_TEST.md). Earlier pass notes below are historical.**
+Historical milestone notes below are superseded by the current v6 status.
 
 Updated October 5, 2026, after the supplemental collection.
 

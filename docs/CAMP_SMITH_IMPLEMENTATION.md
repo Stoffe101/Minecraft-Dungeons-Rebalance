@@ -1,6 +1,6 @@
 # Camp smith implementation
 
-**Current (October 7): the user confirms v4 loads and all three smiths are visible. CampUI-Test-v5 adds Gift Wrapper-relative placement, wider spacing, independent overhead names and an experimental read-only merchant UI. Thirteen private asset tests and all 37 PAK integrity/unpack checks pass. v5 is retail-untested; paid upgrades, currency charges, custom Unique picker and persistence are unfinished. A native amount-1 affordability helper is staged but not connected to actions. v3 is withdrawn; v2 remains the accepted reward baseline. See the October 7 section below for exact scope and next work.**
+**Current (October 7): v5 crashed with `Unsupported UBoolProperty ReturnValue size 0` and is withdrawn. v6 fixes that serialized Boolean and implements interactable native smith buttons, guarded native upgrade transactions and temporary 1 emerald / 1 gold fees. It retains Gift Wrapper-relative placement, names and the accepted v2 reward/Hunt subset. Fifteen private integration tests and all 37 PAK entries pass structural checks. Gameplay, native Camp eligibility and save/reload are unverified; full prices, the custom Unique picker and shared gold remain unfinished. v4 NPC loading/spawning was user-confirmed. See [CAMP_UPGRADE_TEST_V6.md](CAMP_UPGRADE_TEST_V6.md) for implementation, tests, limitations and next work.**
 
 ## Historical milestones through October 6
 

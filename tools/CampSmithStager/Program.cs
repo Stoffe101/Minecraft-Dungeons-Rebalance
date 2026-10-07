@@ -6,7 +6,9 @@ using UAssetAPI.PropertyTypes.Objects;
 using UAssetAPI.UnrealTypes;
 
 // Private cooked-asset foundation with placement or read-only interaction previews.
-// Do not change native transaction flags, prices, or player inventory here.
+// Upgrade-test explicitly enables guarded native transactions with temporary pricing.
+if (args.Length == 2 && args[0] == "--self-test-paid-gateway") { PaidUpgradeGateway.SelfTest(args[1]); return; }
+if (args.Length == 2 && args[0] == "--self-test-paid-buttons") { PaidUpgradeButtons.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-read-only-actions") { ReadOnlyMerchantActions.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-affordability") { TestUpgradeAffordability.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-presentation") { UniquePresentation.SelfTest(args[1]); return; }
@@ -15,7 +17,8 @@ if (args.Length == 2 && args[0] == "--self-test-screens") { MerchantScreens.Self
 if (args.Length == 2 && args[0] == "--self-test-placement") { CampPlacement.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-load-contracts") { FunctionLoadContract.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--check-load-contracts") { FunctionLoadContract.ValidateOwned(new UAsset(args[1], EngineVersion.VER_UE4_22)); Console.WriteLine("Generated Function load contracts validated."); return; }
-var interactionPreview = args.Length == 3 && args[0] == "--interaction-preview";
+var upgradeTest = args.Length == 3 && args[0] == "--upgrade-test";
+var interactionPreview = upgradeTest || args.Length == 3 && args[0] == "--interaction-preview";
 var placementPreview = interactionPreview || args.Length == 3 && args[0] == "--placement-preview";
 if (placementPreview) args = args.Skip(1).ToArray();
 if (args.Length != 2) throw new ArgumentException("Usage: CampSmithStager <private-PatchSources-root> <fresh-private-output-root>");
@@ -67,10 +70,14 @@ var loaded = specs.Select(s => {
     var originalFunctions = a.Exports.OfType<FunctionExport>().Count();
     if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Add(a);
     if (s.Definition == null) SelectedItemReaders.Add(a);
-    if (s.Definition != null) MerchantScreens.BindActor(a, s.CloneName["BP_RebalanceCamp".Length..]);
+    if (s.Definition != null) {
+        MerchantScreens.BindActor(a, s.CloneName["BP_RebalanceCamp".Length..]);
+        if (upgradeTest) foreach (var flag in new[] { "bOneTransactionMerchant", "bOneTransactionPerPlayerMerchant" }) cdo.Data.OfType<BoolPropertyData>().Single(p => p.Name.ToString() == flag).Value = false;
+    }
+    if (upgradeTest && s.Definition == null) PaidUpgradeButtons.Add(a, s.CloneName["UMG_RebalanceCamp".Length..^"Content".Length]);
     return (Spec: s, Input: path, InputHashes: inputHashes, Asset: a, Changed: changed, OriginalFunctions: originalFunctions);
 }).ToArray();
-var screens = MerchantScreens.Prepare(source);
+var screens = MerchantScreens.Prepare(source, upgradeTest);
 var placement = placementPreview ? CampPlacement.Prepare(source, interactionPreview) : null;
 Directory.CreateDirectory(output);
 try {
@@ -80,14 +87,15 @@ try {
         var relative = $"Dungeons/Content/{destinationFolder}/{s.CloneName}.uasset";
         var path = Path.Combine(output, relative);
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        int disabledBindings = interactionPreview && s.Definition == null ? ReadOnlyMerchantActions.Block(item.Asset) : 0;
+        int disabledBindings = interactionPreview && !upgradeTest && s.Definition == null ? ReadOnlyMerchantActions.Block(item.Asset) : 0;
         item.Asset.Write(path);
         var expected = item.Asset.SerializeJson();
         var reread = new UAsset(path, EngineVersion.VER_UE4_22);
         if (expected != reread.SerializeJson()) throw new InvalidDataException("Clone semantic round-trip mismatch: " + s.CloneName);
         if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Validate(reread);
         if (s.Definition == null) SelectedItemReaders.Validate(reread);
-        if (interactionPreview && s.Definition == null) ReadOnlyMerchantActions.Validate(reread);
+        if (interactionPreview && !upgradeTest && s.Definition == null) ReadOnlyMerchantActions.Validate(reread);
+        if (upgradeTest && s.Definition == null) PaidUpgradeButtons.Validate(reread, s.CloneName["UMG_RebalanceCamp".Length..^"Content".Length]);
         if (s.Definition != null) MerchantScreens.ValidateActor(reread, s.CloneName["BP_RebalanceCamp".Length..]);
         if (reread.GetNameMapIndexList().Any(n => specs.Any(original => n.Value.Contains(original.Original, StringComparison.Ordinal))))
             throw new InvalidDataException("Original self/cross references remain: " + s.CloneName);
@@ -103,6 +111,8 @@ try {
             addedPresentationFunctions = s.CloneName == "UMG_RebalanceCampUniquesmithContent" ? 3 : 0,
             addedSelectionReadFunctions = s.Definition == null ? 2 : 0,
             disabledActionBindingCount = disabledBindings,
+            controlledUpgradeButtonCount = upgradeTest && s.Definition == null ? (s.CloneName.Contains("Powersmith") ? 4 : 2) : 0,
+            addedUpgradeActionFunctions = upgradeTest && s.Definition == null ? (s.CloneName.Contains("Powersmith") ? 3 : 2) : 0,
             functionCount = reread.Exports.OfType<FunctionExport>().Count() });
     }
     foreach (var screen in screens) {
@@ -120,9 +130,9 @@ try {
         report.Add(new { sourcePackage = "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset", clonePackage = relative,
             relocatedNames = screen.RelocatedNames, nativeDefinition = (string?)null, merchantType = (string?)null,
             originalHashes = originals, outputHashes = new[] { path, Path.ChangeExtension(path, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash),
-            semanticRoundTrip = true, originalFunctionCount = reread.Exports.OfType<FunctionExport>().Count() - 1,
-            addedPresentationFunctions = 0, addedSelectionReadFunctions = 0, addedAffordabilityFunctions = 1, functionCount = reread.Exports.OfType<FunctionExport>().Count(),
-            nativeDecisionGraphsPreserved = true, contentDispatch = MerchantScreens.ClassPath(MerchantScreens.Content(screen.Service)) });
+            semanticRoundTrip = true, originalFunctionCount = reread.Exports.OfType<FunctionExport>().Count() - 1 - (upgradeTest ? 9 : 0),
+            addedPresentationFunctions = 0, addedSelectionReadFunctions = 0, addedAffordabilityFunctions = 1, addedUpgradeGatewayFunctions = upgradeTest ? 9 : 0, functionCount = reread.Exports.OfType<FunctionExport>().Count(),
+            nativeDecisionGraphsPreserved = !upgradeTest, contentDispatch = MerchantScreens.ClassPath(MerchantScreens.Content(screen.Service)) });
     }
     if (placement != null) {
         const string relative = "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset";
@@ -141,21 +151,21 @@ try {
             placementOffsets = new { right = 900, forward = new[] { -650, 0, 650 } }, namesImplemented = true, nativeBalloonNames = false });
     }
     File.WriteAllText(Path.Combine(output, "CAMP_SMITH_STAGE_REPORT.json"), JsonConvert.SerializeObject(new {
-        status = interactionPreview ? "camp_interaction_preview_only" : placementPreview ? "camp_placement_preview_only" : "private_asset_foundation_only", deployable = placementPreview,
-        functionCreationPreloadsValidated = true, gameplayVerified = false, campPlacementImplemented = placementPreview, npcPreviewOnly = placementPreview,
-        readOnlyMerchantUiPreview = interactionPreview, nativeUpgradeActionsBlockedByBindings = interactionPreview,
+        status = upgradeTest ? "camp_native_upgrade_test" : interactionPreview ? "camp_interaction_preview_only" : placementPreview ? "camp_placement_preview_only" : "private_asset_foundation_only", deployable = placementPreview,
+        functionCreationPreloadsValidated = true, gameplayVerified = false, campPlacementImplemented = placementPreview, npcPreviewOnly = placementPreview && !upgradeTest,
+        readOnlyMerchantUiPreview = interactionPreview && !upgradeTest, nativeUpgradeActionsBlockedByBindings = interactionPreview && !upgradeTest,
         interactionsDisabledBySpawn = placementPreview && !interactionPreview,
-        paidTransactionsImplemented = false, uniquePickerImplemented = false,
+        paidTransactionsImplemented = upgradeTest, completePaidDesignImplemented = false, nativeInventoryPersistenceVerified = false, uniquePickerImplemented = false,
         nativeTestAffordabilityImplemented = true, testUpgradeAmount = TestUpgradeAffordability.Amount, testGildAmount = TestUpgradeAffordability.Amount,
-        affordabilityConnectedToActions = false, labelsImplemented = placementPreview, giftWrapperPlacementImplemented = placementPreview,
+        affordabilityConnectedToActions = upgradeTest, labelsImplemented = placementPreview, giftWrapperPlacementImplemented = placementPreview,
         uniquePresentationBindingsImplemented = true,
         selectedItemReadBindingsImplemented = true,
         actorScreenBindingsImplemented = true,
         campContentDispatchImplemented = true,
         nativeDecisionFlowRetained = true,
-        nativeTowerFlagsPreserved = true, packages = report
+        nativeTowerFlagsPreserved = !upgradeTest, packages = report
     }, Formatting.Indented));
-    Console.WriteLine($"Staged and re-opened {(placementPreview ? 10 : 9)} package pairs; no live paid Camp services enabled.");
+    Console.WriteLine($"Staged and re-opened {(placementPreview ? 10 : 9)} package pairs; upgrade prototype enabled: {upgradeTest}.");
 } catch {
     Directory.Delete(output, true);
     throw;

@@ -1,0 +1,268 @@
+{
+  "status": "camp_native_upgrade_test",
+  "deployable": true,
+  "functionCreationPreloadsValidated": true,
+  "gameplayVerified": false,
+  "campPlacementImplemented": true,
+  "npcPreviewOnly": false,
+  "readOnlyMerchantUiPreview": false,
+  "nativeUpgradeActionsBlockedByBindings": false,
+  "interactionsDisabledBySpawn": false,
+  "paidTransactionsImplemented": true,
+  "completePaidDesignImplemented": false,
+  "nativeInventoryPersistenceVerified": false,
+  "uniquePickerImplemented": false,
+  "nativeTestAffordabilityImplemented": true,
+  "testUpgradeAmount": 1,
+  "testGildAmount": 1,
+  "affordabilityConnectedToActions": true,
+  "labelsImplemented": true,
+  "giftWrapperPlacementImplemented": true,
+  "uniquePresentationBindingsImplemented": true,
+  "selectedItemReadBindingsImplemented": true,
+  "actorScreenBindingsImplemented": true,
+  "campContentDispatchImplemented": true,
+  "nativeDecisionFlowRetained": true,
+  "nativeTowerFlagsPreserved": false,
+  "packages": [
+    {
+      "sourcePackage": "Dungeons/Content/Content_Season1/Decor/Prefab/Merchants/BP_TowerArtisanMerchant.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampUniquesmith.uasset",
+      "relocatedNames": 3,
+      "nativeDefinition": "TowerArtisanMerchantDef",
+      "merchantType": "TowerUniquesmith",
+      "originalHashes": {
+        "BP_TowerArtisanMerchant.uasset": "4fb33957c5a052196c35f02addc19b6c0b4cad4e37728128096c1e0596c6cf19",
+        "BP_TowerArtisanMerchant.uexp": "63ddc3bc4180516c396056c1d8b301762f9cdd74ebdccb45afed98e35942e0c9"
+      },
+      "outputHashes": {
+        "BP_RebalanceCampUniquesmith.uasset": "8fbabbb487a3d9de2b99cc4952a88609c69a0397b4024eeb22fcd82d74facdef",
+        "BP_RebalanceCampUniquesmith.uexp": "b3f3de6209f56ed3fbddab2f55e92d09151e6d9704d83dae39f0a7093c2979e9"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 0,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 0,
+      "disabledActionBindingCount": 0,
+      "controlledUpgradeButtonCount": 0,
+      "addedUpgradeActionFunctions": 0,
+      "functionCount": 0
+    },
+    {
+      "sourcePackage": "Dungeons/Content/Content_Season1/Decor/Prefab/Merchants/BP_TowerBlacksmithMerchant.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampPowersmith.uasset",
+      "relocatedNames": 4,
+      "nativeDefinition": "TowerBlacksmithMerchantDef",
+      "merchantType": "TowerBlacksmith",
+      "originalHashes": {
+        "BP_TowerBlacksmithMerchant.uasset": "5f27399d0ed9ddd0066c77911ed909388c1266dfdfeff5811518bd460e52fdb4",
+        "BP_TowerBlacksmithMerchant.uexp": "d0bd35ade7b4729164cd0fe83ca4eea7123b0b21de364645751ae3c6a4acf786"
+      },
+      "outputHashes": {
+        "BP_RebalanceCampPowersmith.uasset": "24c900a6054a56e8cd8c87190498db15cfb84f48097447d4969b7eba4c156d9f",
+        "BP_RebalanceCampPowersmith.uexp": "0bf1e9b9b10758a542732459af5d6908df8a622438e3e86d2895025edb635117"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 2,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 0,
+      "disabledActionBindingCount": 0,
+      "controlledUpgradeButtonCount": 0,
+      "addedUpgradeActionFunctions": 0,
+      "functionCount": 2
+    },
+    {
+      "sourcePackage": "Dungeons/Content/Content_Season1/Decor/Prefab/Merchants/BP_TowerGilderMerchant.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/BP_RebalanceCampGildsmith.uasset",
+      "relocatedNames": 3,
+      "nativeDefinition": "TowerGilderMerchantDef",
+      "merchantType": "TowerGildsmith",
+      "originalHashes": {
+        "BP_TowerGilderMerchant.uasset": "e816d36cc847d8e5defe9fa5097816ff54ee91324d514eef15d07be1ab76da97",
+        "BP_TowerGilderMerchant.uexp": "632d5c8a0f18b0d0020da3b4f55aa2fe4378416cff2dedf46059cb19428d6eff"
+      },
+      "outputHashes": {
+        "BP_RebalanceCampGildsmith.uasset": "7f7f280113a779d6609bea63ddcfc682298fd3b4a2b62c6dee5ee1153e60dd6f",
+        "BP_RebalanceCampGildsmith.uexp": "977143fa70d035501fce2cf6dba855a84344a28d4b4e3bbfc108c49b869e4a52"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 0,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 0,
+      "disabledActionBindingCount": 0,
+      "controlledUpgradeButtonCount": 0,
+      "addedUpgradeActionFunctions": 0,
+      "functionCount": 0
+    },
+    {
+      "sourcePackage": "Dungeons/Content/Content_Season1/UI/Merchant/UMG_TowerMerchantArtisanContent.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmithContent.uasset",
+      "relocatedNames": 5,
+      "nativeDefinition": null,
+      "merchantType": null,
+      "originalHashes": {
+        "UMG_TowerMerchantArtisanContent.uasset": "872f43ac9e3499660c1c2260c17e0849523e58ddbb11029aa5b34b424cb02b66",
+        "UMG_TowerMerchantArtisanContent.uexp": "c65efb138877eb9c91616d4ded07b531c53864e84b9006c638030f0f17ab45b9"
+      },
+      "outputHashes": {
+        "UMG_RebalanceCampUniquesmithContent.uasset": "15186e55135b6c2df4a84d948706b277fac658a5bbe82c666a1b34cdc0ea2af3",
+        "UMG_RebalanceCampUniquesmithContent.uexp": "9594bbc6a2ebf0d9eca300e5a66b53e868f2abb19644c7008176c0380805bba4"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 3,
+      "addedPresentationFunctions": 3,
+      "addedSelectionReadFunctions": 2,
+      "disabledActionBindingCount": 0,
+      "controlledUpgradeButtonCount": 2,
+      "addedUpgradeActionFunctions": 2,
+      "functionCount": 10
+    },
+    {
+      "sourcePackage": "Dungeons/Content/Content_Season1/UI/Merchant/UMG_TowerMerchantBlacksmithContent.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmithContent.uasset",
+      "relocatedNames": 5,
+      "nativeDefinition": null,
+      "merchantType": null,
+      "originalHashes": {
+        "UMG_TowerMerchantBlacksmithContent.uasset": "37f9cc3e58072115173c3a208fbba30555a7de0091df9536526693e8fe10094f",
+        "UMG_TowerMerchantBlacksmithContent.uexp": "0ca054a95729412d25822fa2edf76f41da0cec3f94b3ee3ded6859836b8d7bf5"
+      },
+      "outputHashes": {
+        "UMG_RebalanceCampPowersmithContent.uasset": "2eac47adeaeccc898769a02a4bb57be92e364d631c0479e104403fe1046827db",
+        "UMG_RebalanceCampPowersmithContent.uexp": "f1873412b6fe52624f60da4aefd82ed5d669856d3c2bbfb2f7b01851cbac9a31"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 3,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 2,
+      "disabledActionBindingCount": 0,
+      "controlledUpgradeButtonCount": 4,
+      "addedUpgradeActionFunctions": 3,
+      "functionCount": 8
+    },
+    {
+      "sourcePackage": "Dungeons/Content/Content_Season1/UI/Merchant/UMG_TowerMerchantGilderContent.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmithContent.uasset",
+      "relocatedNames": 5,
+      "nativeDefinition": null,
+      "merchantType": null,
+      "originalHashes": {
+        "UMG_TowerMerchantGilderContent.uasset": "60128bcb0f18dd28d44bf6c4001a15b9a3345ac6f22e77500809cc7b35d4a414",
+        "UMG_TowerMerchantGilderContent.uexp": "cbda3324d3cb87822d06e3480458d6387f8e95dd1c2064f96a78212f91f88cfd"
+      },
+      "outputHashes": {
+        "UMG_RebalanceCampGildsmithContent.uasset": "a41bedef5de520149c59d96919ce8dd2c4325502c1e1cf420bd0b0e51e3cfee5",
+        "UMG_RebalanceCampGildsmithContent.uexp": "7a140104d6ba0a19d2da1d1545fcd537c493e1418603a8e21f0e52945cb086f2"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 3,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 2,
+      "disabledActionBindingCount": 0,
+      "controlledUpgradeButtonCount": 2,
+      "addedUpgradeActionFunctions": 2,
+      "functionCount": 7
+    },
+    {
+      "sourcePackage": "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmith.uasset",
+      "relocatedNames": 4,
+      "nativeDefinition": null,
+      "merchantType": null,
+      "originalHashes": {
+        "UMG_Merchant.uasset": "7b9acd0bb8ac4d1ba6c793390b0bd3266e28b3fe6dcc611c136e9d4db55c79c0",
+        "UMG_Merchant.uexp": "236a13111aa808a961dcc726e97c0edc8a3d79506eb326ef65e225199a2da111"
+      },
+      "outputHashes": {
+        "UMG_RebalanceCampUniquesmith.uasset": "9b66bbe63f545dbb2a37e51409fee2fe3cd0c826070d44ce40fc68fbd444151b",
+        "UMG_RebalanceCampUniquesmith.uexp": "c754f5e3352f679b1e926e7eb5fc43d6d1d101d8853e4f798e122f4f73f4b061"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 28,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 0,
+      "addedAffordabilityFunctions": 1,
+      "addedUpgradeGatewayFunctions": 9,
+      "functionCount": 38,
+      "nativeDecisionGraphsPreserved": false,
+      "contentDispatch": "/Game/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampUniquesmithContent.UMG_RebalanceCampUniquesmithContent_C"
+    },
+    {
+      "sourcePackage": "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmith.uasset",
+      "relocatedNames": 4,
+      "nativeDefinition": null,
+      "merchantType": null,
+      "originalHashes": {
+        "UMG_Merchant.uasset": "7b9acd0bb8ac4d1ba6c793390b0bd3266e28b3fe6dcc611c136e9d4db55c79c0",
+        "UMG_Merchant.uexp": "236a13111aa808a961dcc726e97c0edc8a3d79506eb326ef65e225199a2da111"
+      },
+      "outputHashes": {
+        "UMG_RebalanceCampPowersmith.uasset": "e261bd2f4d9bd94dc71e2db4fd0e0eb3065cdc9fa3e07c1ca05eb6df3802c569",
+        "UMG_RebalanceCampPowersmith.uexp": "c47c415d770037fac50f49ed2c37d99ae9df869658ed7046e400de7d3c6dea54"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 28,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 0,
+      "addedAffordabilityFunctions": 1,
+      "addedUpgradeGatewayFunctions": 9,
+      "functionCount": 38,
+      "nativeDecisionGraphsPreserved": false,
+      "contentDispatch": "/Game/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampPowersmithContent.UMG_RebalanceCampPowersmithContent_C"
+    },
+    {
+      "sourcePackage": "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset",
+      "clonePackage": "Dungeons/Content/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmith.uasset",
+      "relocatedNames": 4,
+      "nativeDefinition": null,
+      "merchantType": null,
+      "originalHashes": {
+        "UMG_Merchant.uasset": "7b9acd0bb8ac4d1ba6c793390b0bd3266e28b3fe6dcc611c136e9d4db55c79c0",
+        "UMG_Merchant.uexp": "236a13111aa808a961dcc726e97c0edc8a3d79506eb326ef65e225199a2da111"
+      },
+      "outputHashes": {
+        "UMG_RebalanceCampGildsmith.uasset": "d97817827a3843adfea83d323f961521b96ee00698acbf09bd40b298e1a918e9",
+        "UMG_RebalanceCampGildsmith.uexp": "8111f20cc0d6de0560eac264c54dacecdb7d32d256471602caebbd2127c54a19"
+      },
+      "semanticRoundTrip": true,
+      "originalFunctionCount": 28,
+      "addedPresentationFunctions": 0,
+      "addedSelectionReadFunctions": 0,
+      "addedAffordabilityFunctions": 1,
+      "addedUpgradeGatewayFunctions": 9,
+      "functionCount": 38,
+      "nativeDecisionGraphsPreserved": false,
+      "contentDispatch": "/Game/Mods/MinecraftDungeonsRebalance/Camp/UMG_RebalanceCampGildsmithContent.UMG_RebalanceCampGildsmithContent_C"
+    },
+    {
+      "sourcePackage": "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset",
+      "clonePackage": "Dungeons/Content/Decor/Prefabs/RewardChest/BP_LobbyChest.uasset",
+      "nativeDefinition": null,
+      "originalHashes": {
+        "BP_LobbyChest.uasset": "7c6812268ea7fb1816c33cb2bbe67d9a5ea26bb0b16c0db18fb86d79021f0a2e",
+        "BP_LobbyChest.uexp": "dd6b26a2ca788e29cd682a7a66241e02c898e62e6f3f4ded852cb1e6cb61b03b"
+      },
+      "outputHashes": {
+        "BP_LobbyChest.uasset": "cb551fc7da544c7b532fe5d21ec94a5533e4181ad3cc32535c966a742f4e854e",
+        "BP_LobbyChest.uexp": "50705aac5329a817f0b0db330b53a15570d4d93c3be1f0fcc50ec352079e82df"
+      },
+      "semanticRoundTrip": true,
+      "placementHook": "ReceiveBeginPlay",
+      "hostOnly": true,
+      "replicated": false,
+      "interactionsDisabled": false,
+      "placementAnchor": "/Game/Decor/Prefabs/Merchants/BP_LobbyVillager_GiftWrapper",
+      "placementOffsets": {
+        "right": 900,
+        "forward": [
+          -650,
+          0,
+          650
+        ]
+      },
+      "namesImplemented": true,
+      "nativeBalloonNames": false
+    }
+  ]
+}

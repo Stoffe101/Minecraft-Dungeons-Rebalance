@@ -24,7 +24,7 @@ static class TestUpgradeAffordability
         var currency = graph.Property("Currency", "StructProperty", new UStructProperty {
             Struct = graph.Import("ScriptStruct", "SerializableItemId", graph.Package("/Script/Dungeons")) });
         currency.Property.PropertyFlags = EPropertyFlags.CPF_Parm;
-        var result = graph.Property("ReturnValue", "BoolProperty", new UBoolProperty { NativeBool = true });
+        var result = graph.Property("ReturnValue", "BoolProperty", new UBoolProperty { ElementSize = 1, NativeBool = true });
         result.Property.PropertyFlags = EPropertyFlags.CPF_Parm | EPropertyFlags.CPF_OutParm | EPropertyFlags.CPF_ReturnParm;
         var walletClass = graph.Class("/Script/Dungeons", "WalletComponent");
         var wallet = graph.Object("PlayerWallet", walletClass);
@@ -47,7 +47,7 @@ static class TestUpgradeAffordability
         var f = asset.Exports.OfType<FunctionExport>().Single(e => e.ObjectName.ToString() == Name);
         var fields = f.Children.Select(p => (PropertyExport)p.ToExport(asset)).ToArray();
         if (fields.Length != 4 || fields[0].ObjectName.ToString() != "Player" || fields[1].ObjectName.ToString() != "Currency"
-            || fields[2].Property is not UBoolProperty b || !b.NativeBool
+            || fields[2].Property is not UBoolProperty b || !b.NativeBool || b.ElementSize != 1
             || !fields[2].Property.PropertyFlags.HasFlag(EPropertyFlags.CPF_ReturnParm)
             || !f.FunctionFlags.HasFlag(EFunctionFlags.FUNC_BlueprintPure)
             || fields[1].Property is not UStructProperty currencyType
@@ -97,6 +97,7 @@ static class TestUpgradeAffordability
     internal static void SelfTest(string source)
     {
         Action<UAsset>[] corruptions = {
+            a => ((UBoolProperty)((PropertyExport)Function(a).Children[2].ToExport(a)).Property).ElementSize = 0,
             a => ((EX_IntConst)((EX_CallMath)((EX_Return)Function(a).ScriptBytecode[4]).ReturnExpression).Parameters[1]).Value = 0,
             a => ((EX_JumpIfNot)Function(a).ScriptBytecode[1]).BooleanExpression = new EX_True(),
             a => ((EX_JumpIfNot)Function(a).ScriptBytecode[3]).CodeOffset = 0,
@@ -108,7 +109,7 @@ static class TestUpgradeAffordability
             try { Validate(asset); } catch (InvalidDataException) { rejected = true; }
             if (!rejected) throw new InvalidDataException("Corrupted native affordability guard accepted.");
         }
-        Console.WriteLine("Four native affordability rejection checks passed; no charges or upgrades executed.");
+        Console.WriteLine("Five native affordability rejection checks passed; no charges or upgrades executed.");
     }
     static FunctionExport Function(UAsset a) => a.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == Name);
     static void VerifyContract()

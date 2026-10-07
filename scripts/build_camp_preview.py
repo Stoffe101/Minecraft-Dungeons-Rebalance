@@ -1,4 +1,4 @@
-"""Combine verified v2 files with Camp placement or read-only UI previews."""
+"""Combine accepted v2 rewards/Hunt waves with explicit Camp test modes."""
 import argparse
 import hashlib
 import json
@@ -20,6 +20,7 @@ def main():
     parser = argparse.ArgumentParser()
     for name in ['baseline', 'smiths', 'output', 'packager']:
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument("--upgrade-test", action="store_true", help="Explicitly permit the guarded native upgrade prototype")
     args = parser.parse_args()
     baseline, smiths, output, packager = [getattr(args, n).resolve() for n in ['baseline', 'smiths', 'output', 'packager']]
     if output.exists():
@@ -36,14 +37,21 @@ def main():
     if files.keys() != entries.keys() or any(digest(p) != entries[n]['sha256'] for n, p in files.items()):
         raise ValueError('Baseline content differs from verified report')
     smith_report = json.loads((smiths / 'CAMP_SMITH_STAGE_REPORT.json').read_text())
+    upgrade_test = smith_report['status'] == 'camp_native_upgrade_test'
     ui_preview = smith_report['status'] == 'camp_interaction_preview_only'
-    if (smith_report['status'] not in ['camp_placement_preview_only', 'camp_interaction_preview_only'] or len(smith_report['packages']) != 10
-            or smith_report['interactionsDisabledBySpawn'] == ui_preview or smith_report['paidTransactionsImplemented']
+    interactive = ui_preview or upgrade_test
+    if args.upgrade_test != upgrade_test:
+        raise ValueError('Upgrade prototype requires matching explicit --upgrade-test')
+    if (smith_report['status'] not in ['camp_placement_preview_only', 'camp_interaction_preview_only', 'camp_native_upgrade_test'] or len(smith_report['packages']) != 10
+            or smith_report['interactionsDisabledBySpawn'] == interactive or smith_report['paidTransactionsImplemented'] != upgrade_test
             or smith_report['gameplayVerified'] or not smith_report.get('functionCreationPreloadsValidated')):
-        raise ValueError('Expected an unverified placement or read-only interaction stage')
+        raise ValueError('Expected an unverified, contract-validated Camp test stage')
     if ui_preview and (not smith_report.get('nativeUpgradeActionsBlockedByBindings')
                        or sum(p.get('disabledActionBindingCount', 0) for p in smith_report['packages']) != 11):
         raise ValueError('Read-only UI requires all eleven transaction bindings blocked')
+    if upgrade_test and (not smith_report.get('affordabilityConnectedToActions') or smith_report.get('completePaidDesignImplemented')
+                         or sum(p.get('controlledUpgradeButtonCount', 0) for p in smith_report['packages']) != 8):
+        raise ValueError('Upgrade prototype requires eight controlled button templates and payment bindings')
     smith_files = {}
     for package in smith_report['packages']:
         if not package['semanticRoundTrip']:
@@ -64,7 +72,7 @@ def main():
     if replaced != {CHEST + '.uasset', CHEST + '.uexp'}:
         raise ValueError('Only the Camp chest pair may replace v2 files')
     chest = next(p for p in smith_report['packages'] if p.get('placementHook'))
-    if not chest['hostOnly'] or chest['replicated'] or chest['interactionsDisabled'] == ui_preview:
+    if not chest['hostOnly'] or chest['replicated'] or chest['interactionsDisabled'] == interactive:
         raise ValueError('Placement preview guards changed')
     files.update(smith_files)
     if len(files) != 37:
@@ -75,7 +83,7 @@ def main():
         target = stage / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
-    build_name = 'CampUI-Test-v5' if ui_preview else 'CampCentralNames-Test-v5'
+    build_name = 'CampUpgrade-Test-v6' if upgrade_test else 'CampUI-LoadFix-Test-v6' if ui_preview else 'CampCentralNames-Test-v6'
     pak = output / ('MinecraftDungeonsRebalance-' + build_name + '.pak')
     subprocess.run([sys.executable, str(packager), 'pack', str(pak), 'Dungeons', '-p'], cwd=stage, check=True)
     subprocess.run([sys.executable, str(packager), 'test', str(pak)], check=True)
@@ -86,17 +94,17 @@ def main():
     if actual != expected:
         raise ValueError('PAK did not preserve the exact file set and bytes')
     report = dict(build=build_name, gameplayVerified=False, completeDesignImplemented=False,
-                  priorV4NpcLoadingUserConfirmed=True, functionCreationPreloadsValidated=True, npcInteractionsEnabled=ui_preview,
-                  nativeUpgradeActionsBlockedByBindings=ui_preview, upgradeActionsEnabled=False,
+                  priorV4NpcLoadingUserConfirmed=True, functionCreationPreloadsValidated=True, npcInteractionsEnabled=interactive,
+                  nativeUpgradeActionsBlockedByBindings=ui_preview, upgradeActionsEnabled=upgrade_test,
                   giftWrapperPlacementImplemented=True, namesImplemented=True, nativeTestAffordabilityImplemented=True,
-                  testUpgradeAmount=1, testGildAmount=1, affordabilityConnectedToActions=False, npcReplicated=False, paidTransactionsImplemented=False,
+                  testUpgradeAmount=1, testGildAmount=1, affordabilityConnectedToActions=upgrade_test, npcReplicated=False, paidTransactionsImplemented=upgrade_test, nativeInventoryPersistenceVerified=False,
                   pakSha256=digest(pak), pakBytes=pak.stat().st_size, baselinePakSha256=BASELINE_HASH,
                   entries=[dict(path=n, bytes=len(b), sha256=hashlib.sha256(b).hexdigest()) for n, b in sorted(expected.items())],
                   replacedBaselineEntries=sorted(replaced), retainedBaselineEntries=17,
                   placementStageReportSha256=digest(smiths / 'CAMP_SMITH_STAGE_REPORT.json'),
                   features=baseline_report['features'] + ['experimental Gift Wrapper-relative smith placement and TextRender names',
-                                                         'read-only native merchant UI; stock upgrade actions blocked' if ui_preview else 'NPC interactions disabled'],
-                  excluded=['paid/repeatable/persistent smith upgrades', 'custom Unique picker', 'client NPC replication',
+                                                         'guarded native upgrade transactions; temporary 1 emerald / 1 gold pricing' if upgrade_test else 'read-only native merchant UI; stock upgrade actions blocked' if ui_preview else 'NPC interactions disabled'],
+                  excluded=['production price policy and verified inventory/save persistence', 'custom Unique picker', 'client NPC replication',
                             'shared gold', 'higher Ancient encounter selection chance', 'completion gold', 'global mob income rebalance'])
     (output / 'BUILD_REPORT.json').write_text(json.dumps(report, indent=2) + '\n')
     print('Built, integrity-tested and unpack-compared all 37 PAK entries:', pak)
