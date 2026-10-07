@@ -162,3 +162,10 @@ Final local validation: 13 private-source integration tests pass; all 10 package
 Built `MinecraftDungeonsRebalance-CampUI-Test-v5.pak`:37 entries, 6133071 bytes, SHA-256 `eb7aa6324eb4bf9f47942234ab036e8ed28449a47a1d8a98c11a7137be9c080c`. Integrity test and exact path/byte unpack comparison pass. All17 non-chest v2 entries stay byte-identical; the replacement chest keeps100 emeralds. v5 is untested in-game. Reports: research/camp-central-ui-stage-v5.json and research/camp-central-ui-build-v5.json. Windows CI follows the source commit.
 
 Next work: connect a single owned action button to the preflight and native transaction decision/success path; recheck funds at confirmation; charge once after verified success; establish persistent Camp inventory behavior and reloading. Do not re-enable the original free Tower action as a substitute. Shared gold, full economy/Hunt design and custom Unique picker are still incomplete.
+
+
+## v5 Windows validation — October 7
+
+Implementation commit ff7f772d8179a141fae0879efbb76209515f7f8b passed all three workflows: evidence tooling 37591860858 (collector job 112695000966 includes successful normal Windows CampSmithStager compilation), native reader 37591860830, and policy models 37591860834. Evidence is completed job/step metadata; no compiler warning count is claimed. CI has neither private retail source inputs nor a Dungeons runtime. The 13 private integration tests, all 10 package round trips, and 37-entry PAK integrity/unpack comparison were performed locally. No retail confirmation of v5 positions, TextRender labels or merchant UI has been received.
+
+Placement requires an existing Gift Wrapper actor when the chest begin-play hook runs. There is no timer/retry if the Gift Wrapper is spawned later. Camp lifecycle ordering and the Gift Wrapper actor basis remain runtime acceptance points; the screenshot does not establish those. Charging, currency selection, persistent upgrades and custom Unique choice remain unfinished.

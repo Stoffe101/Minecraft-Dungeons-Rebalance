@@ -1,0 +1,13 @@
+{
+  "sourceCommit": "ff7f772d8179a141fae0879efbb76209515f7f8b",
+  "evidenceRun": 37591860858,
+  "evidenceJob": 112695000966,
+  "nativeRun": 37591860830,
+  "policyRun": 37591860834,
+  "allWorkflowsSucceeded": true,
+  "normalWindowsCampSmithStagerCompileStep": "success",
+  "privateRetailInputsInCi": false,
+  "dungeonsRuntimeInCi": false,
+  "localPrivateIntegrationTests": 13,
+  "gameplayVerified": false
+}
