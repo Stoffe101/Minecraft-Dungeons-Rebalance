@@ -362,3 +362,8 @@ At implementation commit 7972a9127c4ebaf1c90ad51452618afe9b4c9fc4, evidence run 
 ## v4 Windows validation — October 6
 
 Implementation commit f25d8fbc351e293eeebaa2d512d1ac77debef4a0 passed evidence run37524820391 (normal Windows CampSmithStager build, zero warnings/errors, permitted-fixture checks and Python syntax), native reader run37524820045 and policy run37524820052. Eleven private-source tests and the actual-crashed-v3 rejection ran locally; CI does not have those private inputs or a game runtime. v4 remains a runtime-unverified loading correction candidate, with prices/upgrades disabled. Final PAK hash1fc846ee8c0633cd10322a14ac4dedf23f67971ddfc2147a60cd6a1edbd3b527;6,075,360bytes. Saved the private candidate PAK and published source/docs. Targeted full collected asset-name inventory also yielded no merchant/pricing JSON/INI candidate or exposed price-definition asset; this is a filename inventory result, not proof that all native pricing configuration is absent.
+
+
+## October 7 v5 UI test acceptance
+
+Replace v4 with CampUI-Test-v5; keep only one Rebalance PAK installed. Enter Camp in single-player with Gift Wrapper unlocked. Check all three seats are nearby, separated and reachable, and that their names are visible. Open each NPC's dialogue, inspect native inventory selection, then cancel/close/reopen and reload Camp. Check for duplicate seats/labels. The native upgrade action should be unavailable in this read-only build. This is not a1-emerald/1-gold spending test: no charging or upgrade is implemented. Later acceptance must test 0 funds, exact 1 funds, cancellation, each successful action, Unique choice, repeat attempts, and item/balance persistence after reload. Preserve v2 reward observations separately from these new tests.

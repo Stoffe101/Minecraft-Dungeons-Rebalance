@@ -42,7 +42,7 @@ class CampSmithTests(unittest.TestCase):
             for package in report['packages']:
                 added_functions += package['addedPresentationFunctions']
                 selection_functions += package['addedSelectionReadFunctions']
-                self.assertEqual(package['functionCount'], package['originalFunctionCount'] + package['addedPresentationFunctions'] + package['addedSelectionReadFunctions'])
+                self.assertEqual(package['functionCount'], package['originalFunctionCount'] + package['addedPresentationFunctions'] + package['addedSelectionReadFunctions'] + package.get('addedAffordabilityFunctions', 0))
                 self.assertTrue(package['semanticRoundTrip'])
                 self.assertGreater(package['relocatedNames'], 0)
                 self.assertIn('/Mods/MinecraftDungeonsRebalance/Camp/', package['clonePackage'])
@@ -57,6 +57,31 @@ class CampSmithTests(unittest.TestCase):
             self.assertEqual(definitions, {'TowerArtisanMerchantDef', 'TowerBlacksmithMerchantDef', 'TowerGilderMerchantDef'})
             self.assertEqual(added_functions, 3)
             self.assertEqual(selection_functions, 6)
+
+    def test_read_only_interaction_preview(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / 'ui'
+            result = subprocess.run([ARGS.dotnet, ARGS.stager, '--interaction-preview', str(ARGS.source), str(output)],
+                                    capture_output=True, text=True, timeout=120)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            report = json.loads((output / 'CAMP_SMITH_STAGE_REPORT.json').read_text())
+            self.assertEqual(report['status'], 'camp_interaction_preview_only')
+            self.assertFalse(report['interactionsDisabledBySpawn'])
+            self.assertTrue(report['nativeUpgradeActionsBlockedByBindings'])
+            self.assertFalse(report['paidTransactionsImplemented'])
+            self.assertFalse(report['affordabilityConnectedToActions'])
+            self.assertEqual(sum(p.get('disabledActionBindingCount', 0) for p in report['packages']), 11)
+            self.assertTrue(all(p['semanticRoundTrip'] for p in report['packages']))
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-read-only-actions', str(ARGS.source)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Two read-only action rejection checks passed', result.stdout)
+
+    def test_native_affordability_guard_rejections(self):
+        result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-affordability', str(ARGS.source)],
+                                capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Four native affordability rejection checks passed', result.stdout)
 
     def test_presentation_rejects_invalid_native_graphs(self):
         source = Path(ARGS.source) / 'Dungeons/Content/Content_Season1/UI/Merchant/UMG_TowerMerchantArtisanContent.uasset'
@@ -85,6 +110,12 @@ class CampSmithTests(unittest.TestCase):
             self.assertTrue(report['interactionsDisabledBySpawn'])
             self.assertFalse(report['paidTransactionsImplemented'])
             self.assertFalse(report['gameplayVerified'])
+            self.assertTrue(report['nativeTestAffordabilityImplemented'])
+            self.assertEqual(report['testUpgradeAmount'], 1)
+            self.assertEqual(report['testGildAmount'], 1)
+            self.assertFalse(report['affordabilityConnectedToActions'])
+            self.assertTrue(report['labelsImplemented'])
+            self.assertTrue(report['giftWrapperPlacementImplemented'])
             self.assertEqual(len(report['packages']), 10)
             self.assertEqual(len(list(output.rglob('*.uasset'))), 10)
             chest = next(p for p in report['packages'] if p.get('placementHook'))
@@ -116,7 +147,7 @@ class CampSmithTests(unittest.TestCase):
         result = subprocess.run([ARGS.dotnet, ARGS.stager, '--self-test-placement', str(ARGS.source)],
                                 capture_output=True, text=True, timeout=120)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn('Eight Camp placement rejection checks passed', result.stdout)
+        self.assertIn('Ten Camp placement rejection checks passed', result.stdout)
 
     def test_missing_sources_create_no_output(self):
         with tempfile.TemporaryDirectory() as folder:

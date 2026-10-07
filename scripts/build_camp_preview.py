@@ -1,4 +1,4 @@
-"""Combine verified v2 files with the non-interactive Camp placement stage."""
+"""Combine verified v2 files with Camp placement or read-only UI previews."""
 import argparse
 import hashlib
 import json
@@ -36,10 +36,14 @@ def main():
     if files.keys() != entries.keys() or any(digest(p) != entries[n]['sha256'] for n, p in files.items()):
         raise ValueError('Baseline content differs from verified report')
     smith_report = json.loads((smiths / 'CAMP_SMITH_STAGE_REPORT.json').read_text())
-    if (smith_report['status'] != 'camp_placement_preview_only' or len(smith_report['packages']) != 10
-            or not smith_report['interactionsDisabledBySpawn'] or smith_report['paidTransactionsImplemented']
+    ui_preview = smith_report['status'] == 'camp_interaction_preview_only'
+    if (smith_report['status'] not in ['camp_placement_preview_only', 'camp_interaction_preview_only'] or len(smith_report['packages']) != 10
+            or smith_report['interactionsDisabledBySpawn'] == ui_preview or smith_report['paidTransactionsImplemented']
             or smith_report['gameplayVerified'] or not smith_report.get('functionCreationPreloadsValidated')):
-        raise ValueError('Expected an unverified, non-interactive placement stage')
+        raise ValueError('Expected an unverified placement or read-only interaction stage')
+    if ui_preview and (not smith_report.get('nativeUpgradeActionsBlockedByBindings')
+                       or sum(p.get('disabledActionBindingCount', 0) for p in smith_report['packages']) != 11):
+        raise ValueError('Read-only UI requires all eleven transaction bindings blocked')
     smith_files = {}
     for package in smith_report['packages']:
         if not package['semanticRoundTrip']:
@@ -60,7 +64,7 @@ def main():
     if replaced != {CHEST + '.uasset', CHEST + '.uexp'}:
         raise ValueError('Only the Camp chest pair may replace v2 files')
     chest = next(p for p in smith_report['packages'] if p.get('placementHook'))
-    if not chest['hostOnly'] or chest['replicated'] or not chest['interactionsDisabled']:
+    if not chest['hostOnly'] or chest['replicated'] or chest['interactionsDisabled'] == ui_preview:
         raise ValueError('Placement preview guards changed')
     files.update(smith_files)
     if len(files) != 37:
@@ -71,7 +75,8 @@ def main():
         target = stage / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
-    pak = output / 'MinecraftDungeonsRebalance-CampPlacement-LoadFix-Test-v4.pak'
+    build_name = 'CampUI-Test-v5' if ui_preview else 'CampCentralNames-Test-v5'
+    pak = output / ('MinecraftDungeonsRebalance-' + build_name + '.pak')
     subprocess.run([sys.executable, str(packager), 'pack', str(pak), 'Dungeons', '-p'], cwd=stage, check=True)
     subprocess.run([sys.executable, str(packager), 'test', str(pak)], check=True)
     unpack = output / 'verified-unpack'
@@ -80,13 +85,17 @@ def main():
     expected = {n: p.read_bytes() for n, p in files.items()}
     if actual != expected:
         raise ValueError('PAK did not preserve the exact file set and bytes')
-    report = dict(build='CampPlacement-LoadFix-Test-v4', gameplayVerified=False, completeDesignImplemented=False,
-                  crashCorrectionRuntimeVerified=False, functionCreationPreloadsValidated=True, npcInteractionsEnabled=False, npcReplicated=False, paidTransactionsImplemented=False,
+    report = dict(build=build_name, gameplayVerified=False, completeDesignImplemented=False,
+                  priorV4NpcLoadingUserConfirmed=True, functionCreationPreloadsValidated=True, npcInteractionsEnabled=ui_preview,
+                  nativeUpgradeActionsBlockedByBindings=ui_preview, upgradeActionsEnabled=False,
+                  giftWrapperPlacementImplemented=True, namesImplemented=True, nativeTestAffordabilityImplemented=True,
+                  testUpgradeAmount=1, testGildAmount=1, affordabilityConnectedToActions=False, npcReplicated=False, paidTransactionsImplemented=False,
                   pakSha256=digest(pak), pakBytes=pak.stat().st_size, baselinePakSha256=BASELINE_HASH,
                   entries=[dict(path=n, bytes=len(b), sha256=hashlib.sha256(b).hexdigest()) for n, b in sorted(expected.items())],
                   replacedBaselineEntries=sorted(replaced), retainedBaselineEntries=17,
                   placementStageReportSha256=digest(smiths / 'CAMP_SMITH_STAGE_REPORT.json'),
-                  features=baseline_report['features'] + ['experimental host-only Camp smith placement; interactions disabled'],
+                  features=baseline_report['features'] + ['experimental Gift Wrapper-relative smith placement and TextRender names',
+                                                         'read-only native merchant UI; stock upgrade actions blocked' if ui_preview else 'NPC interactions disabled'],
                   excluded=['paid/repeatable/persistent smith upgrades', 'custom Unique picker', 'client NPC replication',
                             'shared gold', 'higher Ancient encounter selection chance', 'completion gold', 'global mob income rebalance'])
     (output / 'BUILD_REPORT.json').write_text(json.dumps(report, indent=2) + '\n')

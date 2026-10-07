@@ -66,7 +66,8 @@ static class MerchantScreens
             dispatch.ScriptBytecodeSize = dispatch.ScriptBytecode.Sum(e => ExpressionSerializer.WriteExpression(e, writer));
             // Resolve hashes AFTER identity relocation. All functions other than
             // dispatch must retain their entire parsed graph on write/reopen.
-            var preserved = asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch)
+            TestUpgradeAffordability.Add(asset);
+            var preserved = asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch && f.ObjectName.ToString() != TestUpgradeAffordability.Name)
                 .ToDictionary(f => f.ObjectName.ToString(), f => Graph(asset, f));
             if (!original.Contains("OnDecisionToBeMade") || !original.Contains("InstDecisionContent"))
                 throw new InvalidDataException("Native decision event graph missing.");
@@ -76,15 +77,16 @@ static class MerchantScreens
     }
     internal static void Validate(UAsset asset, string service, Dictionary<string, string> preserved)
     {
+        TestUpgradeAffordability.Validate(asset);
         var dispatch = asset.Exports.OfType<FunctionExport>().Single(f => f.ObjectName.ToString() == "GetSoftContentWidget");
-        if (asset.Exports.OfType<FunctionExport>().Count() != preserved.Count + 1)
+        if (asset.Exports.OfType<FunctionExport>().Count() != preserved.Count + 2)
             throw new InvalidDataException("Native merchant function removed or added.");
         if (!dispatch.FunctionFlags.HasFlag(EFunctionFlags.FUNC_Event) || !dispatch.FunctionFlags.HasFlag(EFunctionFlags.FUNC_BlueprintEvent)
             || dispatch.ScriptBytecode.Length != 2 || dispatch.ScriptBytecode[0] is not EX_Return ret
             || ret.ReturnExpression is not EX_SoftObjectConst constant || constant.Value is not EX_StringConst text
             || text.Value != ClassPath(Content(service)) || dispatch.ScriptBytecode[1] is not EX_EndOfScript)
             throw new InvalidDataException("Invalid Camp content dispatch.");
-        foreach (var f in asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch))
+        foreach (var f in asset.Exports.OfType<FunctionExport>().Where(f => f != dispatch && f.ObjectName.ToString() != TestUpgradeAffordability.Name))
             if (!preserved.TryGetValue(f.ObjectName.ToString(), out var graph) || graph != Graph(asset, f))
                 throw new InvalidDataException("Native merchant decision/input graph changed.");
         if (asset.Imports.Any(i => i.ObjectName.ToString() == "/Game/UI/Merchant/UMG_Merchant"))

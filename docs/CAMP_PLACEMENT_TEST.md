@@ -1,6 +1,10 @@
 # Camp placement test build
 
-**v3 is withdrawn after the user's Camp load crash. The current candidate is MinecraftDungeonsRebalance-CampPlacement-LoadFix-Test-v4.pak. It corrects a proven generated-Function load-contract omission, but resolution of the reported crash has not been confirmed in game. Interactions remain disabled and prices/upgrades remain unfinished. The v3 instructions below describe the unchanged placement scope; substitute the v4 filename and remove v3 before testing.**
+**Current (October 7): the user confirms v4 loads and all three smiths are visible. CampUI-Test-v5 adds Gift Wrapper-relative placement, wider spacing, independent overhead names and an experimental read-only merchant UI. Thirteen private asset tests and all 37 PAK integrity/unpack checks pass. v5 is retail-untested; paid upgrades, currency charges, custom Unique picker and persistence are unfinished. A native amount-1 affordability helper is staged but not connected to actions. v3 is withdrawn; v2 remains the accepted reward baseline. See the October 7 section below for exact scope and next work.**
+
+For v5, remove v4/v3 from the existing ~mods directory and install only MinecraftDungeonsRebalance-CampUI-Test-v5.pak. Enter single-player Camp with Gift Wrapper unlocked. Check positions, names, dialogue opening and item selection, then cancel/reopen/reload. The native upgrade action should be unavailable; this build does not charge 1 emerald or 1 gold. No command/collector is needed to test the PAK.
+
+## Historical v3/v4 placement and crash work
 
 October 6, 2026. This is **CampPlacement-Test-v3**, an experimental NPC placement build. It is not the finished paid-upgrade mod.
 
@@ -55,3 +59,22 @@ FunctionLoadContract validates qualified native Function/Default__Function impor
 To test v4: remove v3, place v4 in the same ~mods folder, enter Camp in single-player, and first check whether loading succeeds. Then check the three non-interactive NPCs/duplicates and the unchanged 100-emerald reward. If loading still fails, remove v4 and use v2. Upgrade/payment testing remains unavailable.
 
 v4 PAK SHA-256: `1fc846ee8c0633cd10322a14ac4dedf23f67971ddfc2147a60cd6a1edbd3b527`; bytes: 6075360. Runtime crash correction verified: false.
+
+
+## October 7: confirmed v4 NPC load, central placement, names and UI preview
+
+The user confirms all three v4 smiths are visible in Camp. The screenshots show overlapping chairs below the bridge beside Ancient Hunt, and request the clearing beside the Gift Wrapper instead. This accepts v4 NPC loading/spawning only; it does not accept interaction, prices, item mutation, saves or multiplayer. The current test-price request is **1 emerald per upgrade and 1 gold for gilding**. Production prices remain separate.
+
+Implemented Gift Wrapper-relative spawning using the exact collected native class path `/Game/Decor/Prefabs/Merchants/BP_LobbyVillager_GiftWrapper`. The prototype offsets are right 900 and forward -650/0/+650 in that actor's basis; these are authored test positions, not measured coordinates from the screenshots. All three seats have 650-unit spacing rather than 220. If no valid Gift Wrapper is present, no smiths spawn; there is no fallback to the old bridge position. Reload Camp after swapping builds. Host-only, nonreplicated behavior and per-class duplicate checks remain.
+
+Added independent engine TextRenderActor labels: Uniquesmith, Powersmith and Gildsmith. Labels sit 70 units above each smith's actor bounds and face the available player camera when created, with 40-unit text size. This uses reflected `TextRenderActor.TextRender`, not its non-UFUNCTION C++ getter. Names are separate world text, not a complete native balloon/TTS implementation; camera orientation is sampled once. Font visibility, exact location, overlap and navigation need retail confirmation.
+
+Added `--interaction-preview`: native interaction is allowed to open the owned merchant screen. In the three owned content copies, emptied and disabled **all 11 TransactionClassPrio-bearing widget/template configurations**:2 Unique,7 Power (including collect/bullet/slot views),2 Gild. Original Tower assets are untouched. No action in the owned graph calls TryExecute, Deduct, ClientAdd, GildItem or TryUpgradeItem. The intent is a read-only dialogue/selection test; native runtime behavior is not certified by serialization. If an upgrade action unexpectedly becomes enabled, do not treat that as the paid feature passing.
+
+Added `RebalanceCanAffordTestUpgrade` to each owned root screen. Its native path validates the supplied player, requires authority, obtains WalletComponent using Actor.GetComponentByClass, validates the wallet, and checks captured WalletComponent.Balance against 1. It accepts the actual native SerializableItemId from its future caller, avoiding a guessed currency ID or player wallet field. Invalid inputs return false. This is a native preflight foundation **not wired to buttons, not a price override, and not a charge**. Emerald/Gold selection, an exclusive action gateway, chosen-Unique confirmation, success-only charging and normal-inventory persistence remain unfinished. Captured GetPrice is not a Blueprint event; post-success Deduct alone cannot enforce affordability before mutation. No further collector is requested.
+
+Final local validation: 13 private-source integration tests pass; all 10 package pairs reopen with exact parsed equality and unchanged source hashes. Placement negative cases now 10, affordability 4, read-only bindings 2; prior presentation/record/selection/screen/loading checks remain. The actual crashed v3 still fails the loading-contract regression check. Compiler is the pinned direct Roslyn route with the known Newtonsoft net6/net8 warning. A first UI test found Powersmith has 7 transaction configurations rather than 2; corrected the source-specific count and reran all checks. These tests do not launch Dungeons.
+
+Built `MinecraftDungeonsRebalance-CampUI-Test-v5.pak`:37 entries, 6133071 bytes, SHA-256 `eb7aa6324eb4bf9f47942234ab036e8ed28449a47a1d8a98c11a7137be9c080c`. Integrity test and exact path/byte unpack comparison pass. All17 non-chest v2 entries stay byte-identical; the replacement chest keeps100 emeralds. v5 is untested in-game. Reports: research/camp-central-ui-stage-v5.json and research/camp-central-ui-build-v5.json. Windows CI follows the source commit.
+
+Next work: connect a single owned action button to the preflight and native transaction decision/success path; recheck funds at confirmation; charge once after verified success; establish persistent Camp inventory behavior and reloading. Do not re-enable the original free Tower action as a substitute. Shared gold, full economy/Hunt design and custom Unique picker are still incomplete.

@@ -88,3 +88,8 @@ All 29 requested native types and 16 enum declarations captured successfully. Ca
 ## V5 integration and collector stop
 
 The user supplied the successful v5 capture: 53 types/26 enums, requested dependency closure complete. No further capture requested. Camp actor CDOs now point to owned merchant roots whose GetSoftContentWidget overrides open the matching cloned content; all other native decision/input graphs are retained. Seven asset integration tests pass, including 18 negative graph/record/dispatch checks. This is configuration/graph integration, not runtime payment or save validation. No new gameplay PAK is released. Pricing customization and normal-inventory upgrade behavior need an exposed implementation route or a validated native runtime/toolchain before paid services and world placement can be completed. See CAMP_SMITH_IMPLEMENTATION.md.
+
+
+## October 7 temporary test price request
+
+User requests 1 emerald for upgrades and 1 gold for gilding, for testing only. Production prices750/2500 emeralds and 150/250 gold remain unchanged; Powersmith production rules are unresolved. The owned native preflight now checks an amount of 1 using the supplied native currency ID and authoritative player's WalletComponent. It is pure and unbound: v5 performs no charge or item upgrade. This does not establish Gold/Emerald ID selection, atomicity or rollback. The stock native actions are disabled in the UI preview. Next implementation must use a controlled action entry, revalidation before choice confirmation and exactly-once charging after success.

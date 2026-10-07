@@ -15,10 +15,9 @@ sealed class SpawnGraph
     internal readonly List<KismetExpression> Code = new();
     readonly Dictionary<string, int> labels = new();
     readonly List<(EX_JumpIfNot Jump, string Label)> branches = new();
-    internal SpawnGraph(UAsset asset)
+    internal SpawnGraph(UAsset asset, string name = "RebalanceSpawnCampSmiths")
     {
         Asset = asset; Owner = asset.Exports.OfType<ClassExport>().Single();
-        const string name = "RebalanceSpawnCampSmiths";
         if (asset.Exports.Any(e => e.ObjectName.ToString() == name)) throw new InvalidDataException("Placement already added.");
         Function = (FunctionExport)asset.Exports.OfType<FunctionExport>().First(f => f.Children.Length == 0).Clone();
         Function.ObjectName = new FName(asset, name); Function.OuterIndex = Index(Owner);
@@ -59,10 +58,10 @@ sealed class SpawnGraph
     }
     internal PropertyExport Object(string name, FPackageIndex type) => Property(name, "ObjectProperty", new UObjectProperty { PropertyClass = type });
     internal PropertyExport Struct(string name, string type) => Property(name, "StructProperty", new UStructProperty { Struct = Import("ScriptStruct", type, Package("/Script/CoreUObject")) });
-    internal PropertyExport ActorArray(FPackageIndex actor)
+    internal PropertyExport ActorArray(FPackageIndex actor, string name = "ExistingSmiths")
     {
-        var field = Property("ExistingSmiths", "ArrayProperty", new UArrayProperty());
-        var inner = Object("ExistingSmiths_Inner", actor); inner.OuterIndex = Index(field);
+        var field = Property(name, "ArrayProperty", new UArrayProperty());
+        var inner = Object(name + "_Inner", actor); inner.OuterIndex = Index(field);
         inner.CreateBeforeCreateDependencies.Clear(); inner.CreateBeforeCreateDependencies.Add(Index(field));
         Function.Children = Function.Children.Where(p => p.Index != Index(inner).Index).ToArray();
         ((UArrayProperty)field.Property).Inner = Index(inner); field.SerializationBeforeSerializationDependencies.Add(Index(inner));
@@ -85,9 +84,9 @@ sealed class SpawnGraph
     }
     internal void Label(string name) => labels.Add(name, Code.Count);
     internal int Size(KismetExpression expr) { using var stream = new MemoryStream(); using var writer = new AssetBinaryWriter(stream, Asset); return ExpressionSerializer.WriteExpression(expr, writer); }
-    internal void Finish()
+    internal void Finish(KismetExpression? returnExpression = null)
     {
-        Code.Add(new EX_Return { ReturnExpression = new EX_Nothing() }); Code.Add(new EX_EndOfScript());
+        Code.Add(new EX_Return { ReturnExpression = returnExpression ?? new EX_Nothing() }); Code.Add(new EX_EndOfScript());
         uint offset = 0; var offsets = Code.Select(e => { uint value = offset; offset += (uint)Size(e); return value; }).ToArray();
         foreach (var (jump, label) in branches) jump.CodeOffset = offsets[labels[label]];
         Function.ScriptBytecode = Code.ToArray(); Function.ScriptBytecodeRaw = null; Function.ScriptBytecodeSize = (int)offset;

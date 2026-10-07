@@ -5,15 +5,18 @@ using UAssetAPI.ExportTypes;
 using UAssetAPI.PropertyTypes.Objects;
 using UAssetAPI.UnrealTypes;
 
-// Private cooked-asset foundation with an optional non-interactive placement preview.
+// Private cooked-asset foundation with placement or read-only interaction previews.
 // Do not change native transaction flags, prices, or player inventory here.
+if (args.Length == 2 && args[0] == "--self-test-read-only-actions") { ReadOnlyMerchantActions.SelfTest(args[1]); return; }
+if (args.Length == 2 && args[0] == "--self-test-affordability") { TestUpgradeAffordability.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-presentation") { UniquePresentation.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-selection") { SelectedItemReaders.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-screens") { MerchantScreens.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-placement") { CampPlacement.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--self-test-load-contracts") { FunctionLoadContract.SelfTest(args[1]); return; }
 if (args.Length == 2 && args[0] == "--check-load-contracts") { FunctionLoadContract.ValidateOwned(new UAsset(args[1], EngineVersion.VER_UE4_22)); Console.WriteLine("Generated Function load contracts validated."); return; }
-var placementPreview = args.Length == 3 && args[0] == "--placement-preview";
+var interactionPreview = args.Length == 3 && args[0] == "--interaction-preview";
+var placementPreview = interactionPreview || args.Length == 3 && args[0] == "--placement-preview";
 if (placementPreview) args = args.Skip(1).ToArray();
 if (args.Length != 2) throw new ArgumentException("Usage: CampSmithStager <private-PatchSources-root> <fresh-private-output-root>");
 var source = Path.GetFullPath(args[0]);
@@ -68,7 +71,7 @@ var loaded = specs.Select(s => {
     return (Spec: s, Input: path, InputHashes: inputHashes, Asset: a, Changed: changed, OriginalFunctions: originalFunctions);
 }).ToArray();
 var screens = MerchantScreens.Prepare(source);
-var placement = placementPreview ? CampPlacement.Prepare(source) : null;
+var placement = placementPreview ? CampPlacement.Prepare(source, interactionPreview) : null;
 Directory.CreateDirectory(output);
 try {
     var report = new List<object>();
@@ -77,12 +80,14 @@ try {
         var relative = $"Dungeons/Content/{destinationFolder}/{s.CloneName}.uasset";
         var path = Path.Combine(output, relative);
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        int disabledBindings = interactionPreview && s.Definition == null ? ReadOnlyMerchantActions.Block(item.Asset) : 0;
         item.Asset.Write(path);
         var expected = item.Asset.SerializeJson();
         var reread = new UAsset(path, EngineVersion.VER_UE4_22);
         if (expected != reread.SerializeJson()) throw new InvalidDataException("Clone semantic round-trip mismatch: " + s.CloneName);
         if (s.CloneName == "UMG_RebalanceCampUniquesmithContent") UniquePresentation.Validate(reread);
         if (s.Definition == null) SelectedItemReaders.Validate(reread);
+        if (interactionPreview && s.Definition == null) ReadOnlyMerchantActions.Validate(reread);
         if (s.Definition != null) MerchantScreens.ValidateActor(reread, s.CloneName["BP_RebalanceCamp".Length..]);
         if (reread.GetNameMapIndexList().Any(n => specs.Any(original => n.Value.Contains(original.Original, StringComparison.Ordinal))))
             throw new InvalidDataException("Original self/cross references remain: " + s.CloneName);
@@ -97,6 +102,7 @@ try {
             semanticRoundTrip = true, originalFunctionCount = item.OriginalFunctions,
             addedPresentationFunctions = s.CloneName == "UMG_RebalanceCampUniquesmithContent" ? 3 : 0,
             addedSelectionReadFunctions = s.Definition == null ? 2 : 0,
+            disabledActionBindingCount = disabledBindings,
             functionCount = reread.Exports.OfType<FunctionExport>().Count() });
     }
     foreach (var screen in screens) {
@@ -114,8 +120,8 @@ try {
         report.Add(new { sourcePackage = "Dungeons/Content/UI/Merchant/UMG_Merchant.uasset", clonePackage = relative,
             relocatedNames = screen.RelocatedNames, nativeDefinition = (string?)null, merchantType = (string?)null,
             originalHashes = originals, outputHashes = new[] { path, Path.ChangeExtension(path, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash),
-            semanticRoundTrip = true, originalFunctionCount = reread.Exports.OfType<FunctionExport>().Count(),
-            addedPresentationFunctions = 0, addedSelectionReadFunctions = 0, functionCount = reread.Exports.OfType<FunctionExport>().Count(),
+            semanticRoundTrip = true, originalFunctionCount = reread.Exports.OfType<FunctionExport>().Count() - 1,
+            addedPresentationFunctions = 0, addedSelectionReadFunctions = 0, addedAffordabilityFunctions = 1, functionCount = reread.Exports.OfType<FunctionExport>().Count(),
             nativeDecisionGraphsPreserved = true, contentDispatch = MerchantScreens.ClassPath(MerchantScreens.Content(screen.Service)) });
     }
     if (placement != null) {
@@ -126,18 +132,22 @@ try {
         placement.Write(path); var expected = placement.SerializeJson();
         var reread = new UAsset(path, EngineVersion.VER_UE4_22);
         if (expected != reread.SerializeJson()) throw new InvalidDataException("Placement round-trip mismatch.");
-        CampPlacement.Validate(reread);
+        CampPlacement.Validate(reread, interactionPreview);
         foreach (var (file, hash) in hashes)
             if (Hash(Path.Combine(Path.GetDirectoryName(original)!, file)) != hash) throw new InvalidDataException("Camp chest source changed.");
         report.Add(new { sourcePackage = relative, clonePackage = relative, nativeDefinition = (string?)null,
             originalHashes = hashes, outputHashes = new[] { path, Path.ChangeExtension(path, ".uexp") }.ToDictionary(p => Path.GetFileName(p)!, Hash),
-            semanticRoundTrip = true, placementHook = "ReceiveBeginPlay", hostOnly = true, replicated = false, interactionsDisabled = true });
+            semanticRoundTrip = true, placementHook = "ReceiveBeginPlay", hostOnly = true, replicated = false, interactionsDisabled = !interactionPreview, placementAnchor = "/Game/Decor/Prefabs/Merchants/BP_LobbyVillager_GiftWrapper",
+            placementOffsets = new { right = 900, forward = new[] { -650, 0, 650 } }, namesImplemented = true, nativeBalloonNames = false });
     }
     File.WriteAllText(Path.Combine(output, "CAMP_SMITH_STAGE_REPORT.json"), JsonConvert.SerializeObject(new {
-        status = placementPreview ? "camp_placement_preview_only" : "private_asset_foundation_only", deployable = placementPreview,
+        status = interactionPreview ? "camp_interaction_preview_only" : placementPreview ? "camp_placement_preview_only" : "private_asset_foundation_only", deployable = placementPreview,
         functionCreationPreloadsValidated = true, gameplayVerified = false, campPlacementImplemented = placementPreview, npcPreviewOnly = placementPreview,
-        interactionsDisabledBySpawn = placementPreview,
+        readOnlyMerchantUiPreview = interactionPreview, nativeUpgradeActionsBlockedByBindings = interactionPreview,
+        interactionsDisabledBySpawn = placementPreview && !interactionPreview,
         paidTransactionsImplemented = false, uniquePickerImplemented = false,
+        nativeTestAffordabilityImplemented = true, testUpgradeAmount = TestUpgradeAffordability.Amount, testGildAmount = TestUpgradeAffordability.Amount,
+        affordabilityConnectedToActions = false, labelsImplemented = placementPreview, giftWrapperPlacementImplemented = placementPreview,
         uniquePresentationBindingsImplemented = true,
         selectedItemReadBindingsImplemented = true,
         actorScreenBindingsImplemented = true,
